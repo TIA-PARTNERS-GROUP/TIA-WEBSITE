@@ -32,4 +32,4 @@ jobs:
           cd ./tia_partners_backend/ && npm install
       - name: Run backend tests
         run: |
-          cd ./tia_partners_backend/ && npm test -- --ci --silent --forceExit --coverage
+          cd ./tia_partners_backend/ && npm test
