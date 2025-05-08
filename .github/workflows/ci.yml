@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' 
+
+      - name: Install frontend dependencies
+        run: |
+          cd ./tia_partners_frontend/ && npm install
+      - name: Run frontend tests
+        run: |
+          cd ./tia_partners_frontend/ && npm test -- --ci --silent --forceExit --coverage
+      - name: Install backend dependencies
+        run: |
+          cd ./tia_partners_backend/ && npm install
+      - name: Run backend tests
+        run: |
+          cd ./tia_partners_backend/ && npm test -- --ci --silent --forceExit --coverage
