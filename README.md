@@ -14,22 +14,30 @@ If you are developing a production application, we recommend using TypeScript wi
 # TIA Partners Project
 Make sure that your in the tia_partners_frontend/ or tia_partners_backend/ dir before running these commands
 
-## How to install packages
+## Package Manager
+Using npm
+[npm](https://docs.npmjs.com/)
+### How to install packages
 ```console
 npm install
 ```
-
-## How to run 
+### How to run 
 ```console
 npm run dev
 ```
 
-## How to test 
-```console
-npm test
-```
-
-## How to use storybook
+## Documentation
+Using storybook
+[storybook](https://storybook.js.org/docs)
+### How to run
 ```console
 npm run storybook
+```
+
+## Testing
+Using the Jest testing framework
+[jest](https://jestjs.io/)
+### How to run test 
+```console
+npm test
 ```
