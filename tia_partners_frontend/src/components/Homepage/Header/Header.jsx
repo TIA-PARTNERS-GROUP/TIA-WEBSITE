@@ -3,12 +3,13 @@ import { Navbar, MobileMenu } from "./";
 
 const Header = () => {
   return (
-    <header className="fixed w-full bg-white/90 backdrop-blur-md z-50 shadow-sm">
-      <div className="container mx-auto px-6 py-4">
+    <header className="fixed w-full header-backdrop z-50">
+      <div className="container mx-auto px-6 py-3">
         <div className="flex justify-between items-center">
+          <div className="logo">TIA</div>
           <Navbar />
+          <MobileMenu />
         </div>
-        <MobileMenu />
       </div>
     </header>
   );

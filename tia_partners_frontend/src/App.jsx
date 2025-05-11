@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import Header from './components/Homepage/Header';
-import HeroSection from './components/Homepage/Hero';
-import { TestimonialsSection } from './components/Homepage/Testimonials/';
+//import Header from './components/Homepage/Header';
+import HeroSection from './components/Homepage/Hero/';
+//import { TestimonialsSection } from './components/Homepage/Testimonials/';
 //import FeaturesSection from './components/Homepage/Features';
 //import CtaSection from './components/Cta'; 
 //import Footer from './components/Footer'; 
@@ -12,12 +12,8 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="font-sans text-gray-900 antialiased">
-      <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      
-      <main>
-        
-      </main>
+    <div>
+      <HeroSection />
     </div>
   );
 }
