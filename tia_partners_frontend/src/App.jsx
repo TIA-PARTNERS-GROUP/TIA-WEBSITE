@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import React from 'react';
 
-//import Header from './components/Homepage/Header';
-import HeroSection from './components/Homepage/Hero/';
-//import { TestimonialsSection } from './components/Homepage/Testimonials/';
-//import FeaturesSection from './components/Homepage/Features';
-//import CtaSection from './components/Cta'; 
-//import Footer from './components/Footer'; 
-//import ScrollToTopButton from './components/Homepage/ScrollToTopButton';
+import Header from './components/Homepage/Header';
+import Features from './components/Homepage/Features';
+import HowItWorks from './components/Homepage/HowItWorks.jsx';
+import CTA from './components/Homepage/CTA';
+import Footer from './components/Homepage/Footer';
+
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
-    <div>
-      <HeroSection />
+    <div className="App">
+      <Header />
+      <Features />
+      <HowItWorks />
+      <CTA />
+      <Footer />
     </div>
   );
 }
