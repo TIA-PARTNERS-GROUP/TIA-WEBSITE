@@ -2,22 +2,19 @@ import { FaUserPlus, FaLightbulb, FaLink } from 'react-icons/fa';
 
 const steps = [
   {
-    icon: <FaUserPlus className="text-white text-2xl" />,
+    icon: <FaUserPlus className="text-blue-500 text-4xl" />,
     title: 'Join the Network',
     description: 'Create your profile and tell us what you do. Whether you’re a business or a creative, we want to know your strengths.',
-    bg: 'bg-blue-600',
   },
   {
-    icon: <FaLightbulb className="text-white text-2xl" />,
+    icon: <FaLightbulb className="text-yellow-500 text-4xl" />,
     title: 'Get Smart Recommendations',
     description: 'Our AI engine finds partners, clients, or collaborators that truly complement your goals and skills.',
-    bg: 'bg-yellow-500',
   },
   {
-    icon: <FaLink className="text-white text-2xl" />,
+    icon: <FaLink className="text-green-500 text-4xl" />,
     title: 'Connect & Grow',
     description: 'Chat, collaborate, or close deals — TIA helps you turn opportunities into success.',
-    bg: 'bg-green-500',
   },
 ];
 
