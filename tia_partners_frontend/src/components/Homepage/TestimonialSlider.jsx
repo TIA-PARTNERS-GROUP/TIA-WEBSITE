@@ -78,7 +78,7 @@ export default function TestimonialSlider() {
                   <div>
                     <h5 className="font-semibold text-white text-lg">
                       {t.name}{' '}
-                      <span className="text-sm text-blue-600 font-medium ml-2 bg-blue-50 px-2 py-1 rounded">
+                      <span className="text-sm text-blue-700 font-medium ml-2 bg-blue-50 px-2 py-1 rounded">
                         {t.tier}
                       </span>
                     </h5>

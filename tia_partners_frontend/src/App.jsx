@@ -7,18 +7,13 @@ import CTA from './components/Homepage/CTA';
 import Footer from './components/Homepage/Footer';
 import Membership from './components/Homepage/Membership';
 import TestimonialSlider from './components/Homepage/TestimonialSlider';
+import Home from './components/Homepage/Home.jsx';
 
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Features />
-      <HowItWorks />
-      <Membership />
-      <CTA />
-      <TestimonialSlider />
-      <Footer />
+      <Home/>
     </div>
   );
 }

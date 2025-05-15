@@ -38,7 +38,7 @@ const Membership = () => {
           {plans.map((plan) => (
             <div
               key={plan.title}
-              className="flex flex-col justify-between bg-white text-gray-800 shadow-lg rounded-xl p-6 border border-gray-200 min-h-[420px] transition-transform transform hover:scale-105 hover:shadow-xl"
+              className="flex flex-col justify-between bg-white text-gray-800 shadow-lg rounded-xl p-6 border border-gray-200 min-h-[420px] transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
             >
               <div>
                 <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
