@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
+import { lazyImports } from '../../routes/LazyPages.js'; // adjust path as needed
+
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
-    { name: 'Benefits Page', path: '/benefits', isRoute: true },
+    { name: 'Benefits', path: '/benefits', isRoute: true },
     { name: 'Membership', path: '#membership' },
     { name: 'Our Partners', path: '#our-partners' },
     { name: 'Features', path: '#features' },
@@ -16,6 +19,12 @@ const Header = () => {
     { name: 'News', path: '#news' },
     { name: 'Contact Us', path: '#contact' },
   ];
+
+  const preloadRoute = (path) => {
+    if (lazyImports[path]) {
+      lazyImports[path](); // triggers dynamic import on hover/focus
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
@@ -37,18 +46,20 @@ const Header = () => {
                   key={idx}
                   to={link.path}
                   className="hover:text-blue-600 transition"
+                  onMouseEnter={() => preloadRoute(link.path)}
+                  onFocus={() => preloadRoute(link.path)}
                 >
                   {link.name}
                 </Link>
               ) : (
-                  <a
-                    key={idx}
-                    href={link.path}
-                    className="hover:text-blue-600 transition"
-                  >
-                    {link.name}
-                  </a>
-                )
+                <a
+                  key={idx}
+                  href={link.path}
+                  className="hover:text-blue-600 transition"
+                >
+                  {link.name}
+                </a>
+              )
             )}
           </nav>
 
@@ -91,19 +102,21 @@ const Header = () => {
                 to={link.path}
                 className="block text-gray-700 hover:text-blue-600"
                 onClick={() => setIsOpen(false)}
+                onMouseEnter={() => preloadRoute(link.path)}
+                onFocus={() => preloadRoute(link.path)}
               >
                 {link.name}
               </Link>
             ) : (
-                <a
-                  key={idx}
-                  href={link.path}
-                  className="block text-gray-700 hover:text-blue-600"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </a>
-              )
+              <a
+                key={idx}
+                href={link.path}
+                className="block text-gray-700 hover:text-blue-600"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </a>
+            )
           )}
           <a
             href="#join"

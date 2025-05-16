@@ -6,9 +6,6 @@ import Layout from './Layout/Layout.jsx';
 const HomePage = React.lazy(() => import('./pages/Home/HomePage.jsx'));
 const BenefitsPage = React.lazy(() => import('./pages/Benefits/BenefitsPage.jsx'));
 
-import(HomePage)
-import(BenefitsPage)
-
 
 function App() {
   return (

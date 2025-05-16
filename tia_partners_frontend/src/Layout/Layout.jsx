@@ -8,10 +8,8 @@ const CTA = lazy(() => import('../pages/Common/CTA.jsx'));
 const TestimonialSlider = lazy(() => import('../pages/Common/TestimonialSlider.jsx'));
 const Footer = lazy(() => import('../pages/Common/Footer.jsx'));
 
-import(Header)
-import(CTA)
-import(TestimonialSlider)
-import(Footer)
+// Lazy load shared/common component
+const RevealOnScroll = lazy(() => import('../pages/Common/RevealOnScroll.jsx'));
 
 
 const Layout = () => {
@@ -23,8 +21,12 @@ const Layout = () => {
         <Outlet />
       </main>
 
-      <CTA />
+      <RevealOnScroll>
+        <CTA />
+      </RevealOnScroll>
+      
       <TestimonialSlider />
+
       <Footer />
     </Suspense>
   );
