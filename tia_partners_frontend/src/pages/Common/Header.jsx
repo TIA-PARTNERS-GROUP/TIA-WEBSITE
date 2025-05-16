@@ -11,7 +11,7 @@ const Header = () => {
 
   const navLinks = [
     { name: 'Benefits', path: '/benefits', isRoute: true },
-    { name: 'Membership', path: '#membership' },
+    { name: 'Membership', path: '/membership', isRoute: true },
     { name: 'Our Partners', path: '#our-partners' },
     { name: 'Features', path: '#features' },
     { name: 'How It Works', path: '#how-it-works' },

@@ -1,3 +1,5 @@
+import {React} from 'react';
+
 const Breadcrumb = () => {
   return (
     <nav className="bg-gray-100 py-2 px-4 text-sm text-gray-700">

@@ -66,17 +66,9 @@ const HomePage = () => {
 
       {/* Animated Sections */}
       <Suspense fallback={<div className="text-center py-10">Loading...</div>}>
-        <RevealOnScroll>
           <Features />
-        </RevealOnScroll>
-
-        <RevealOnScroll>
           <HowItWorks />
-        </RevealOnScroll>
-
-        <RevealOnScroll>
           <Membership />
-        </RevealOnScroll>
       </Suspense>
     </div>
   );

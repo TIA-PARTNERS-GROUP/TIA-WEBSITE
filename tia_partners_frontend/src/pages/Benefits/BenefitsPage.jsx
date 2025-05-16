@@ -11,23 +11,12 @@ const RevealOnScroll = lazy(() => import('../Common/RevealOnScroll.jsx'));
 
 const BenefitsPage = () => {
   return (
-    <Suspense>
-      <RevealOnScroll>
-        <Breadcrumb />
-      </RevealOnScroll>
-
-      <RevealOnScroll>
-        <HeroSection />
-      </RevealOnScroll>
-
-      <RevealOnScroll>
-        <BenefitsSection />
-      </RevealOnScroll>
-
-      <RevealOnScroll>
-        <WhyJoinSection />
-      </RevealOnScroll>
-    </Suspense>
+    <>
+      <Breadcrumb />
+      <HeroSection />
+      <BenefitsSection />
+      <WhyJoinSection />
+    </>
   );
 };
 

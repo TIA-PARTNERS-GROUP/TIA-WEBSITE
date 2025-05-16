@@ -21,12 +21,8 @@ const Layout = () => {
         <Outlet />
       </main>
 
-      <RevealOnScroll>
-        <CTA />
-      </RevealOnScroll>
-      
+      <CTA />
       <TestimonialSlider />
-
       <Footer />
     </Suspense>
   );
