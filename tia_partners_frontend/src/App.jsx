@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Header from './components/Homepage/Header';
-import Features from './components/Homepage/Features';
-import HowItWorks from './components/Homepage/HowItWorks';
-import CTA from './components/Homepage/CTA';
-import Footer from './components/Homepage/Footer';
-import Membership from './components/Homepage/Membership';
-import TestimonialSlider from './components/Homepage/TestimonialSlider';
-import Home from './components/Homepage/Home.jsx';
+import Layout from './Layout/Layout.jsx';
+
+const HomePage = React.lazy(() => import('./pages/Home/HomePage.jsx'));
+const BenefitsPage = React.lazy(() => import('./pages/Benefits/BenefitsPage.jsx'));
+
+import(HomePage)
+import(BenefitsPage)
 
 
 function App() {
   return (
-    <div className="App">
-      <Home/>
-    </div>
+    <Router>
+      <Suspense>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/benefits" element={<BenefitsPage />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </Router>
   );
 }
 
