@@ -40,22 +40,28 @@ const Home = () => {
           <BackgroundBlob className="w-96 h-96 bg-blue-300 top-[-100px] left-[-200px]" />
           <BackgroundBlob className="w-96 h-96 bg-blue-300 top-[100px] left-[1400px]" />
           <h1 className="text-5xl font-bold text-gray-900 leading-tight">
-            Discover. Connect. Grow.
+            Your Partner to Profit
           </h1>
           <p className="mt-6 text-lg text-gray-600">
             AI-powered platform to find your next partner, opportunity, or breakthrough.
           </p>
           <a
             href="#membership"
-            className="mt-8 inline-block bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold shadow hover:opacity-90 transition"
+            className="mt-8 inline-block bg-blue-600 text-white py-3 px-6 rounded-full text-lg font-semibold shadow hover:opacity-90 transition"
           >
             Get Started
+          </a>
+
+          <a
+            href="#membership"
+            className="mt-8 mx-3 inline-block bg-blue-800 text-white py-3 px-6 rounded-full text-lg font-semibold shadow hover:opacity-90 transition"
+          >
+            Watch video
           </a>
         </div>
       </motion.section>
 
       {/* Animated Sections */}
-
       <RevealOnScroll>
         <Features />
       </RevealOnScroll>
