@@ -1,23 +1,18 @@
+// --- User's Icon Imports ---
+// Using the icon components you provided
+import DashboardIcon from "../../components/Icons/DashboardIcon";
+import SettingsIcon from "../../components/Icons/SettingsIcon";
+import ConnectIcon from "../../components/Icons/ConnectIcon"; // Note: I've used ConnectIcon as the name to match the UI label
+import BuildIcon from "../../components/Icons/BuildIcon";
+import CollaborateIcon from "../../components/Icons/CollaborateIcon";
+import NetworkIcon from "../../components/Icons/NetworkIcon";
+import TradeIcon from "../../components/Icons/TradeIcon";
+
+// --- Remaining Placeholder Icons ---
+// These icons were not in your import list and are still placeholders.
+// You can create these components and import them just like the ones above.
 const Icon = ({ children, className }) => (
   <div className={`w-6 h-6 ${className}`}>{children}</div>
-);
-const DashboardIcon = (props) => (
-  <Icon {...props}>
-    {" "}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
-      />
-    </svg>{" "}
-  </Icon>
 );
 const ManageIcon = (props) => (
   <Icon {...props}>
@@ -35,94 +30,6 @@ const ManageIcon = (props) => (
         d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
       />
     </svg>{" "}
-  </Icon>
-);
-const ConnectIcon = (props) => (
-  <Icon {...props}>
-    {" "}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
-      />
-    </svg>{" "}
-  </Icon>
-);
-const BuildIcon = (props) => (
-  <Icon {...props}>
-    {" "}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6A1.125 1.125 0 012.25 11.25v-4.125zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
-      />
-    </svg>{" "}
-  </Icon>
-);
-const CollaborateIcon = (props) => (
-  <Icon {...props}>
-    {" "}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962c.57-.063.996-.594.996-1.185a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185m-7.5 2.962c.57-.063.996-.594.996-1.185a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185m16.5-5.85a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185m-7.5 2.962c.57-.063.996-.594.996-1.185a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185"
-      />
-    </svg>{" "}
-  </Icon>
-);
-const NetworkIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"
-      />
-    </svg>
-  </Icon>
-);
-const TradeIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-      />
-    </svg>
   </Icon>
 );
 const CashflowIcon = (props) => (
@@ -176,28 +83,6 @@ const BusinessGrowthIcon = (props) => (
     </svg>
   </Icon>
 );
-const SettingsIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.438.995s.145.755.438.995l1.003.827c.424.35.534.954.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.52 6.52 0 01-.22-.127c-.324-.196-.72-.257-1.075-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.437-.995s-.145-.755-.437-.995l-1.004-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.213-1.28z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-      />
-    </svg>
-  </Icon>
-);
 const ShareIcon = (props) => (
   <Icon {...props}>
     <svg
@@ -232,6 +117,8 @@ const JusticeIcon = (props) => (
     </svg>
   </Icon>
 );
+
+// --- Reusable Components (That use the icons) ---
 
 const CircularProgress = ({ value, color }) => {
   const r = 50;
@@ -313,13 +200,19 @@ const Sidebar = () => (
     </div>
     <nav>
       <ul>
-        <NavItem icon={<DashboardIcon />} label="Dashboard" />
-        <NavItem icon={<ManageIcon />} label="Manage" />
-        <NavItem icon={<ConnectIcon />} label="Connect" />
-        <NavItem icon={<BuildIcon />} label="Build" />
-        <NavItem icon={<CollaborateIcon />} label="Collaborate" />
-        <NavItem icon={<NetworkIcon />} label="Network" />
-        <NavItem icon={<TradeIcon />} label="Trade" />
+        <NavItem
+          icon={<DashboardIcon className="w-5 h-5" />}
+          label="Dashboard"
+        />
+        <NavItem icon={<ManageIcon className="w-5 h-5" />} label="Manage" />
+        <NavItem icon={<ConnectIcon className="w-5 h-5" />} label="Connect" />
+        <NavItem icon={<BuildIcon className="w-5 h-5" />} label="Build" />
+        <NavItem
+          icon={<CollaborateIcon className="w-5 h-5" />}
+          label="Collaborate"
+        />
+        <NavItem icon={<NetworkIcon className="w-5 h-5" />} label="Network" />
+        <NavItem icon={<TradeIcon className="w-5 h-5" />} label="Trade" />
       </ul>
     </nav>
     <div className="flex items-center p-2 mt-auto space-x-3 cursor-pointer">

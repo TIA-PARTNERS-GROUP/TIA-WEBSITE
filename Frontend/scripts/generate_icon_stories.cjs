@@ -7,12 +7,12 @@ const path = require("path");
 // Source directory where your icon components are located
 const iconsDir = path.join(__dirname, "..", "src", "components", "Icons");
 // Destination directory where the story files will be created
-const storiesDir = path.join(__dirname, "..", "src", "stories");
+const storiesDir = path.join(__dirname, "..", "src", "stories", "Icons");
 
 // --- Template ---
 // The import path is now updated to correctly point from src/stories/ to src/components/Icons/
 const storyTemplate = (iconName, storyName) => `
-import ${iconName} from '../components/Icons/${iconName}';
+import ${iconName} from '../../components/Icons/${iconName}';
 
 export default {
   title: 'Components/Icons',
