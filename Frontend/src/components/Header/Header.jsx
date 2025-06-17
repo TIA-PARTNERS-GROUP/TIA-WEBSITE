@@ -63,14 +63,15 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-3">
             <GhostButton
               onClick={() => (window.location.href = "#login")}
-              className="px-5 py-2 text-sm"
+              className="px-5 py-2 text-sm flex items-center gap-2"
             >
-              <LoginIcon fillColor="#0000" width="30" height="30" />
               <span>Login</span>
+              <LoginIcon fillColor="currentColor" width="20" height="20" />
             </GhostButton>
+
             <PrimaryButton
               onClick={() => (window.location.href = "#join")}
-              className="px-6 py-2 text-sm flex items-center space-x-1"
+              className="px-6 py-2 text-sm"
             >
               <span>Get Started</span>
             </PrimaryButton>
@@ -131,7 +132,7 @@ const Header = () => {
 
 const App = () => {
   return (
-    <div className="bg-gray-50">
+    <div className="white">
       <Header />
       <div className="p-8 text-center">
         <h1 className="text-4xl font-bold mt-16">
@@ -141,7 +142,6 @@ const App = () => {
           The header shadow appears on scroll.
         </p>
         <div className="h-screen mt-8"></div>
-        <p>You've reached the bottom.</p>
         <div className="h-screen mt-8"></div>
       </div>
     </div>

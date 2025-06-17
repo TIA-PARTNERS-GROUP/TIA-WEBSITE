@@ -1,4 +1,4 @@
-const iconModules = import.meta.glob("../components/Icons/*.jsx", {
+const iconModules = import.meta.glob("../../components/Icons/*.jsx", {
   eager: true,
 });
 

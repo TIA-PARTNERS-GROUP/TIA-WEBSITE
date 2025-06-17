@@ -1,7 +1,7 @@
 import { MemoryRouter } from "react-router-dom";
-import Header from "../components/Header/Header";
+import Header from "../../components/Header/Header";
 
-import "../App.css";
+import "../../App.css";
 
 //const lazyImports = {
 // Add paths you expect to lazy load, with dummy functions

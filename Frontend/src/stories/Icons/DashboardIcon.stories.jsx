@@ -1,8 +1,8 @@
-import ArrowFowardIcon from "../components/Icons/ArrowFoward";
+import DashboardIcon from "../../components/Icons/DashboardIcon";
 
 export default {
   title: "Components/Icons",
-  component: ArrowFowardIcon,
+  component: DashboardIcon,
   argTypes: {
     fillColor: { control: "color" },
     width: { control: { type: "range", min: 16, max: 100, step: 1 } },
@@ -10,11 +10,11 @@ export default {
   },
 };
 
-export const ArrowFoward = {
+export const Dashboard = {
   args: {
     fillColor: "#333333",
     width: 32,
     height: 32,
-    alt: "ArrowFoward Icon",
+    alt: "Dashboard Icon",
   },
 };
