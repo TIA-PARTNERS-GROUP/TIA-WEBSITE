@@ -1,7 +1,7 @@
 {
   "name": "tia-partners",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "proxy": "http://localhost:5173",
   "scripts": {
@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate:stories": "node scripts/generate_icon_stories.cjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",

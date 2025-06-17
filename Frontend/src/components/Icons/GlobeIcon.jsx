@@ -1,11 +1,11 @@
 import { ReactComponent as GlobeSVG } from "../../assets/icons/globe.svg";
 
 export default function GlobeIcon({
-  fillColor,
-  width,
-  height,
-  alt = GlobeIcon().name,
+  fillColor = "currentColor",
+  width = 24,
+  height = 24,
   className,
+  alt = "Globe Icon",
 }) {
   return (
     <GlobeSVG

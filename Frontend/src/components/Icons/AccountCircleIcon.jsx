@@ -1,11 +1,11 @@
 import { ReactComponent as AccountCircleSVG } from "../../assets/icons/account_circle.svg";
 
 export default function AccountCircleIcon({
-  fillColor,
-  width,
-  height,
-  alt = AccountCircleIcon().name,
+  fillColor = "currentColor",
+  width = 24,
+  height = 24,
   className,
+  alt = "Account Circle Icon",
 }) {
   return (
     <AccountCircleSVG

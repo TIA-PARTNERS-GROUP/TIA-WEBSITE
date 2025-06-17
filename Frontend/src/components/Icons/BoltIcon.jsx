@@ -1,11 +1,11 @@
 import { ReactComponent as BoltSVG } from "../../assets/icons/bolt.svg";
 
 export default function BoltIcon({
-  fillColor,
-  width,
-  height,
-  alt = BoltIcon().name,
+  fillColor = "currentColor",
+  width = 24,
+  height = 24,
   className,
+  alt = "Bolt Icon",
 }) {
   return (
     <BoltSVG

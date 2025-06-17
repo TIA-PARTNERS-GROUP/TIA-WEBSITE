@@ -1,8 +1,8 @@
 import { MemoryRouter } from "react-router-dom";
 import Header from "../components/Header/Header";
+
 import "../App.css";
 
-// Mock the lazyImports for Storybook environment, as it's an external dependency
 //const lazyImports = {
 // Add paths you expect to lazy load, with dummy functions
 //"/benefits": () => console.log("Preloading /benefits route (mocked)"),

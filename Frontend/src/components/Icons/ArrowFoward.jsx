@@ -1,11 +1,11 @@
 import { ReactComponent as ArrowForwardSVG } from "../../assets/icons/arrow_forward.svg";
 
 export default function ArrowForwardIcon({
-  fillColor,
-  width,
-  height,
-  alt = ArrowForwardIcon().name,
+  fillColor = "currentColor",
+  width = 24,
+  height = 24,
   className,
+  alt = "Arrow Forward Icon",
 }) {
   return (
     <ArrowForwardSVG

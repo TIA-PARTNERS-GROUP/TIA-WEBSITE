@@ -65,7 +65,7 @@ const Header = () => {
               onClick={() => (window.location.href = "#login")}
               className="px-5 py-2 text-sm"
             >
-              <LoginIcon fillColor="#0000000" width="30" height="30" />
+              <LoginIcon fillColor="#0000" width="30" height="30" />
               <span>Login</span>
             </GhostButton>
             <PrimaryButton
