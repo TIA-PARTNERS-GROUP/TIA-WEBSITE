@@ -4,7 +4,7 @@ import HeroAnimation from "../../components/Hero/HeroAnimation";
 
 export default {
   // This title determines the component's name and location in the Storybook sidebar.
-  title: "Showcase/Hero Animation",
+  title: "Components/Hero/HeroAnimation",
 
   // This connects the story to the component, enabling docs and controls.
   component: HeroAnimation,
