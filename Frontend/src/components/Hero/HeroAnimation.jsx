@@ -1,124 +1,16 @@
-// --- User's Icon Imports ---
-// Using the icon components you provided
 import DashboardIcon from "../../components/Icons/DashboardIcon";
 import SettingsIcon from "../../components/Icons/SettingsIcon";
-import ConnectIcon from "../../components/Icons/ConnectIcon"; // Note: I've used ConnectIcon as the name to match the UI label
+import ConnectIcon from "../../components/Icons/ConnectIcon";
 import BuildIcon from "../../components/Icons/BuildIcon";
 import CollaborateIcon from "../../components/Icons/CollaborateIcon";
 import NetworkIcon from "../../components/Icons/NetworkIcon";
 import TradeIcon from "../../components/Icons/TradeIcon";
+import ManageIcon from "../../components/Icons/ManegIcon";
+import CashFlowIcon from "../../components/Icons/CurrencyIcon";
+import BuildTeamIcon from "../../components/Icons/TeamBuildingIcon";
+import BusinessGrowthIcon from "../../components/Icons/TrendingUpIcon";
 
-// --- Remaining Placeholder Icons ---
-// These icons were not in your import list and are still placeholders.
-// You can create these components and import them just like the ones above.
-const Icon = ({ children, className }) => (
-  <div className={`w-6 h-6 ${className}`}>{children}</div>
-);
-const ManageIcon = (props) => (
-  <Icon {...props}>
-    {" "}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
-      />
-    </svg>{" "}
-  </Icon>
-);
-const CashflowIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0h.75A.75.75 0 015.25 6v.75m0 0v.75A.75.75 0 014.5 8.25h-.75m0 0H3.75A.75.75 0 013 7.5v-.75m6 12l-3-3m0 0l-3 3m3-3v12.75m0-12.75L12 9.75M12 9.75L9.75 12m0 0L12 14.25m4.5-4.5l3 3m0 0l3-3m-3 3V1.5m0 12.75L18 9.75m0 0L16.5 12m0 0L18 14.25"
-      />
-    </svg>
-  </Icon>
-);
-const BuildTeamIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962c.57-.063.996-.594.996-1.185a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185m-7.5 2.962c.57-.063.996-.594.996-1.185a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185m16.5-5.85a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185m-7.5 2.962c.57-.063.996-.594.996-1.185a2.25 2.25 0 00-4.5 0c0 .59.426 1.122.996 1.185"
-      />
-    </svg>
-  </Icon>
-);
-const BusinessGrowthIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"
-      />
-    </svg>
-  </Icon>
-);
-const ShareIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.195.025.39.05.588.08m0 0a2.25 2.25 0 11-3.182 0m3.182 0l-2.618 1.83m2.618-1.83l2.618 1.83m-5.236 5.236a2.25 2.25 0 11-3.182 0m3.182 0c.195-.025.39-.05.588-.08m0 0l-2.618-1.83m2.618 1.83l2.618-1.83"
-      />
-    </svg>
-  </Icon>
-);
-const JusticeIcon = (props) => (
-  <Icon {...props}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.036.243c-2.132 0-4.14-.818-5.62-2.247m0 0a5.988 5.988 0 01-2.036-.243c-.483-.174-.711-.703-.59-1.202L9 4.971m-3.001-.094c-.99.203-1.99.377-3 .52M6 4.877l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.036.243c-2.132 0-4.14-.818-5.62-2.247m0 0l5.62-5.62m0 0l5.62 5.62"
-      />
-    </svg>
-  </Icon>
-);
-
-// --- Reusable Components (That use the icons) ---
+import ProfileImage from "../../assets/images/profile.png";
 
 const CircularProgress = ({ value, color }) => {
   const r = 50;
@@ -189,15 +81,21 @@ const GridCard = ({ icon, bgColor }) => (
   </div>
 );
 
-// --- Main Component Structure ---
-
 const Sidebar = () => (
-  <div className="flex flex-col w-64 p-6 bg-gray-800 text-white">
-    <div className="flex items-center mb-10">
-      <div className="p-2 mr-3 font-bold text-black bg-white rounded-md">
+  <div className="flex flex-col w-64 p-6 bg-hero_portal-side_bar text-white">
+    {/* Mac-style window controls */}
+    <div className="flex space-x-2 mb-8">
+      <div className="w-3 h-3 bg-red-500 rounded-full cursor-pointer"></div>
+      <div className="w-3 h-3 bg-yellow-400 rounded-full cursor-pointer"></div>
+      <div className="w-3 h-3 bg-green-500 rounded-full cursor-pointer"></div>
+    </div>
+
+    <div className="flex justify-center items-center mb-10">
+      <div className="text-3xl p-2 font-extrabold text-text-light italic">
         TIA
       </div>
     </div>
+
     <nav>
       <ul>
         <NavItem
@@ -215,12 +113,9 @@ const Sidebar = () => (
         <NavItem icon={<TradeIcon className="w-5 h-5" />} label="Trade" />
       </ul>
     </nav>
-    <div className="flex items-center p-2 mt-auto space-x-3 cursor-pointer">
-      <img
-        src="https://i.pravatar.cc/40?u=jacob"
-        alt="User Avatar"
-        className="w-10 h-10 rounded-full"
-      />
+    <div className="flex items-center p-0 mt-auto space-x-5 cursor-pointer">
+      {/* === MODIFIED: Increased profile icon size from w-10 h-10 to w-12 h-12 === */}
+      <img src={ProfileImage} alt="User Avatar" className="w-17 h-14 rounded" />
       <div>
         <p className="text-sm font-semibold">My Account</p>
       </div>
@@ -243,7 +138,7 @@ const DashboardContent = () => (
 
     <section className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-3">
       <FeatureCard
-        icon={<CashflowIcon className="w-8 h-8" />}
+        icon={<CashFlowIcon className="w-8 h-8" />}
         title="Cashflow"
       />
       <FeatureCard
@@ -272,10 +167,10 @@ const DashboardContent = () => (
     <section className="grid grid-cols-1 gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-3">
       <GridCard
         icon={<SettingsIcon className="w-10 h-10 text-white" />}
-        bgColor="bg-pink-500"
+        bgColor={`bg-pink-500`}
       />
       <GridCard
-        icon={<CollaborateIcon className="w-10 h-10 text-white" />}
+        icon={<ConnectIcon className="w-10 h-10 text-white" />}
         bgColor="bg-orange-400"
       />
       <GridCard
@@ -283,11 +178,11 @@ const DashboardContent = () => (
         bgColor="bg-lime-500"
       />
       <GridCard
-        icon={<ShareIcon className="w-10 h-10 text-white" />}
+        icon={<CollaborateIcon className="w-10 h-10 text-white" />}
         bgColor="bg-blue-500"
       />
       <GridCard
-        icon={<JusticeIcon className="w-10 h-10 text-white" />}
+        icon={<TradeIcon className="w-10 h-10 text-white" />}
         bgColor="bg-yellow-400"
       />
       <GridCard
@@ -298,16 +193,12 @@ const DashboardContent = () => (
   </div>
 );
 
-// --- The Main Exported Component ---
-
 export default function HeroAnimation() {
   return (
-    <div className="min-h-screen p-4 bg-gray-200 font-sans">
-      <h1 className="mb-4 text-xl font-semibold text-gray-500">
-        Hero Animation
-      </h1>
+    // This outer div centers the entire dashboard component on the page
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
       <div
-        className="flex mx-auto overflow-hidden bg-white rounded-lg shadow-2xl"
+        className="flex w-full overflow-hidden bg-white rounded-lg shadow-2xl"
         style={{ maxWidth: "1200px" }}
       >
         <Sidebar />
