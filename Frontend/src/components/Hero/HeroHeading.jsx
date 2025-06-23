@@ -11,7 +11,7 @@ import GhostButton from "../Button/GhostButton";
 const HeroHeading = () => {
   return (
     <div className="bg-white">
-      <div className="container mx-auto px-6 py-16 sm:py-24 text-center">
+      <div className="container mx-auto px-6 sm:pt-0 sm:pb-0 text-center">
         {/* Main Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 tracking-tight">
           Your <span className="text-blue-600">partner</span> to profit
