@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./Layouts/MainLayout.jsx";
 
-const HomePage = React.lazy(() => import("./pages/HomePage.jsx"));
+const HomePage = React.lazy(() => import("./pages/LandingPage.jsx"));
 
 function App() {
   return (
