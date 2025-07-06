@@ -27,7 +27,6 @@ const LandingPage = () => {
         }}
       ></div>
 
-      <HeaderComponent />
       <main className="relative z-0">
         <div className="container mx-auto flex flex-col items-center gap-y-16 px-6 py-24 text-center">
           <HeroHeadingComponent />

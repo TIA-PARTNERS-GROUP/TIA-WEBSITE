@@ -78,7 +78,7 @@ const Header = () => {
               <LoginIcon fillColor="currentColor" width="20" height="20" />
             </GhostButton>
             <PrimaryButton
-              onClick={() => (window.location.href = "#join")}
+              onClick={() => (window.location.href = "/dashboard")}
               className="px-6 py-2 text-sm"
             >
               <span>Get Started</span>
