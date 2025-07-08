@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import process from 'process';
 
 const env = process.env;
 
