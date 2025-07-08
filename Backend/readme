@@ -1,8 +1,7 @@
 NEW PACKAGES
-
-npm install dotenv --save
-npm install jsonwebtoken
-npm install joi
+dotenv
+jsonwebtoken
+joi
 
 TODO PORTING
 manage, project, user, admin, connect, reference - MODELS
