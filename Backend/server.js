@@ -1,4 +1,4 @@
-const app = require('./index');
+const app = require('./routes/index');
 const PORT = 5000;
 
 app.listen(PORT, () => {
