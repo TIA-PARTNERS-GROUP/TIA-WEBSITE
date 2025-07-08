@@ -5,7 +5,9 @@ import MainLayout from "./Layouts/MainLayout.jsx";
 import PortalLayout from "./Layouts/PortalLayout.jsx";
 
 const HomePage = React.lazy(() => import("./pages/LandingPage.jsx"));
-const DashboardPage = React.lazy(() => import("./pages/DashboardPage.jsx"));
+const DashboardPage = React.lazy(() => import("./pages/Portal/DashboardPage.jsx"));
+const ManagePage = React.lazy(() => import("./pages/Portal/ManagePage.jsx"));
+const ConnectPage = React.lazy(() => import("./pages/Portal/ConnectPage.jsx"));
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           </Route>\
           <Route element={<PortalLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/manage" element={<ManagePage />} />
+            <Route path="/connect" element={<ConnectPage />} />
           </Route>\
         </Routes>
       </Suspense>

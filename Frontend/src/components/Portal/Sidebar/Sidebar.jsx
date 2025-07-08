@@ -19,8 +19,8 @@ const sidebarItems = [
   {path: "/trade", icon: <TradeIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Trade"}
 ];
 
-const NavItem = ({ icon, label, isActive }) => (
-  <li className={`font-bold flex items-center p-4 @md:p-2 space-x-2 @md:space-x-3 rounded-md cursor-pointer text-lg @md:text-base ${
+const NavItem = ({ path, icon, label, isActive }) => (
+  <li onClick={() => (window.location.href = path)} className={`font-bold flex items-center p-4 @md:p-2 space-x-2 @md:space-x-3 rounded-md cursor-pointer text-lg @md:text-base ${
     isActive 
       ? "bg-blue-600 text-white" 
       : "text-white-300 hover:bg-gray-700 hover:text-white"
@@ -48,6 +48,7 @@ const Sidebar = () => (
         {sidebarItems.map((item) => (
             <NavItem
               key={item.path}
+              path={item.path}
               icon={item.icon} // Use icon from sidebarItems
               label={item.label} // Use label from sidebarItems
               isActive={location.pathname === item.path} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
