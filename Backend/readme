@@ -1,3 +1,5 @@
+ADD .ENV FILE TO BACKEND
+
 NEW PACKAGES
 dotenv
 jsonwebtoken
