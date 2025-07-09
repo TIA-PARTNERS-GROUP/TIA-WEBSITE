@@ -1,31 +1,55 @@
 import 'dotenv/config';
 import process from 'process';
 
-const env = process.env;
-
-const base = {
-  host: env.DB_HOST,
-  user: env.DB_USER, 
-  password: env.DB_PASS,
-  port: Number(env.DB_PORT),
+const required = (key) => {
+  const value = process.env[key];
+  if (!value) throw new Error(`Missing required env var: ${key}`);
+  return value;
 };
 
-const config = {
+const valEnv = {
+  NODE_ENV: required('NODE_ENV'),
+  PORT: parseInt(required('PORT'), 10),
+  FRONTEND_BASE_URL: required('FRONTEND_BASE_URL'),
+  DB_HOST: required('DB_HOST'),
+  DB_USER: required('DB_USER'),
+  DB_PASS: required('DB_PASS'),
+  DB_PORT: parseInt(required('DB_PORT'), 10),
+  DB_NAME: required('DB_NAME'),
+};
+
+const env = {
+  frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
+  port: valEnv.PORT,
+  db: {
     development: {
-        ...base,
-        database: env.DB_NAME,
-        multipleStatements: false,
+      
+      host: valEnv.DB_HOST,
+      username: valEnv.DB_USER,
+      password: valEnv.DB_PASS,
+      database: valEnv.DB_NAME,
+      database_port: valEnv.DB_PORT,
+      multipleStatements: false,
     },
     test: {
-        ...base,
-        database: env.DB_NAME,
-        multipleStatements: true,
+      frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
+      host: valEnv.DB_HOST,
+      username: valEnv.DB_USER,
+      password: valEnv.DB_PASS,
+      database: valEnv.DB_NAME,
+      database_port: valEnv.DB_PORT,
+      multipleStatements: true,
     },
     production: {
-        ...base,
-        database: env.DB_NAME,
-        multipleStatements: false,
+      frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
+      host: valEnv.DB_HOST,
+      username: valEnv.DB_USER,
+      password: valEnv.DB_PASS,
+      database: valEnv.DB_NAME,
+      database_port: valEnv.DB_PORT,
+      multipleStatements: false,
     }
+  }
 };
 
-export default config;
+export default env;

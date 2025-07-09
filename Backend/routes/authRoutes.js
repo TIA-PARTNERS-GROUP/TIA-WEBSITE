@@ -1,5 +1,5 @@
 import Router from 'express';
-import { signup, verifyEmail, resendVerification, login, logout, forgotPassword, resetPassword } from '../controllers/authController'
+import { signup, verifyEmail, resendVerification, login, logout, forgotPassword, resetPassword } from '../controllers/authController.js'
 
 const router = Router();
 
@@ -13,24 +13,20 @@ const router = Router();
  *       scheme: bearer
  *       bearerFormat: JWT
  */
+// JOSHUA - NOT SURE IF WE ARE USING SWAGGER WILL NEED TO DISCUSS. LOOK INTO STORY BOOK SHIT MORE
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/signup', signup);
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/verifyEmail', verifyEmail);
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/resendVerification', resendVerification);
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/login', login);
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/logout', logout);
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/forgotPassword', forgotPassword);
 
-// TODO: ADD SWAGGER SCHEMA
 router.post('/resetPassword', resetPassword);
+
+export default router;
