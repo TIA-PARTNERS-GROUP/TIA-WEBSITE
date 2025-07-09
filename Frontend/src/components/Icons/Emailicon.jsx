@@ -1,14 +1,14 @@
-import { ReactComponent as ProfileSVG } from "../../assets/icons/profile.svg";
+import { ReactComponent as EmailSVG } from "../../assets/icons/email.svg";
 
-export default function ProfileIcon({
+export default function EmailIcon({
   fillColor = "currentColor",
   width = 24,
   height = 24,
   className,
-  alt = "Notification Icon",
+  alt = "Email Icon",
 }) {
   return (
-    <ProfileSVG
+    <EmailSVG
       width={width}
       height={height}
       stroke={fillColor}

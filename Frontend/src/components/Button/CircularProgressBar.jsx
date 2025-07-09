@@ -18,7 +18,7 @@ const CircularProgressBar = ({ progress = 75, size = 120, strokeWidth = 10 }) =>
           cy={size / 2}
         />
         <circle
-          className="text-violet-600"
+          className="text-rose-500"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -30,7 +30,7 @@ const CircularProgressBar = ({ progress = 75, size = 120, strokeWidth = 10 }) =>
           cy={size / 2}
         />
       </svg>
-      <span className="absolute text-lg font-semibold text-violet-600">
+      <span className="absolute text-lg font-semibold text-rose-500">
         {progress}%
       </span>
     </div>

@@ -1,6 +1,7 @@
 import PortalHeader from "../../components/Portal/Sidebar/PortalHeader";
 import ProfileTab from "../../components/Portal/Dashboard/ProfileTab";
 import HorizontalTabs from "../../components/Button/HorizontalTabs";
+import SmartConnectShowcase from "../../components/Portal/Connect/SmartConnectShowcase";
 
 // Tab names
 const partnerTabData = [
@@ -25,6 +26,7 @@ const ConnectPage = () => {
         <HorizontalTabs tabData = {partnerTabData} />
         <div className="bg-white rounded-xl pt-10 pl-20">
             <HorizontalTabs tabData = {searchTabData} />
+            <SmartConnectShowcase />
         </div>
       </div>
     </main>

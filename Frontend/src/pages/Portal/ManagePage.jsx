@@ -2,6 +2,7 @@ import PortalHeader from "../../components/Portal/Sidebar/PortalHeader";
 import ProfileTab from "../../components/Portal/Dashboard/ProfileTab";
 import HorizontalTabs from "../../components/Button/HorizontalTabs";
 import ProfileHeader from "../../components/Portal/Manage/ProfileHeader";
+import ContactInfo from "../../components/Portal/Manage/ContactInfo";
 
 // Tab names
 const tabData = [
@@ -15,7 +16,7 @@ const tabData = [
 
 const ManagePage = () => {
   return (
-    <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4"> 
+    <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full py-4 space-y-4"> 
       <div className="bg-white rounded-xl">
         <PortalHeader />
         <ProfileTab />
@@ -25,6 +26,9 @@ const ManagePage = () => {
         <div className="bg-white rounded-xl">
             <ProfileHeader />
         </div>
+      </div>
+      <div className="bg-white rounded-xl">
+        <ContactInfo />
       </div>
     </main>
   );

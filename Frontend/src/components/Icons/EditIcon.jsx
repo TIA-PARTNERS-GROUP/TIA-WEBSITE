@@ -1,14 +1,14 @@
-import { ReactComponent as ProfileSVG } from "../../assets/icons/profile.svg";
+import { ReactComponent as EditSVG } from "../../assets/icons/edit.svg";
 
-export default function ProfileIcon({
+export default function EditIcon({
   fillColor = "currentColor",
   width = 24,
   height = 24,
   className,
-  alt = "Notification Icon",
+  alt = "Edit Icon",
 }) {
   return (
-    <ProfileSVG
+    <EditSVG
       width={width}
       height={height}
       stroke={fillColor}

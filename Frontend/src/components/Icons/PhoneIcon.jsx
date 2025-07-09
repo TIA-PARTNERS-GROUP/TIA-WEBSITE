@@ -1,14 +1,14 @@
-import { ReactComponent as ProfileSVG } from "../../assets/icons/profile.svg";
+import { ReactComponent as PhoneSVG } from "../../assets/icons/phone.svg";
 
-export default function ProfileIcon({
+export default function PhoneIcon({
   fillColor = "currentColor",
   width = 24,
   height = 24,
   className,
-  alt = "Notification Icon",
+  alt = "Phone Icon",
 }) {
   return (
-    <ProfileSVG
+    <PhoneSVG
       width={width}
       height={height}
       stroke={fillColor}

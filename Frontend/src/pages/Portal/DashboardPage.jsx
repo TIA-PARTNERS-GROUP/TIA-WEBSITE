@@ -9,10 +9,18 @@ import DailyActivities from "../../components/Portal/Dashboard/DailyActivities";
 const barData = [
   { progress: "60", description: "Alliance Partners connected"},
   { progress: "100", description: "Complimentary Partners connected"},
-  { progress: "22", description: "Goals Completed this Quarter"},
-  { progress: "50", description: "Tech Briefings Attended"},
-  { progress: "60", description: "Networking Events Attended"},
   { progress: "80", description: "MasterMind Panels"}
+]
+
+const goalData = [
+  { progress: 22, description: "Goals Completed this Quarter"},
+  { progress: 50, description: "Tech Briefings Attended"},
+  { progress: 60, description: "Networking Events Attended"}
+]
+
+const actionData = [
+  { description: "Finish setting up profile"},
+  { description: "Post your first Blog"}
 ]
 
 const DashboardPage = () => {
@@ -25,15 +33,15 @@ const DashboardPage = () => {
       <div className="bg-white rounded-xl">
         <FocusTab />
       </div>
-      <div className="grid grid-cols-3 gap-8">
-        <div className="bg-white rounded-xl p-8 h-full">
-          <GoalTracker />
-        </div>
-        <div className="bg-white rounded-xl p-8 h-full">
-          <NextAction />
-        </div>
+      <div className="grid grid-cols-3 gap-8 pb-4">
         <div className="bg-white rounded-xl p-8 h-full">
           <DailyActivities overallProgress = {80} barData = {barData} />
+        </div>
+        <div className="bg-white rounded-xl p-8 h-full">
+          <NextAction actionData = {actionData}/>
+        </div>
+        <div className="bg-white rounded-xl p-8 h-full">
+          <GoalTracker goalData = {goalData}/>
         </div>
       </div>
     </main>
