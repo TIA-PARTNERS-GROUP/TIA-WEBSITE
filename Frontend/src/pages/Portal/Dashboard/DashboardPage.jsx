@@ -1,9 +1,9 @@
-import PortalHeader from "../../components/Portal/Sidebar/PortalHeader";
-import ProfileTab from "../../components/Portal/Dashboard/ProfileTab";
-import FocusTab from "../../components/Portal/Dashboard/FocusTab";
-import GoalTracker from "../../components/Portal/Dashboard/GoalTracker";
-import NextAction from "../../components/Portal/Dashboard/NextAction";
-import DailyActivities from "../../components/Portal/Dashboard/DailyActivities";
+import PortalHeader from "../../../components/Portal/Sidebar/PortalHeader";
+import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
+import FocusTab from "../../../components/Portal/Dashboard/FocusTab";
+import GoalTracker from "../../../components/Portal/Dashboard/GoalTracker";
+import NextAction from "../../../components/Portal/Dashboard/NextAction";
+import DailyActivities from "../../../components/Portal/Dashboard/DailyActivities";
 
 // Sample Data for Daily Activities Progress Bars
 const barData = [
@@ -26,11 +26,11 @@ const actionData = [
 const DashboardPage = () => {
   return (
     <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4"> 
-      <div className="bg-white rounded-xl">
+      <div className="bg-white rounded-xl p-8">
         <PortalHeader />
         <ProfileTab />
       </div>
-      <div className="bg-white rounded-xl">
+      <div className="bg-white rounded-xl p-8">
         <FocusTab />
       </div>
       <div className="grid grid-cols-3 gap-8 pb-4">

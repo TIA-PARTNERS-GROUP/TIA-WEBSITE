@@ -1,4 +1,4 @@
-import { motion, useInView, animate } from "framer-motion";
+import { motion } from "framer-motion";
 
 import DashboardIcon from "../../../components/Icons/DashboardIcon";
 import ConnectIcon from "../../../components/Icons/ConnectIcon";
@@ -8,15 +8,17 @@ import NetworkIcon from "../../../components/Icons/NetworkIcon";
 import TradeIcon from "../../../components/Icons/TradeIcon";
 import ManageIcon from "../../../components/Icons/ManegIcon";
 
+const splitPath = location.pathname.split('/')[1];
+
 // Track sidebar paths, icons and labels for mapping NavItems below
 const sidebarItems = [
-  {path: "/dashboard", icon: <DashboardIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Dashboard" }, 
-  {path: "/manage", icon: <ManageIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Manage"}, 
-  {path: "/connect", icon: <ConnectIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Connect"},
-  {path: "/build", icon: <BuildIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Build"},
-  {path: "/collaborate", icon: <CollaborateIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Collaborate"},
-  {path: "/network", icon: <NetworkIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Network"},
-  {path: "/trade", icon: <TradeIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Trade"}
+  {match: "dashboard", path: "/dashboard", icon: <DashboardIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Dashboard" }, 
+  {match: "manage", path: "/manage/profile", icon: <ManageIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Manage"}, 
+  {match: "connect", path: "/connect/alliance/smartconnect", icon: <ConnectIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Connect"},
+  {match: "build", path: "/build", icon: <BuildIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Build"},
+  {match: "collaborate", path: "/collaborate", icon: <CollaborateIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Collaborate"},
+  {match: "network", path: "/network", icon: <NetworkIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Network"},
+  {match: "trade", path: "/trade", icon: <TradeIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Trade"}
 ];
 
 const NavItem = ({ path, icon, label, isActive }) => (
@@ -51,7 +53,7 @@ const Sidebar = () => (
               path={item.path}
               icon={item.icon} // Use icon from sidebarItems
               label={item.label} // Use label from sidebarItems
-              isActive={location.pathname === item.path} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
+              isActive={splitPath === item.match} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
             />
         ))}
       </ul>

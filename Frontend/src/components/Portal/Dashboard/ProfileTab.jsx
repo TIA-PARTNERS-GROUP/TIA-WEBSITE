@@ -7,7 +7,8 @@ const progress = 80;
 const ProfileTab = () => (
   <div className="container mx-auto flex flex-col items-start px-0 pb-4 text-left">
     <div className="flex items-start gap-4 w-full">
-      <ProfileIcon className="w-20 h-20 @md:w-14 @md:h-14 text-black mt-0.5" />
+      <button onClick={() => (window.location.href = "/manage/profile")}><ProfileIcon className="w-20 h-20 @md:w-14 @md:h-14 text-black mt-0.5" /></button>
+      
       <div className="flex-1">
         <h2 className="pt-1 text-2xl @md:text-3xl font-semibold text-black-800">Welcome back, {username}!</h2>
         <div className="flex items-center gap-3 max-w-[24%]">
