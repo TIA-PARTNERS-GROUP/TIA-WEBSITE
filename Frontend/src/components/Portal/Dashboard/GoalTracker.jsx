@@ -20,9 +20,9 @@ const GoalTracker = ({ goalData }) => (
           </div>
         ))}
     <SecondaryButton
-            className="text-sm block text-center py-0.5 mt-2 max-w-[200px]"
+            className="text-sm block text-center py-0.5 mt-2 max-w-[215px]"
             >
-            Add new tracker
+            + Add new tracker
     </SecondaryButton>
   </div>
 )

@@ -9,7 +9,7 @@ const UserArtifactsList = () => {
 
     return (
     <div>
-      <div className="grid grid-cols-[6fr_0.5fr_0.5fr] gap-4 w-full my-auto">
+      <div className="grid grid-cols-[6fr_0.7fr_0.7fr] gap-4 w-full my-auto">
         <SecondaryButton
             className="text-sm block text-center py-0.5 mt-2 max-w-[130px]"
             >

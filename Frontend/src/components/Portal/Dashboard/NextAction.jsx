@@ -39,9 +39,9 @@ const NextAction = ({ actionData }) => (
           </div>
     </motion.section>
     <SecondaryButton
-            className="text-sm block text-center py-0.5 mt-2 max-w-[160px]"
+            className="text-sm block text-center py-0.5 mt-2 max-w-[185px]"
             >
-            Add new task
+            + Add new task
         </SecondaryButton>
   </div>
 )
