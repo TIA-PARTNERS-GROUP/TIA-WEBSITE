@@ -9,8 +9,10 @@ const PortalLayout = () => {
     <>
       <div className="font-poppins flex flex-col min-h-screen">
         <div className="flex flex-1">
-            <Sidebar />
-
+            <aside class="h-screen sticky top-0">
+                <Sidebar />
+            </aside>
+            
             <div className="flex-1 flex flex-col">
               <main className="flex-1">
                 <Outlet /> {}
