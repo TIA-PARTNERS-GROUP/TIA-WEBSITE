@@ -4,7 +4,7 @@ import config from '../config/config.js'
 
 const router = express.Router();
 
-// Routes
+// Appends to api:
 router.use('/auth', authRoutes);
 // router.use('/users', userRoutes);
 // router.use('/chat', chatRoutes);

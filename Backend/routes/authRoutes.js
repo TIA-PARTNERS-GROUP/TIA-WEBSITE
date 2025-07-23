@@ -3,7 +3,7 @@ import { signup, verifyEmail, resendVerification, login, logout, forgotPassword,
 
 const router = Router();
 
-// JOSHUA - FOR EACH ROUTE IMPLEMNT A SWAGGER SCHEMA FOLLOW THE BELLOW
+// JOSHUA - FOR EACH ROUTE IMPLEMNT A SWAGGER SCHEMA FOLLOW BELLOW
 /**
  * @swagger
  * components:
@@ -13,7 +13,6 @@ const router = Router();
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-// JOSHUA - NOT SURE IF WE ARE USING SWAGGER WILL NEED TO DISCUSS. LOOK INTO STORY BOOK SHIT MORE
 
 router.post('/signup', signup);
 

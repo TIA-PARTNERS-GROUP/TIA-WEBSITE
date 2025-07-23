@@ -8,7 +8,7 @@ const required = (key) => {
 };
 
 const valEnv = {
-  NODE_ENV: required('NODE_ENV'),
+  NODE_ENV: required('NODE_ENV') || 'development', // Default to development (for testing purposes)
   PORT: parseInt(required('PORT'), 10),
   FRONTEND_BASE_URL: required('FRONTEND_BASE_URL'),
   DB_HOST: required('DB_HOST'),
@@ -16,14 +16,15 @@ const valEnv = {
   DB_PASS: required('DB_PASS'),
   DB_PORT: parseInt(required('DB_PORT'), 10),
   DB_NAME: required('DB_NAME'),
+  MIDDLEWARE: process.env.MIDDLEWARE === 'True',
 };
 
 const env = {
-  frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
-  port: valEnv.PORT,
+  FRONTEND_BASE_URL: valEnv.FRONTEND_BASE_URL,
+  PORT: valEnv.PORT,
+  MIDDLEWARE: valEnv.MIDDLEWARE,
   db: {
     development: {
-      
       host: valEnv.DB_HOST,
       username: valEnv.DB_USER,
       password: valEnv.DB_PASS,

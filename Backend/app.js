@@ -41,11 +41,13 @@ app.use('/api', routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware
-app.use(logger);
-app.use(errorHandler);
-app.use(generalAPILimiter);
-app.use(express.json());
-app.use(cookieParser())
+if (config.MIDDLEWARE) {
+  app.use(logger);
+  app.use(errorHandler);
+  app.use(generalAPILimiter);
+  app.use(express.json());
+  app.use(cookieParser())
+}
 
 // ENV mode error handling for redirecting. Better error handling formatting
 if (config.env === 'production') {
