@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import SecondaryButton from "../../Button/SecondaryButton";
 import DeleteIcon from "../../Icons/DeleteIcon";
@@ -5,16 +6,18 @@ import SquareSelectIcon from "../../Icons/SquareSelectIcon";
 import TickIcon from "../../Icons/TickIcon";
 
 const UserArtifactsList = () => {
+    const { manageType } = useParams();
     const [isChecked, setIsChecked] = useState(false);
 
     return (
     <div>
       <div className="grid grid-cols-[6fr_0.7fr_0.7fr] gap-4 w-full my-auto">
-        <SecondaryButton
-            className="text-sm block text-center py-0.5 mt-2 max-w-[130px]"
-            >
-            + Add new
-        </SecondaryButton>
+          <SecondaryButton
+              onClick={() => (window.location.href = `/manage/${manageType}/write`)}
+              className="text-sm block text-center py-0.5 mt-2 max-w-[130px]"
+              >
+              + Add new
+          </SecondaryButton>
         <div className="grid grid-cols-[1fr_2fr] items-center justify-center">
           
           <div className="relative">

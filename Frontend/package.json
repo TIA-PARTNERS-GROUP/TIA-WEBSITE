@@ -61,6 +61,7 @@
     "playwright": "^1.52.0",
     "postcss": "^8.5.3",
     "prop-types": "^15.8.1",
+    "quill": "^2.0.3",
     "react-docgen": "^8.0.0",
     "storybook": "^8.6.12",
     "supertest": "^7.1.0",

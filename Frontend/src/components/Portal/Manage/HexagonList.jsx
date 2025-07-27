@@ -1,5 +1,3 @@
-import SecondaryButton from "../../Button/SecondaryButton";
-
 const HexagonList = ({ listData }) => (
   <div className="container text-left gap-2">
         {listData.map((item, index) => (  

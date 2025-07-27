@@ -11,6 +11,7 @@ const ConnectPage = React.lazy(() => import("./pages/Portal/Connect/ConnectPage.
 const PartnerContent = React.lazy(() => import("./pages/Portal/Connect/PartnerContent.jsx"));
 const SearchContent = React.lazy(() => import("./pages/Portal/Connect/SearchContent.jsx"));
 const ManageContent = React.lazy(() => import("./pages/Portal/Manage/ManageContent.jsx"));
+const TableViewContent = React.lazy(() => import("./pages/Portal/Manage/TableViewContent.jsx"));
 
 function App() {
   return (
@@ -23,7 +24,10 @@ function App() {
           <Route element={<PortalLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/manage" element={<ManagePage />}> 
-              <Route path=":manageType" element={<ManageContent />} />
+              <Route path=":manageType" element={<ManageContent />}>
+                <Route index element={<TableViewContent />} />
+                <Route path=":tableViewType" element={<TableViewContent/>} />
+              </Route>
             </Route>
             <Route path="/connect" element={<ConnectPage />}>
               <Route path=":partnerType" element={<PartnerContent />}>

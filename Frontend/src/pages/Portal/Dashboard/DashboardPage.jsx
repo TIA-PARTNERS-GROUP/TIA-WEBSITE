@@ -18,9 +18,9 @@ const goalData = [
   { progress: 60, description: "Networking Events Attended"}
 ]
 
-const actionData = [
-  { description: "Finish setting up profile"},
-  { description: "Post your first Blog"}
+const initialActionData = [
+  { description: "Finish setting up profile", input: false},
+  { description: "Post your first Blog", input: false}
 ]
 
 const DashboardPage = () => {
@@ -38,7 +38,7 @@ const DashboardPage = () => {
           <DailyActivities overallProgress = {80} barData = {barData} />
         </div>
         <div className="bg-white rounded-xl p-8 h-full">
-          <NextAction actionData = {actionData}/>
+          <NextAction initialActionData = {initialActionData}/>
         </div>
         <div className="bg-white rounded-xl p-8 h-full">
           <GoalTracker goalData = {goalData}/>

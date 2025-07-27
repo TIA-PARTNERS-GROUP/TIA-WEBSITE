@@ -1,4 +1,4 @@
-import { motion, useInView, animate } from "framer-motion";
+import { motion } from "framer-motion";
 
 import CashFlowIcon from "../../../components/Icons/CurrencyIcon";
 import BuildTeamIcon from "../../../components/Icons/TeamBuildingIcon";
