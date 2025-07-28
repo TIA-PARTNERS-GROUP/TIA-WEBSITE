@@ -1,0 +1,17 @@
+ADD .ENV FILE TO BACKEND
+
+NEW PACKAGES
+dotenv
+jsonwebtoken
+joi
+cookieParser
+nodemon
+cors
+express-rate-limit
+swagger-jsdoc
+swagger-ui-express
+--save-dev @babel/preset-env @babel/core babel-jest
+
+TODO PORTING
+manage, project, user, admin, connect, reference - MODELS
+manage, project, user, admin, connect, reference - CONTROLLERS
