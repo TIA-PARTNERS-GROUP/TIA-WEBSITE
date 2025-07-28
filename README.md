@@ -51,7 +51,8 @@ DB_NAME=testdb
 
 ## Frontend
 ```
-REACT_APP_API_BASE_URL=http://localhost:5000/api
+VITE_FRONTEND_BASE_PORT=3000
+VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
 ## Testing
