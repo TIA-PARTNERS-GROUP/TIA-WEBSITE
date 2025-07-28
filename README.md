@@ -35,8 +35,8 @@ npm run storybook
 ```
 
 ### ENV Setup
-# TODO: REMOVE ENV CONFIGURATIONS FROM README
-## Frontend
+### TODO: REMOVE ENV CONFIGURATIONS FROM README
+## Backend
 ```
 NODE_ENV=development
 PORT=5000
@@ -49,7 +49,7 @@ DB_PORT=5432
 DB_NAME=testdb
 ```
 
-## Backend
+## Frontend
 ```
 REACT_APP_API_BASE_URL=http://localhost:5000/api
 ```
