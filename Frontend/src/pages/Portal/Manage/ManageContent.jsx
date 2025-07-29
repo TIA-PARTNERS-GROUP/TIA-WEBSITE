@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import HorizontalTabs from "../../../components/Button/HorizontalTabs";
-import Profile from "./Profile";
 import Connections from "./Connections";
 import CaseStudies from './CaseStudies';
 import Testimonials from './Testimonials';
 import Blogs from './Blogs';
 import MasterMind from './MasterMind';
+import Profile from './Profile';
 
 // Tab names
 const tabData = [

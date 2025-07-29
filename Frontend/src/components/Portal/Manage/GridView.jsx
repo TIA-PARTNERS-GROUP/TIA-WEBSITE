@@ -1,4 +1,4 @@
-import ConnectionsGrid from "../../../components/Portal/Connect/ConnectionsGrid";
+import ConnectionsGrid from "../Connect/ConnectionsGrid";
 
 const connectionsData = [
     {
@@ -36,12 +36,14 @@ const connectionsData = [
     }
 ];
 
-const SmartConnect = () => (
-  <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
-    <h2 className="text-3xl font-semibold">SmartConnect</h2>
-    <p className="pt-2 pb-20 text-md">Our SmartConnect system has recommended the following connections based on your profile:</p>
-    <ConnectionsGrid connectionsData={connectionsData}/>
-  </div>
-)
+const GridView = () => {
+  return (
+    <div className="bg-white rounded-xl px-8 py-2">
+        <h2 className="pt-10 text-4xl @md:text-3xl font-semibold text-black-800">Connections</h2>
+        <p className="py-8 text-lg">You are currently connected to these companies:</p>
+        <ConnectionsGrid connectionsData={connectionsData} connectionModule={true}/>
+    </div>
+  );
+};
 
-export default SmartConnect;
+export default GridView;
