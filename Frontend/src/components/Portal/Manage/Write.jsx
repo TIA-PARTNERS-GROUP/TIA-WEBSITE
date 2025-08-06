@@ -43,7 +43,6 @@ const WriteView = () => {
 
       setArticleData({ title, content, delta, type, date });
 
-      console.log('Sending state:', { title, date, type, content});
       navigate(`/manage/${manageType}/table-view`, {
       state: { 
         newArticle: { 
