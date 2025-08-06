@@ -4,6 +4,7 @@ import config from "../config/config.js"
 import jwt from 'jsonwebtoken'
 
 import argon2 from 'argon2';
+import { exit } from "process";
 
 export const signup = async (req, res) => {
   try {
@@ -60,12 +61,15 @@ export const login = async (req, res) => {
 
     const existingUser = await user.findByLoginEmail(email);
 
-    let authenticated = false;
-    if (existingUser != null) {
-      authenticated = argon2.verify(existingUser.password_hash, password);
+    if (existingUser == null) {
+      return res.status(401).json({message: "Invalid email or password"});
     }
+    console.log(password)
+    console.log(existingUser.password_hash)
+    let authenticated = await argon2.verify(existingUser.password_hash, password);
+    console.log(authenticated)
 
-    if (!authenticated || existingUser == null) {
+    if (!authenticated) {
       return res.status(401).json({message: "Invalid email or password"});
     }
 
