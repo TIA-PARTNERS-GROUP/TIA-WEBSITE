@@ -1,9 +1,29 @@
+import userModel from "../models/user.js";
+import db from "../config/db.js"
+
+import argon2 from 'argon2';
+
 export const signup = async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const user = userModel(db)
+    const { email, password, firstName, lastName } = req.body;
+
+    // Duplicate email check should also be done before a registration can be submitted
+    var existingUser = await user.findByLoginEmail(email);
+    if (existingUser != null) {
+      return res.status(409).json({
+        message: 'Email already in use'
+      })
+    }
+
+    var hash = await argon2.hash(password, {raw: true});
+    var userId = await user.registerUser(firstName, lastName, email, hash);
 
     return res.status(201).json({
-      message: 'Signup successful [TO BE IMPLEMENTED!]',
+      id: userId,
+      email: email,
+      firstName: firstName,
+      lastName: lastName
     });
   } catch (err) {
     console.error('Signup error:', err);
