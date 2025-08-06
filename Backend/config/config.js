@@ -26,28 +26,28 @@ const env = {
   db: {
     development: {
       host: valEnv.DB_HOST,
-      username: valEnv.DB_USER,
+      user: valEnv.DB_USER,
       password: valEnv.DB_PASS,
       database: valEnv.DB_NAME,
-      database_port: valEnv.DB_PORT,
+      port: valEnv.DB_PORT,
       multipleStatements: false,
     },
     test: {
       frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
       host: valEnv.DB_HOST,
-      username: valEnv.DB_USER,
+      user: valEnv.DB_USER,
       password: valEnv.DB_PASS,
       database: valEnv.DB_NAME,
-      database_port: valEnv.DB_PORT,
+      port: valEnv.DB_PORT,
       multipleStatements: true,
     },
     production: {
       frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
       host: valEnv.DB_HOST,
-      username: valEnv.DB_USER,
+      user: valEnv.DB_USER,
       password: valEnv.DB_PASS,
       database: valEnv.DB_NAME,
-      database_port: valEnv.DB_PORT,
+      port: valEnv.DB_PORT,
       multipleStatements: false,
     }
   }
