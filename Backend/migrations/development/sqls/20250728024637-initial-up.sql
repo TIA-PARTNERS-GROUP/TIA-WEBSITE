@@ -601,7 +601,7 @@ DROP TABLE IF EXISTS `user_logins`;
 CREATE TABLE `user_logins` (
   `user_id` int unsigned NOT NULL,
   `login_email` varchar(254) NOT NULL,
-  `password_hash` binary(70) DEFAULT NULL,
+  `password_hash` varchar(255) DEFAULT NULL,
   `password_reset_token` blob,
   `password_reset_requested_timestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`),
