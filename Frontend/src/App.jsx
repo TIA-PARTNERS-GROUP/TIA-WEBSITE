@@ -13,6 +13,12 @@ const SearchContent = React.lazy(() => import("./pages/Portal/Connect/SearchCont
 const ManageContent = React.lazy(() => import("./pages/Portal/Manage/ManageContent.jsx"));
 const TableViewContent = React.lazy(() => import("./pages/Portal/Manage/TableViewContent.jsx"));
 
+const TradePage = React.lazy(() => import("./pages/Portal/Trade/TradePage.jsx"));
+const FindJob = React.lazy(() => import("./pages/Portal/Trade/FindJob.jsx"));
+const SubmitJob = React.lazy(() => import("./pages/Portal/Trade/SubmitJob.jsx"));
+const History = React.lazy(() => import("./pages/Portal/Trade/History.jsx"));
+
+
 function App() {
   return (
     <Router>
@@ -35,7 +41,16 @@ function App() {
                 <Route path=":searchType" element={<SearchContent />} />
               </Route>
             </Route>
+            <Route path="/trade" element={<TradePage />}>
+            <Route index element={<FindJob />} />
+            <Route path="find" element={<FindJob />} />
+            <Route path="submit" element={<SubmitJob />} />
+            <Route path="history" element={<History />} />
           </Route>
+          </Route>
+
+          
+
 
           <Route path="*" element={<div>Page not found</div>} />
         </Routes>

@@ -1,6 +1,7 @@
 import ArrowForwardIcon from "../Icons/ArrowFoward";
 import PrimaryButton from "../Button/PrimaryButton";
 import GhostButton from "../Button/GhostButton";
+import { getBackendAPI } from "../../api/backendAPICallExample.js"
 
 /**
  * A responsive hero heading component with a title, subtitle, and action buttons.
@@ -8,6 +9,18 @@ import GhostButton from "../Button/GhostButton";
  *
  * @returns {JSX.Element} The rendered HeroHeading component.
  */
+
+const handleAPITest = async () => {
+  try {
+    const data = await getBackendAPI();
+    console.log("Backend Response:", data);
+    alert(`✅ API Response: ${JSON.stringify(data)}`);
+  } catch (err) {
+    console.error("API Error:", err);
+    alert("❌ API call failed. See console for details.");
+  }
+};
+
 const HeroHeading = () => {
   return (
     <div className="bg-white">
@@ -31,7 +44,7 @@ const HeroHeading = () => {
             <span>Join Now</span>
           </PrimaryButton>
           <GhostButton
-            onClick={() => (window.location.href = "#login")}
+            onClick={() => (handleAPITest())}
             className="px-10 py-2 text-sm flex items-center gap-2"
           >
             <span>Find Your Membership Now</span>
