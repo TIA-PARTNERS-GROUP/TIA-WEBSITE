@@ -64,10 +64,8 @@ export const login = async (req, res) => {
     if (existingUser == null) {
       return res.status(401).json({message: "Invalid email or password"});
     }
-    console.log(password)
-    console.log(existingUser.password_hash)
+
     let authenticated = await argon2.verify(existingUser.password_hash, password);
-    console.log(authenticated)
 
     if (!authenticated) {
       return res.status(401).json({message: "Invalid email or password"});
