@@ -15,7 +15,7 @@ const itemVariants = {
 };
 
 const FeatureCard = ({ description = "", input = false, onChange }) => (
-  <div
+  <motion.div
     variants={itemVariants}
     className="w-full p-4 @md:p-6 text-black group hover:bg-gray-200 rounded-lg cursor-pointer"
   >
@@ -35,7 +35,7 @@ const FeatureCard = ({ description = "", input = false, onChange }) => (
         - {description}
       </span>
     )}
-  </div>
+  </motion.div>
 );
 
 const NextAction = ({ initialActionData }) => {
@@ -59,10 +59,10 @@ const NextAction = ({ initialActionData }) => {
   return (
     <div className="container text-left gap-2">
       <h2 className="pt-1 pb-4 text-2xl @md:text-3xl font-bold text-black-800">Next Action</h2>
-      <section 
+      <motion.section 
               variants={containerVariants}
               initial="hidden"
-              whileinview="visible"
+              whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}>
             <div className="flex flex-col w-full text-left">
               {actionData.map((action, index) => (
@@ -74,7 +74,7 @@ const NextAction = ({ initialActionData }) => {
                   />
               ))}
             </div>
-      </section>
+      </motion.section>
       <SecondaryButton
               onClick={handleAddTask}
               className="text-sm block text-center py-0.5 mt-2 max-w-[185px]"
