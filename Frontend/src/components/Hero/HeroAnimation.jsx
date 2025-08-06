@@ -253,7 +253,7 @@ const DashboardContent = () => {
         className="flex flex-wrap justify-around p-4 @md:p-6 mt-6 @md:mt-8 bg-white rounded-lg shadow-md gap-3 @md:gap-4"
         variants={containerVariants}
         initial="hidden"
-        whileInView="visible"
+        whileinview="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
         <motion.div variants={itemVariants}>
@@ -272,7 +272,7 @@ const DashboardContent = () => {
         className="grid grid-cols-3 gap-4 @md:gap-6 mt-6 @md:mt-8 @md:grid-cols-3"
         variants={containerVariants}
         initial="hidden"
-        whileInView="visible"
+        whileinview="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
         {/* Responsive icon sizes for FeatureCard */}
@@ -326,7 +326,7 @@ const DashboardContent = () => {
         className="grid grid-cols-3 gap-4 @md:gap-6 mt-6 @md:mt-8 @sm:grid-cols-2 @lg:grid-cols-3"
         variants={containerVariants}
         initial="hidden"
-        whileInView="visible"
+        whileinview="visible"
         viewport={{ once: true, amount: 0.1 }}
       >
         {/* Responsive icon sizes for GridCard */}

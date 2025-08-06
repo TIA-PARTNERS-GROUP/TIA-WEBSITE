@@ -44,7 +44,7 @@ const FocusTab = () => (
         className="grid grid-cols-3 gap-10 @md:gap-6 mt-6 @md:mt-8 @md:grid-cols-3 w-full"
         variants={containerVariants}
         initial="hidden"
-        whileInView="visible"
+        whileinview="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
         <FeatureCard

@@ -62,7 +62,7 @@ const NextAction = ({ initialActionData }) => {
       <section 
               variants={containerVariants}
               initial="hidden"
-              whileInView="visible"
+              whileinview="visible"
               viewport={{ once: true, amount: 0.2 }}>
             <div className="flex flex-col w-full text-left">
               {actionData.map((action, index) => (

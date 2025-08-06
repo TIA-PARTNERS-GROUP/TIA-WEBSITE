@@ -9,7 +9,7 @@ const PortalLayout = () => {
     <>
       <div className="font-poppins flex flex-col min-h-screen">
         <div className="flex flex-1">
-            <aside class="h-screen sticky top-0">
+            <aside className="h-screen sticky top-0">
                 <Sidebar />
             </aside>
             
