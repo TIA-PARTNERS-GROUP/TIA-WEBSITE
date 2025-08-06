@@ -16,6 +16,7 @@ const valEnv = {
   DB_PASS: required('DB_PASS'),
   DB_PORT: parseInt(required('DB_PORT'), 10),
   DB_NAME: required('DB_NAME'),
+  JWT_SECRET: required('JWT_SECRET'),
   MIDDLEWARE: process.env.MIDDLEWARE === 'True',
 };
 
@@ -23,6 +24,7 @@ const env = {
   FRONTEND_BASE_URL: valEnv.FRONTEND_BASE_URL,
   PORT: valEnv.PORT,
   MIDDLEWARE: valEnv.MIDDLEWARE,
+  JWT_SECRET: valEnv.JWT_SECRET,
   db: {
     development: {
       host: valEnv.DB_HOST,
