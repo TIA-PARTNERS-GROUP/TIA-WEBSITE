@@ -13,7 +13,7 @@ const SearchBar = () => {
     return (
     <form className="text-black pb-20 pr-10 w-full">
         <div className="flex justify-between"> 
-            <div className="flex gap-x-2 border-b-2 border-gray-500 pb-1 w-1/2">
+            <div className="flex gap-x-2 border-b-2 border-gray-500 pb-1 w-1/2 items-center">
                 <SearchIcon /> 
                 <input 
                             type="search" 
