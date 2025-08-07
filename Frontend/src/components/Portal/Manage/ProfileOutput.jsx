@@ -1,7 +1,6 @@
 import ProfileHeader from "./ProfileHeader";
 import ContactInfo from "./ContactInfo";
 import HexagonList from "./HexagonList";
-import { useLocation } from "react-router-dom";
 
 const defaultCompanyDescription = 'DyCom is a seasoned and experienced Network Services\
  company that takes great pride in offering a wide-range of sophisticated IT products\
@@ -29,15 +28,6 @@ const ProfileOutput =({
     whatWeDoData = defaultWhatWeDoData, 
     clientData = defaultClientData, 
     contactInfo = defaultContactInfo}) => {
-
-  const location = useLocation();
-  if (location.state?.companyName) {
-    companyName = location.state?.companyName;
-    companyDescription = location.state?.companyDescription;
-    whatWeDoData = location.state?.whatWeDoData;
-    clientData = location.state?.clientData;
-    contactInfo = location.state?.contactInfo;
-  };
 
   return (
     <div className="space-y-4">

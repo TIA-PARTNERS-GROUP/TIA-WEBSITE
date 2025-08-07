@@ -35,7 +35,7 @@ const PortalHeader = () => {
         <div className="flex gap-x-2">
           <div className="relative">
             <button 
-              className="relative p-1 hover:bg-gray-100 rounded-full transition-colors"
+              className="relative translate-y-2.5 translate-x-1 p-1 hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Notifications"
               aria-expanded={dropdownOpen}
               onClick={toggleDropdown}
