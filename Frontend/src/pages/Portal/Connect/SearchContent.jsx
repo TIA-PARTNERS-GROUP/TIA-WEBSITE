@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import HorizontalTabs from "../../../components/Button/HorizontalTabs";
 import SmartConnect from "../../../components/Portal/Connect/SmartConnect";
@@ -11,6 +11,9 @@ const searchTabData = [
 
 const SearchContent = () => {
   const { partnerType, searchType } = useParams();
+  const [searchParams] = useSearchParams();
+  const queryValue = searchParams.get('q');
+
   const navigate = useNavigate();
 
   // Redirects to smartconnect if no searchType is specified
@@ -34,9 +37,14 @@ const SearchContent = () => {
       />
       
       {searchType === "quick-search" ? (
-        <QuickSearch />
+        <QuickSearch queryValue = {queryValue} />
       ) : (
+        <></>
+      )}
+      {searchType === "smartconnect" ? (
         <SmartConnect />
+      ) : (
+        <></>
       )}
     </div>
   );

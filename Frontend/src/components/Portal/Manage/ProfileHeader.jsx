@@ -44,7 +44,7 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
         </div>
       </div>
       {personalProfile 
-        ? <button className="flex pt-10" onClick={() => navigate("/manage/profile/edit")}>
+        ? <button className="flex pt-10" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/edit"); }}>
             <EditIcon className="w-8 h-8"/>
             <p className="px-2 py-1 text-lg font-semibold">Edit Profile</p>
           </button>

@@ -1,17 +1,38 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
-import ContactInfo from "../Manage/ContactInfo";
 
-const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
+const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule }) => {
+
+    const filteredData = queryValue
+        ? connectionsData.filter(connection => 
+            connection.title.toLowerCase().includes(queryValue.toLowerCase())
+          )
+        : connectionsData;
+
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
 
-    const [finalConnectionsData, setFinalConnectionsData] = useState(connectionsData);
+    useEffect(() => {
+        const urlSearchTerm = searchParams.get('q') || '';
+        
+        // Filter based on URL search term
+        const filtered = connectionsData.filter(connection => 
+            connection.title.toLowerCase().includes(urlSearchTerm.toLowerCase())
+        );
+        
+        setFinalConnectionsData(filtered);
+        
+    }, [location.search, connectionsData]);
+
+    const [finalConnectionsData, setFinalConnectionsData] = useState(filteredData);
     const [connectionStatus, setConnectionStatus] = useState(connectionsData.reduce((acc, _, index) => ({ ...acc, [index]: connectionModule || false }), {}));
 
     const handleConnectSwitch = (index) => {
@@ -34,7 +55,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
         <div className="grid grid-cols-3 gap-8 w-full mx-auto">
             {finalConnectionsData.map((company, index) => (
                 <div key={`connection-${index}`} className="flex flex-col items-center">
-                    <div className="bg-gray-200 w-[400px] h-full rounded-lg shadow-xl -mt-4">
+                    <div className="bg-gray-200 w-[400px] h-full rounded-lg shadow-xl">
                         <img
                             src={Banner}
                             alt="Profile Banner"

@@ -177,8 +177,8 @@ const EditView = () => {
         </div>
     </div>
     <div className="pt-20 flex gap-x-6">
-        <SecondaryButton className="px-20" onClick={() => navigate("/manage/profile/view")}>Cancel</SecondaryButton>
-        <PrimaryButton className="px-20" onClick={() => {
+        <SecondaryButton className="px-20" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/view")}}>Cancel</SecondaryButton>
+        <PrimaryButton className="px-20" onClick={() => {window.scrollTo(0, 0);
                                         navigate(`/manage/profile/view`, {
                                         state: { 
                                         companyName: companyName,

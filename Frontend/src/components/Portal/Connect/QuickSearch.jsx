@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import ConnectionsGrid from "../../../components/Portal/Connect/ConnectionsGrid";
 import SearchBar from "./SearchBar";
 
@@ -37,13 +38,19 @@ const connectionsData = [
     }
 ];
 
-const QuickSearch = () => (
+const QuickSearch = () => {
+
+  const [searchParams] = useSearchParams();
+
+  const queryValue = searchParams.get('q') || null;
+
+  return (
   <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
     <h2 className="text-3xl font-semibold">Quick Search</h2>
     <p className="pt-2 pb-10 text-md">Manually search for connections:</p>
     <SearchBar />
-    <ConnectionsGrid connectionsData={connectionsData}/>
+    <ConnectionsGrid queryValue={queryValue} connectionsData={connectionsData}/>
   </div>
-)
+)}
 
 export default QuickSearch;
