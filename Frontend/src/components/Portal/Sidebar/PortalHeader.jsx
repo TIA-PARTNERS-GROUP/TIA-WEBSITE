@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
 import MessageIcon from "../../Icons/MessageIcon";
+
 
 const PortalHeader = () => {
   // Get route title
   const routeRaw = location.pathname.split('/')[1] || 'home';
   const routeFinal = routeRaw.charAt(0).toUpperCase() + routeRaw.slice(1);
+  
+  const navigate = useNavigate();
 
   const [notificationData, setNotificationData] = useState([
     {description: "QUT has requested to connect with you", link: "/manage/connections"},
@@ -76,6 +80,7 @@ const PortalHeader = () => {
           <button 
             className="p-1 pl-1 pr-2 hover:bg-gray-100 rounded-full transition-colors"
             aria-label="Messages"
+            onClick={(() => navigate("/chat-llm"))}
           >
             <MessageIcon className="w-5 h-5 @md:w-5 @md:h-5 text-white" />
           </button>

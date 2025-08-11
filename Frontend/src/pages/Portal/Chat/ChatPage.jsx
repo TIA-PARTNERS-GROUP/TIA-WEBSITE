@@ -1,6 +1,9 @@
 import MessageField from "../../../components/Portal/Chat/MessageField";
 
-messageData = [];
+let messageData = [
+    {author: "agent", text: "Hello Mark!"},
+    {author: "user", text: "Hello"}
+]
 
 const ChatPage = () => (
     <div className="bg-hero_portal-side_bar w-screen h-screen">
