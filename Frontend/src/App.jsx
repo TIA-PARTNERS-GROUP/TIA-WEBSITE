@@ -12,6 +12,7 @@ const PartnerContent = React.lazy(() => import("./pages/Portal/Connect/PartnerCo
 const SearchContent = React.lazy(() => import("./pages/Portal/Connect/SearchContent.jsx"));
 const ManageContent = React.lazy(() => import("./pages/Portal/Manage/ManageContent.jsx"));
 const TableViewContent = React.lazy(() => import("./pages/Portal/Manage/TableViewContent.jsx"));
+const ChatPage = React.lazy(() => import("./pages/Portal/Chat/ChatPage.jsx"))
 
 const TradePage = React.lazy(() => import("./pages/Portal/Trade/TradePage.jsx"));
 const FindJob = React.lazy(() => import("./pages/Portal/Trade/FindJob.jsx"));
@@ -26,27 +27,30 @@ function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
-          </Route>\
-          <Route element={<PortalLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/manage" element={<ManagePage />}> 
-              <Route path=":manageType" element={<ManageContent />}>
-                <Route index element={<TableViewContent />} />
-                <Route path=":tableViewType" element={<TableViewContent/>} />
-              </Route>
-            </Route>
-            <Route path="/connect" element={<ConnectPage />}>
-              <Route path=":partnerType" element={<PartnerContent />}>
-                <Route index element={<SearchContent />} />
-                <Route path=":searchType" element={<SearchContent />} />
-              </Route>
-            </Route>
-            <Route path="/trade" element={<TradePage />}>
-            <Route index element={<FindJob />} />
-            <Route path="find" element={<FindJob />} />
-            <Route path="submit" element={<SubmitJob />} />
-            <Route path="history" element={<History />} />
           </Route>
+          <Route>
+            <Route path="/chat-llm" element={<ChatPage />} />
+          </Route>
+            <Route element={<PortalLayout />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/manage" element={<ManagePage />}> 
+                <Route path=":manageType" element={<ManageContent />}>
+                  <Route index element={<TableViewContent />} />
+                  <Route path=":tableViewType" element={<TableViewContent/>} />
+                </Route>
+              </Route>
+              <Route path="/connect" element={<ConnectPage />}>
+                <Route path=":partnerType" element={<PartnerContent />}>
+                  <Route index element={<SearchContent />} />
+                  <Route path=":searchType" element={<SearchContent />} />
+                </Route>
+              </Route>
+              <Route path="/trade" element={<TradePage />}>
+              <Route index element={<FindJob />} />
+              <Route path="find" element={<FindJob />} />
+              <Route path="submit" element={<SubmitJob />} />
+              <Route path="history" element={<History />} />
+            </Route>
           </Route>
 
           
