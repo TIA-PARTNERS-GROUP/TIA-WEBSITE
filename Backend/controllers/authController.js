@@ -1,14 +1,13 @@
 import userModel from "../models/user.js";
-import db from "../config/db.js"
-import config from "../config/config.js"
-import jwt from 'jsonwebtoken'
+import db from "../config/db.js";
+import config from "../config/config.js";
+import jwt from 'jsonwebtoken';
 
 import argon2 from 'argon2';
-import { exit } from "process";
 
 export const signup = async (req, res) => {
   try {
-    const user = userModel(db)
+    const user = userModel(db);
     const { email, password, firstName, lastName } = req.body;
 
     // Duplicate email check should also be done before a registration can be submitted
@@ -16,13 +15,14 @@ export const signup = async (req, res) => {
     if (existingUser != null) {
       return res.status(409).json({
         message: 'Email already in use'
-      })
+      });
     }
 
     let hash = await argon2.hash(password);
     let userId = await user.registerUser(firstName, lastName, email, hash);
 
     return res.status(201).json({
+      message: 'Success',
       id: userId,
       email: email,
       firstName: firstName,
@@ -71,9 +71,9 @@ export const login = async (req, res) => {
       return res.status(401).json({message: "Invalid email or password"});
     }
 
-    let tokenUser = {id: existingUser.id, email: existingUser.login_email}
+    let tokenUser = {id: existingUser.id, email: existingUser.login_email};
 
-    let token = jwt.sign(tokenUser, config.JWT_SECRET)
+    let token = jwt.sign(tokenUser, config.JWT_SECRET);
     
 
     return res.status(200).json({
@@ -103,7 +103,7 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     //const { token } = req.validatedParams;
-    const { newPassword } = req.validatedBody
+    const { newPassword } = req.validatedBody;
 
     return res.status(200).json({ message: 'Password reset [TO BE IMPLEMENTED!]' });
   } catch (err) {
