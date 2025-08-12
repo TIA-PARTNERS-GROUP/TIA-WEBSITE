@@ -1,7 +1,18 @@
 import Router from 'express';
-import { checkUserExists } from '../controllers/userController.js';
+import { checkUserExists, getUserDetails} from '../controllers/userController.js';
+import { verifyToken } from '../middleware/authTolkien.js';
 
 const router = Router();
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
 
 /**
  * @swagger
@@ -48,5 +59,80 @@ const router = Router();
  *                   example: Failed to process request
  */
 router.get('/exists/:email', checkUserExists);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Get user details by ID
+ *     description: Retrieves detailed information about a specific user by their unique ID.
+ *     tags:
+ *       - User
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the user to retrieve.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "123"
+ *                     firstName:
+ *                       type: string
+ *                       example: John
+ *                     lastName:
+ *                       type: string
+ *                       example: Doe
+ *                     contactEmail:
+ *                       type: string
+ *                       example: john.doe@example.com
+ *                     contactPhone:
+ *                       type: string
+ *                       example: "0123456789"
+ *                     loginEmail:
+ *                       type: string
+ *                       example: john.login@example.com
+ *       404:
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Failed to process request
+ */
+router.get('/:id', verifyToken, getUserDetails);
 
 export default router;

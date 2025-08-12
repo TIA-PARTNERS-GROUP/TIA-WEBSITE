@@ -4,8 +4,17 @@ export default (db) => ({
     return rows;
   },
 
-  async findById(id) {
-    const [rows] = await db.query('SELECT * FROM [table_name] WHERE id = ?', [id]);
+  async infoFromId(id) {
+    const [rows] = await db.query(`
+      SELECT u.id, u.first_name, u.last_name, u.contact_email, u.contact_phone_no, ul.login_email
+      FROM users u
+      LEFT JOIN user_logins ul on u.id = ul.user_id
+      WHERE u.id = ?
+      `
+      , [id]);
+    if (rows.length == 0) {
+      return null;
+    }
     return rows[0];
   },
 
