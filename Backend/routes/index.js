@@ -14,7 +14,7 @@ router.use('/auth', authRoutes);
 // router.use('/projects', projectRoutes);
 // router.use('/references', referenceRoutes);
 
-// Redirect to dashaboard for users, devs get direct acsess to api
+// Redirect to dashboard for users, devs get direct access to api
 if (config.env === 'production') {
     const redirectUrl = `${config.FRONTEND_BASE_URL}/dashboard`;
     router.get('/', (req, res) => {

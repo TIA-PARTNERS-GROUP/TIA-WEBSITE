@@ -1,11 +1,20 @@
 import jwt from 'jsonwebtoken';
-
+import config from '../config/config.js'
 /**
  * Middleware: Verifies access token from Authorization header.
  * Checks if token is present and valid.
  */
 export const verifyToken = (req, res, next) => {
     try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+          if (!token) return res.status(401).json({ message: 'Token missing' });
+
+        jwt.verify(token, config.JWT_SECRET, (err, user) => {
+            if (err) return res.status(403).json({ message: 'Invalid token' });
+            req.user = user; // Attach user payload to request
+            next();
+        });
 
     } catch (error) {
         return res.status(403).json({ message: 'Invalid or expired token.' });
