@@ -1,0 +1,29 @@
+{
+    "development" : {
+        "host": {"ENV": "DB_HOST"},
+        "driver": "mysql",
+        "user": {"ENV": "DB_USER"},
+        "password": {"ENV": "DB_PASS"},
+        "database": {"ENV": "DB_NAME"},
+        "port": {"ENV": "DB_PORT"},
+        "multipleStatements": true
+    },
+    "testing" : {
+        "host": {"ENV": "DB_HOST"},
+        "driver": "mysql",
+        "user": {"ENV": "DB_USER"},
+        "password": {"ENV": "DB_PASS"},
+        "database": {"ENV": "DB_NAME"},
+        "port": {"ENV": "DB_PORT"},
+        "multipleStatements": true
+    },
+    "production" : {
+        "host": {"ENV": "DB_HOST"},
+        "driver": "mysql",
+        "user": {"ENV": "DB_USER"},
+        "password": {"ENV": "DB_PASS"},
+        "database": {"ENV": "DB_NAME"},
+        "port": {"ENV": "DB_PORT"},
+        "multipleStatements": true
+    }
+}
