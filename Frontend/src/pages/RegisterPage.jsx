@@ -1,7 +1,44 @@
-import React from "react";
+import React, {useState} from "react";
+import config from '../config.js';
+import { useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
+  const [firstname, setFirstname] = useState("")
+  const [lastname, setLastname] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(firstname)
+
+    const res = await fetch(config.apiBaseUrl+"/auth/signup",
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                firstName: firstname,
+                lastName: lastname
+            })
+        }
+    )
+
+    if (!res.status == 201) {
+        console.log(await res.json())
+        throw Error(`Error: ${res.status}`);
+    }
+
+    navigate('/login')
+  }
+  
+
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "40px" }}>
 
@@ -10,10 +47,11 @@ const RegisterPage = () => {
       <p style={{ fontSize: "14px", color: "#555" }}>Enter your email to sign up for this app</p>
 
       {/* Form */}
-      <form style={{ display: "flex", flexDirection: "column", width: "280px", marginTop: "20px" }}>
-        <input type="text" placeholder="User name" style={inputStyle} />
-        <input type="email" placeholder="Email" style={inputStyle} />
-        <input type="password" placeholder="Password" style={inputStyle} />
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", width: "280px", marginTop: "20px" }}>
+        <input type="text" placeholder="First name" style={inputStyle} onChange={(e) => setFirstname(e.target.value)} />
+        <input type="text" placeholder="Last name" style={inputStyle} onChange={(e) => setLastname(e.target.value)} />
+        <input type="email" placeholder="Email" style={inputStyle} onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" style={inputStyle} onChange={(e) => setPassword(e.target.value)} />
         <button type="submit" style={buttonStyle}>Sign up with email</button>
 
         <p style={{ fontSize: "11px", color: "#777", marginTop: "20px" }}>
