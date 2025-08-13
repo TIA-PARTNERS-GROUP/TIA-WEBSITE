@@ -1,6 +1,6 @@
 import Router from 'express';
-import { signup, verifyEmail, resendVerification, login, logout, forgotPassword, resetPassword } from '../controllers/authController.js'
-import { verifyToken } from '../middleware/authTolkien.js'
+import { signup, verifyEmail, resendVerification, login, logout, forgotPassword, resetPassword } from '../controllers/authController.js';   
+import { verifyToken } from '../middleware/authTolkien.js';
 
 const router = Router();
 
@@ -16,7 +16,7 @@ const router = Router();
  */
 
 
-/**
+/**s
  * @swagger
  * /auth/register:
  *   post:
@@ -133,7 +133,6 @@ router.post('/logout', logout);
 router.post('/verifyEmail', verifyEmail);
 
 router.post('/resendVerification', resendVerification);
-
 
 router.post('/forgotPassword', forgotPassword);
 
