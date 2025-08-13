@@ -6,9 +6,8 @@ import config from '../config/config.js';
  */
 export const verifyToken = (req, res, next) => {
     try {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-          if (!token) return res.status(401).json({ message: 'Token missing' });
+        const token = req.cookies.token
+        if (!token) return res.status(401).json({ message: 'Token missing' });
 
         jwt.verify(token, config.JWT_SECRET, (err, user) => {
             if (err) return res.status(403).json({ message: 'Invalid or expired token' });

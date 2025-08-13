@@ -1,5 +1,5 @@
 import Router from 'express';
-import { checkUserExists, getUserDetails} from '../controllers/userController.js';
+import { checkUserExists, getUserDetails, getMe} from '../controllers/userController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
 
 const router = Router();
@@ -134,5 +134,7 @@ router.get('/exists/:email', checkUserExists);
  *                   example: Failed to process request
  */
 router.get('/:id', verifyToken, getUserDetails);
+
+router.get('/me', verifyToken, getMe)
 
 export default router;
