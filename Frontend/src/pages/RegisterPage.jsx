@@ -12,7 +12,7 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(firstname)
+
 
     const res = await fetch(config.apiBaseUrl+"/auth/signup",
         {
@@ -30,7 +30,6 @@ const RegisterPage = () => {
     )
 
     if (!res.status == 201) {
-        console.log(await res.json())
         throw Error(`Error: ${res.status}`);
     }
 
