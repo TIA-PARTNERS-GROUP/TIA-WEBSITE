@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import config from '../config.js';
+import axios from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
 
@@ -9,26 +10,40 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    sessionStorage.removeItem("token");
     e.preventDefault();
 
-    const res = await fetch(config.apiBaseUrl+"/auth/login",
+    try {
+      const res = await axios.post(
+        `${config.apiBaseUrl}/auth/login`,
         {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    email: email,
-                    password: password
-                }
-            )
+          email,
+          password
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
         }
-    )
+      );
+      sessionStorage.setItem("token", res.data.token);
 
-    if (!res.ok) {
-        throw Error(`Error: ${res.status}`)
+    } catch (err) {
+      if (err.response) {
+        // Server responded with a status outside 2xx
+        console.error('Error response:', err.response.data);
+        console.error('Status code:', err.response.status);
+      } else if (err.request) {
+        // No response received from the server
+        console.error('No response:', err.request);
+      } else {
+        // Something went wrong setting up the request
+        console.error('Error setting up request:', err.message);
+      }
     }
+    
+    
 
     navigate("/dashboard")
   }

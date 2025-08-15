@@ -9,8 +9,9 @@ const api = axios.create({
 // Attach access token to requests
 api.interceptors.request.use(
     (cfg) => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
+            
             cfg.headers.Authorization = `Bearer ${token}`;
         }
         return cfg;
@@ -27,8 +28,8 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         if (originalRequest?.url?.includes('/auth/refresh')) {
-            localStorage.removeItem('token');
-            window.location.href = '/auth?form=login';
+            sessionStorage.removeItem('token');
+            window.location.href = '/login';
             return Promise.reject(error);
         }
 
@@ -36,12 +37,12 @@ api.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const { data } = await api.post('/auth/refresh');
-                localStorage.setItem('token', data.token);
+                sessionStorage.setItem('token', data.token);
                 originalRequest.headers.Authorization = `Bearer ${data.token}`;
                 return api(originalRequest);
             } catch (err) {
-                localStorage.removeItem('token');
-                window.location.href = '/auth?form=login';
+                sessionStorage.removeItem('token');
+                window.location.href = '/login';
                 return Promise.reject(err);
             }
         }
