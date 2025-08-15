@@ -60,7 +60,76 @@ const router = Router();
  */
 router.get('/exists/:email', checkUserExists);
 
-
+/**
+ * @swagger
+ * /me:
+ *   get:
+ *     summary: Get the currently authenticated user's profile
+ *     description: |
+ *       Returns profile details of the authenticated user.
+ *       Requires a valid **Bearer** JWT access token in the `Authorization` header.
+ *       
+ *       The JWT is verified and decoded to obtain the user ID, which is then used to fetch user information from the database.
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the authenticated user's information.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 123
+ *                     firstName:
+ *                       type: string
+ *                       example: John
+ *                     lastName:
+ *                       type: string
+ *                       example: Doe
+ *                     contactEmail:
+ *                       type: string
+ *                       example: john.doe@example.com
+ *                     contactPhone:
+ *                       type: string
+ *                       example: "+1 555 123 4567"
+ *                     loginEmail:
+ *                       type: string
+ *                       example: john.doe@login.com
+ *       401:
+ *         description: Missing or invalid Authorization header format.
+ *         content:
+ *           application/json:
+ *             examples:
+ *               missingHeader:
+ *                 value:
+ *                   message: Authorization header missing
+ *               invalidFormat:
+ *                 value:
+ *                   message: Invalid authorization format
+ *       403:
+ *         description: Token is invalid or expired.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Invalid or expired token
+ *       500:
+ *         description: Server error while verifying token or fetching user.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Server error verifying token
+ */
 router.get('/me', verifyToken, getMe)
 /**
  * @swagger
