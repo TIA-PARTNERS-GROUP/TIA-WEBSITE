@@ -17,7 +17,7 @@ const valEnv = {
   DB_PORT: parseInt(required('DB_PORT'), 10),
   DB_NAME: required('DB_NAME'),
   JWT_SECRET: required('JWT_SECRET'),
-  MIDDLEWARE: process.env.MIDDLEWARE === 'True',
+  MIDDLEWARE: true,
 };
 
 const env = {

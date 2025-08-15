@@ -60,6 +60,8 @@ const router = Router();
  */
 router.get('/exists/:email', checkUserExists);
 
+
+router.get('/me', verifyToken, getMe)
 /**
  * @swagger
  * /users/{id}:
@@ -135,6 +137,5 @@ router.get('/exists/:email', checkUserExists);
  */
 router.get('/:id', verifyToken, getUserDetails);
 
-router.get('/me', verifyToken, getMe)
 
 export default router;

@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
--- Host: localhost    Database: tia_partners
+-- Host: 127.0.0.1    Database: tiapartners
 -- ------------------------------------------------------
--- Server version	9.3.0
+-- Server version	8.4.6
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -351,6 +351,21 @@ CREATE TABLE `mastermind_roles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `migrations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `run_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `notifications`
 --
 
@@ -601,7 +616,7 @@ DROP TABLE IF EXISTS `user_logins`;
 CREATE TABLE `user_logins` (
   `user_id` int unsigned NOT NULL,
   `login_email` varchar(254) NOT NULL,
-  `password_hash` binary(70) DEFAULT NULL,
+  `password_hash` varchar(255) DEFAULT NULL,
   `password_reset_token` blob,
   `password_reset_requested_timestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`),
@@ -630,6 +645,32 @@ CREATE TABLE `user_posts` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `user_posts_user_id_idx` (`poster_user_id`),
   CONSTRAINT `user_posts_user_id` FOREIGN KEY (`poster_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_sessions`
+--
+
+DROP TABLE IF EXISTS `user_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_sessions` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `token_hash` char(128) NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `expires_at` timestamp NOT NULL,
+  `rotated_from_id` int unsigned DEFAULT NULL,
+  `rotated_to_id` int unsigned DEFAULT NULL,
+  `revoked_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `user_session_user_id_idx` (`user_id`),
+  KEY `user_session_rotated_from_id_idx` (`rotated_from_id`),
+  CONSTRAINT `user_session_rotated_from_id` FOREIGN KEY (`rotated_from_id`) REFERENCES `user_sessions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `user_session_rotated_to_id` FOREIGN KEY (`rotated_to_id`) REFERENCES `user_sessions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_session_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -708,7 +749,7 @@ CREATE TABLE `users` (
   `contact_phone_no` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -720,4 +761,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-22  0:25:51
+-- Dump completed on 2025-08-14 22:56:27
