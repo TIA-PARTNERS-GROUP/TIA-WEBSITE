@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
 import MessageIcon from "../../Icons/MessageIcon";
+import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 
 const PortalHeader = () => {
@@ -25,11 +27,16 @@ const PortalHeader = () => {
     if (!notificationClicked) {
       setNotificationClicked(true);
     }
+    if (notificationData.length == 0) {
+      setNotificationData([{description: "No new notifications"}]);
+    }
   }
 
-  function handleNotificationClick(link) {
+  function handleNotificationClick(link, description) {
     setDropdownOpen(false);
-    window.location.href = link;
+    const updatedNotificationData = notificationData.filter(notification => notification.description !== description);
+    setNotificationData(updatedNotificationData);
+    navigate(link);
   }
 
   return (
@@ -45,9 +52,9 @@ const PortalHeader = () => {
               onClick={toggleDropdown}
             >
               <NotificationIcon className="w-7 h-7 @md:w-7 @md:h-7 text-white" />
-              {((notificationData.length >= 2) && !notificationClicked) && (
-                <div className="absolute top-5 right-1.5 w-2.5 h-2.5 bg-red-600 rounded-full text-[0.6rem] text-white">
-                  <span className="absolute -top-0.5 left-0.5">{notificationData.length}</span>
+              {((notificationData.length >= 1 && notificationData[0].description !== "No new notifications")) && (
+                <div className="absolute top-5 right-1.5 w-2.5 h-2.5 bg-red-600 rounded-full text-[0.6rem] text-white justify-center items-center">
+                  <span className="relative -top-0.5">{notificationData.length}</span>
                 </div>
               )}
             </button>
@@ -60,12 +67,11 @@ const PortalHeader = () => {
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                   {notificationData.map((notification, index) => (  
                     <li key={index}>
-                      <a 
-                        href={notification.link}
+                      <a
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                         onClick={(e) => {
                           e.preventDefault();
-                          handleNotificationClick(notification.link);
+                          handleNotificationClick(notification.link, notification.description);
                         }}
                       >
                         {notification.description}

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 const HorizontalTabs = ({tabData, basePath = '', activePath = ''}) => {
-  const normalizedBasePath = basePath.replace(/\/$/, '');
 
   return (
     <ul className="flex flex-wrap text-md font-medium text-center text-gray-500 border-b border-gray-200">
