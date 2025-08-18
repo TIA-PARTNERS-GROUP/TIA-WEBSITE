@@ -87,5 +87,13 @@ export default (db) => ({
       return null;
     }
     return rows[0];
+  },
+
+  async revokeSession(id) {
+    await db.query(`
+      UPDATE user_sessions
+      SET revoked_at = CURRENT_TIMESTAMP()
+      WHERE id = ?
+      `, [id])
   }
 });

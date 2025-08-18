@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
 import MessageIcon from "../../Icons/MessageIcon";
+import axios from '../../../api/axios.js';
 
 
 const PortalHeader = () => {
@@ -30,6 +31,14 @@ const PortalHeader = () => {
   function handleNotificationClick(link) {
     setDropdownOpen(false);
     window.location.href = link;
+  }
+
+  async function logOut() {
+    const res = await axios.post('/auth/logout');
+    if (res.status == 200) {
+      sessionStorage.removeItem("token");
+      window.location.href = "/";
+    }
   }
 
   return (
@@ -86,7 +95,7 @@ const PortalHeader = () => {
           </button>
           
           <SecondaryButton
-            onClick={() => (window.location.href = "/")}
+            onClick={logOut}
             className="block text-center py-2.5 mt-2 w-full"
           >
             Log out

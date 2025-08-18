@@ -135,7 +135,16 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  return res.status(200).json({ message: 'Logged out [TO BE IMPLEMENTED!]' });
+  try {
+
+    const user = userModel(db);
+    user.revokeSession(req.refreshToken.id)
+    res.clearCookie("refreshToken");
+    return res.status(200).json({message: 'Successfully logged out'})
+  } catch (err) {
+    console.error('Logout error:', err);
+    return res.status(500).json({message: 'Internal server error'})
+  }
 };
 
 export const forgotPassword = async (req, res) => {

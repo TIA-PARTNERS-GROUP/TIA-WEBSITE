@@ -13,6 +13,12 @@ const router = Router();
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: refreshToken
+ * 
+    
  */
 
 
@@ -191,7 +197,62 @@ router.post('/login', login);
  */
 router.post('/refresh', verifyRefreshToken, refresh)
 
-router.post('/logout', logout);
+
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Log out the user
+ *     description: >
+ *       Revokes the user's refresh token session and clears the `refreshToken` cookie.  
+ *       Requires a valid, active refresh token provided via HTTP-only cookie.
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Successfully logged out
+ *       401:
+ *         description: Refresh token missing
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authorization header missing
+ *       403:
+ *         description: Invalid, expired, revoked, or obsolete refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid or expired refresh token
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+router.post('/logout', verifyRefreshToken, logout);
 
 router.post('/verifyEmail', verifyEmail);
 
