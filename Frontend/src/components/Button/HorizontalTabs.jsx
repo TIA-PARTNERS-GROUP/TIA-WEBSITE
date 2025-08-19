@@ -24,7 +24,6 @@ const HorizontalTabs = ({tabData, basePath = '', activePath = '', activeTab, set
 
     setTabDirection(currentPath > prevPath ? "right" : "left");
     setActiveTab(match);
-    console.log(prevPath, currentPath);
   }
 
   return (
