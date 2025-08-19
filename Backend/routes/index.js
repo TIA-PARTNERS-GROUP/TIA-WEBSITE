@@ -1,12 +1,13 @@
-import express from 'express'
+import express from 'express';
 import authRoutes from './authRoutes.js';
-import config from '../config/config.js'
+import userRoutes from './userRoutes.js';
+import config from '../config/config.js';
 
 const router = express.Router();
 
 // Appends to api:
 router.use('/auth', authRoutes);
-// router.use('/users', userRoutes);
+router.use('/users', userRoutes);
 // router.use('/chat', chatRoutes);
 // router.use('/chatbot', chatBotRoutes);
 // router.use('/connect', connectRoutes);

@@ -34,4 +34,5 @@ DROP TABLE IF EXISTS `notifications`;
 DROP TABLE IF EXISTS `subscriptions`;
 DROP TABLE IF EXISTS `user_posts`;
 DROP TABLE IF EXISTS `projects`;
+DROP TABLE IF EXISTS `user_sessions`
 DROP TABLE IF EXISTS `users`;

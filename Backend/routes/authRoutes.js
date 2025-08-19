@@ -1,6 +1,6 @@
 import Router from 'express';
-import { signup, verifyEmail, resendVerification, login, logout, forgotPassword, resetPassword } from '../controllers/authController.js'
-import { verifyToken } from '../middleware/authTolkien.js'
+import { signup, verifyEmail, resendVerification, login, refresh, logout, forgotPassword, resetPassword } from '../controllers/authController.js';   
+import { verifyRefreshToken } from '../middleware/authTolkien.js';
 
 const router = Router();
 
@@ -13,10 +13,16 @@ const router = Router();
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: refreshToken
+ * 
+    
  */
 
 
-/**
+/**s
  * @swagger
  * /auth/register:
  *   post:
@@ -128,12 +134,129 @@ router.post('/signup', signup);
  */
 router.post('/login', login);
 
-router.post('/logout', logout);
+/**
+ * @swagger
+ * /refresh:
+ *   post:
+ *     summary: Refresh the access token using a valid refresh token
+ *     description: |
+ *       Issues a new short-lived access token and rotates the refresh token.
+ *       Requires a valid, non-expired refresh token stored in an HTTP-only cookie.
+ *       The old refresh token will be revoked and replaced with a new one.
+ *       
+ *       **Security & Validation:**
+ *       - Refresh token must be present in the `refreshToken` HTTP-only cookie.
+ *       - Token must exist in the database and not be expired or revoked.
+ *       - Token must not have been superseded (with a 30-second grace period for race conditions).
+ *       
+ *       On success, a new access token is returned in the JSON response and a new refresh token is set as an HTTP-only cookie.
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       description: No request body is required. The refresh token is read from the `refreshToken` cookie.
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: Successfully refreshed the access token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Refresh successful
+ *                 token:
+ *                   type: string
+ *                   description: The new short-lived JWT access token.
+ *       401:
+ *         description: Missing refresh token cookie.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Refresh token missing
+ *       403:
+ *         description: Invalid, expired, or obsolete refresh token.
+ *         content:
+ *           application/json:
+ *             examples:
+ *               expired:
+ *                 value:
+ *                   message: Invalid or expired refresh token
+ *               obsolete:
+ *                 value:
+ *                   message: Obsolete token
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Internal server error
+ */
+router.post('/refresh', verifyRefreshToken, refresh)
+
+
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Log out the user
+ *     description: >
+ *       Revokes the user's refresh token session and clears the `refreshToken` cookie.  
+ *       Requires a valid, active refresh token provided via HTTP-only cookie.
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Successfully logged out
+ *       401:
+ *         description: Refresh token missing
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authorization header missing
+ *       403:
+ *         description: Invalid, expired, revoked, or obsolete refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid or expired refresh token
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+router.post('/logout', verifyRefreshToken, logout);
 
 router.post('/verifyEmail', verifyEmail);
 
 router.post('/resendVerification', resendVerification);
-
 
 router.post('/forgotPassword', forgotPassword);
 

@@ -19,6 +19,8 @@ const FindJob = React.lazy(() => import("./pages/Portal/Trade/FindJob.jsx"));
 const SubmitJob = React.lazy(() => import("./pages/Portal/Trade/SubmitJob.jsx"));
 const History = React.lazy(() => import("./pages/Portal/Trade/History.jsx"));
 
+const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
+const RegisterPage = React.lazy(() => import("./pages/RegisterPage.jsx"));
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Route>
           <Route>
             <Route path="/chat-llm" element={<ChatPage />} />
@@ -53,13 +57,14 @@ function App() {
             </Route>
           </Route>
 
-          
 
 
           <Route path="*" element={<div>Page not found</div>} />
         </Routes>
       </Suspense>
     </Router>
+
+    
   );
 }
 
