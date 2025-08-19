@@ -7,10 +7,7 @@ import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 
 
-const PortalHeader = () => {
-  // Get route title
-  const routeRaw = location.pathname.split('/')[1] || 'home';
-  const routeFinal = routeRaw.charAt(0).toUpperCase() + routeRaw.slice(1);
+const PortalHeader = ( {module} ) => {
   
   const navigate = useNavigate();
 
@@ -42,7 +39,7 @@ const PortalHeader = () => {
   return (
     <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
       <div className="flex items-center justify-between w-full">
-        <h1 className="text-3xl @md:text-3xl font-bold text-black-800">{routeFinal}</h1>
+        <h1 className="text-3xl @md:text-3xl font-bold text-black-800">{module}</h1>
         <div className="flex gap-x-2">
           <div className="relative">
             <button 
