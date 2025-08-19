@@ -8,6 +8,7 @@ import CollaborateIcon from "../../../components/Icons/CollaborateIcon";
 import NetworkIcon from "../../../components/Icons/NetworkIcon";
 import TradeIcon from "../../../components/Icons/TradeIcon";
 import ManageIcon from "../../../components/Icons/ManegIcon";
+import { act } from "react";
 
 
 // Track sidebar paths, icons and labels for mapping NavItems below
@@ -31,17 +32,18 @@ const routeHierarchy = {
     'trade': 7
   };
 
-const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection}) => {
+const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection, setActiveTab}) => {
 
   const location = useLocation();
   const splitPath = location.pathname.split('/')[1];
 
-  const handleModuleClick = (path, e) => {
-    const prevPath = routeHierarchy[activePage]
-    const currentPath = routeHierarchy[path]
+  const handleModuleClick = (match) => {
+    const prevPath = routeHierarchy[activePage];
+    const currentPath = routeHierarchy[match];
 
-    setDirection(currentPath > prevPath ? -1 : 1)
-    setActivePage(path);
+    setDirection(currentPath > prevPath ? -1 : 1);
+    setActivePage(match);
+    setActiveTab('profile');
     window.scrollTo(0, 0);
   }
 
@@ -58,7 +60,7 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection}
   
   return (
     <motion.div
-      className="flex flex-col w-56 @md:w-64 p-4 @md:p-6 bg-hero_portal-side_bar text-white h-[calc(100vh-footerHeight)]"
+      className="flex flex-col w-56 @md:w-64 p-4 @md:p-6 bg-hero_portal-side_bar text-white h-[calc(100vh-footerHeight)] z-50"
       initial={initialLoad ? { x: "-100%" } : {}}
       animate={{ x: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -78,7 +80,7 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection}
                 icon={item.icon} // Use icon from sidebarItems
                 label={item.label} // Use label from sidebarItems
                 match={item.match}
-                isActive={splitPath === item.match} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
+                isActive={activePage === item.match} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
               />
           ))}
         </ul>

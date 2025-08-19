@@ -1,6 +1,31 @@
 import { Link } from 'react-router-dom';
 
-const HorizontalTabs = ({tabData, basePath = '', activePath = ''}) => {
+const tabHierarchy = {
+  'profile': 1,
+  'connections': 2,
+  'case-studies': 3,
+  'testimonials': 4,
+  'blogs': 5,
+  'mastermind': 6,
+
+  'alliance': 1,
+  'complementary': 2,
+
+  'smartconnect': 1,
+  'quick-search': 2
+};
+
+const HorizontalTabs = ({tabData, basePath = '', activePath = '', activeTab, setActiveTab, setTabDirection}) => {
+
+  const handleTabClick = (match) => {
+
+    const prevPath = tabHierarchy[activeTab] ?? 1;
+    const currentPath = tabHierarchy[match] ?? 2;
+
+    setTabDirection(currentPath > prevPath ? "right" : "left");
+    setActiveTab(match);
+    console.log(prevPath, currentPath);
+  }
 
   return (
     <ul className="flex flex-wrap text-md font-medium text-center text-gray-500 border-b border-gray-200">
@@ -8,7 +33,7 @@ const HorizontalTabs = ({tabData, basePath = '', activePath = ''}) => {
         const isActive = activePath === tab.path || (index === 0 && !activePath);
         return (
           <li key={index} className="me-2">
-            <Link to={`${basePath.replace(/\/$/, '')}/${tab.path}`}>
+            <Link to={`${basePath.replace(/\/$/, '')}/${tab.path}`} onClick={() => {handleTabClick(tab.path)}}>
               <button
                 className={`inline-block py-2 px-6 text-white rounded-t-lg ${
                   isActive

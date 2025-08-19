@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import TableView from '../../../components/Portal/Manage/TableView';

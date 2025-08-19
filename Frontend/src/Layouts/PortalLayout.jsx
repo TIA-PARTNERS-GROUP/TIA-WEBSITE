@@ -5,18 +5,18 @@ import { easeInOut, motion } from "framer-motion";
 
 // Alternate Layout for Portal pages
 
-const PortalLayout = ({activePage, setActivePage, setDirection, direction}) => {
+const PortalLayout = ({activePage, setActivePage, setDirection, direction, setActiveTab}) => {
 
   return (
     <>
       <div className="font-poppins flex flex-col min-h-screen bg-gray-100">
         <div className="flex flex-1">
-            <aside className="h-screen sticky top-0">
-                <Sidebar activePage={activePage} setActivePage={setActivePage} setDirection={setDirection}/>
+            <aside className="h-screen sticky top-0 z-50">
+                <Sidebar activePage={activePage} setActivePage={setActivePage} setDirection={setDirection} setActiveTab={setActiveTab}/>
             </aside>
             
             <div className="flex-1 flex flex-col">
-              <main className="flex-1">
+              <main className="flex-1 z-10">
                 <motion.div 
                   initial={{y: direction > 0 ? "-100%" : "100%" }}
                   animate={{ y: 0 }}

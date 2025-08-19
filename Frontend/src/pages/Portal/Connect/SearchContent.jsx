@@ -3,13 +3,14 @@ import { useEffect } from 'react';
 import HorizontalTabs from "../../../components/Button/HorizontalTabs";
 import SmartConnect from "../../../components/Portal/Connect/SmartConnect";
 import QuickSearch from "../../../components/Portal/Connect/QuickSearch";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const searchTabData = [
   {description: "SmartConnect", path: "smartconnect"}, 
   {description: "Quick Search", path: "quick-search"}
 ];
 
-const SearchContent = () => {
+const SearchContent = ({ activeTab, setActiveTab, tabDirection, setTabDirection }) => {
   const { partnerType, searchType } = useParams();
   const [searchParams] = useSearchParams();
   const queryValue = searchParams.get('q');
@@ -34,18 +35,34 @@ const SearchContent = () => {
         tabData={searchTabData}
         basePath={`/connect/${partnerType}`}
         activePath={searchType || 'smartconnect'}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        setTabDirection={setTabDirection}
       />
       
-      {searchType === "quick-search" ? (
-        <QuickSearch queryValue = {queryValue} />
-      ) : (
-        <></>
-      )}
-      {searchType === "smartconnect" ? (
-        <SmartConnect />
-      ) : (
-        <></>
-      )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={searchType}
+          initial={{x: tabDirection === "right" ? "100%" : "-100%" }}
+          animate={{ x: 0 }}
+          exit={{x: tabDirection === "right" ? "-100%" : "100%"}}
+          transition={{ 
+            duration: 0.3,
+            ease: "easeInOut"
+          }}
+        >
+          {searchType === "quick-search" ? (
+            <QuickSearch queryValue = {queryValue} />
+          ) : (
+            <></>
+          )}
+          {searchType === "smartconnect" ? (
+            <SmartConnect />
+          ) : (
+            <></>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

@@ -16,7 +16,7 @@ const ArticleTable = ({ initialTableData }) => {
     <tbody>
       {initialTableData?.map((row, index) => (
         <tr 
-          id={index} 
+          key={index}
           className="group hover:bg-gray-100 hover:cursor-pointer" 
           onClick={() => {
             navigate(`/manage/${manageType}/individual-view`, {
