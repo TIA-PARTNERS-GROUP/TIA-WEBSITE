@@ -8,7 +8,6 @@ import CollaborateIcon from "../../../components/Icons/CollaborateIcon";
 import NetworkIcon from "../../../components/Icons/NetworkIcon";
 import TradeIcon from "../../../components/Icons/TradeIcon";
 import ManageIcon from "../../../components/Icons/ManegIcon";
-import { act } from "react";
 
 
 // Track sidebar paths, icons and labels for mapping NavItems below
@@ -41,7 +40,7 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
     const prevPath = routeHierarchy[activePage];
     const currentPath = routeHierarchy[match];
 
-    setDirection(currentPath > prevPath ? "down" : "up");
+    setDirection(currentPath > prevPath ? "down" : "up"); // Determine trnasition direction from hierarchy
     setActivePage(match);
     setActiveTab('profile');
     window.scrollTo(0, 0);
@@ -77,8 +76,8 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
               <NavItem
                 key={item.path}
                 path={item.path}
-                icon={item.icon} // Use icon from sidebarItems
-                label={item.label} // Use label from sidebarItems
+                icon={item.icon} 
+                label={item.label}
                 match={item.match}
                 isActive={splitPath === item.match} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
               />

@@ -41,7 +41,6 @@ const connectionsData = [
 const QuickSearch = () => {
 
   const [searchParams] = useSearchParams();
-
   const queryValue = searchParams.get('q') || null;
 
   return (

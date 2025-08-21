@@ -18,11 +18,10 @@ const tabHierarchy = {
 const HorizontalTabs = ({tabData, basePath = '', activePath = '', activeTab, setActiveTab, setTabDirection}) => {
 
   const handleTabClick = (match) => {
-
     const prevPath = tabHierarchy[activeTab] ?? 1;
     const currentPath = tabHierarchy[match] ?? 2;
 
-    setTabDirection(currentPath > prevPath ? "right" : "left");
+    setTabDirection(currentPath > prevPath ? "right" : "left"); // Determine direction of transition from hierarchy
     setActiveTab(match);
   }
 

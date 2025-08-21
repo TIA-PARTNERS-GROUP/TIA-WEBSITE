@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
@@ -9,16 +8,15 @@ import ProfileIcon from "../../Icons/ProfileIcon";
 
 const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule }) => {
 
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
     const filteredData = queryValue
         ? connectionsData.filter(connection => 
             connection.title.toLowerCase().includes(queryValue.toLowerCase())
           )
         : connectionsData;
-
-
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         const urlSearchTerm = searchParams.get('q') || '';

@@ -178,16 +178,18 @@ const EditView = () => {
     </div>
     <div className="pt-20 flex gap-x-6">
         <SecondaryButton className="px-20" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/view")}}>Cancel</SecondaryButton>
-        <PrimaryButton className="px-20" onClick={() => {window.scrollTo(0, 0);
-                                        navigate(`/manage/profile/view`, {
-                                        state: { 
-                                        companyName: companyName,
-                                        companyDescription: companyDescription,
-                                        whatWeDoData: whatWeDoData,
-                                        clientData: clientData,
-                                        contactInfo: contactInfo
-                                        },
-                                    })}}>Save</PrimaryButton>
+        <PrimaryButton 
+          className="px-20" 
+          onClick={() => {window.scrollTo(0, 0);
+          navigate(`/manage/profile/view`, {
+          state: { 
+          companyName: companyName,
+          companyDescription: companyDescription,
+          whatWeDoData: whatWeDoData,
+          clientData: clientData,
+          contactInfo: contactInfo
+          },
+      })}}>Save</PrimaryButton>
     </div>
   </div>
 )

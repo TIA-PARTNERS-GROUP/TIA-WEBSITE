@@ -1,5 +1,3 @@
-// Circular Progress Bar used for Daily Activities tracking
-
 const CircularProgressBar = ({ progress = 75, size = 120, strokeWidth = 10 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;

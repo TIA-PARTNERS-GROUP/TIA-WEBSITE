@@ -13,7 +13,6 @@ const connectionNum = 8;
 const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName }) => {
 
   const navigate = useNavigate();
-
   const [connectionStatus, setConnectionStatus] = useState(false);
 
   const handleConnectSwitch = () => {

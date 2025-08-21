@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Quill from 'quill';
+import Quill from 'quill'; // Used for rich text editor
 import 'quill/dist/quill.snow.css';
 import PrimaryButton from '../../Button/PrimaryButton';
 

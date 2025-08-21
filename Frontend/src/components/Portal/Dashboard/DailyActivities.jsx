@@ -1,6 +1,5 @@
 import CircularProgressBar from "../../Button/CircularProgressBar";
 
-// Feed overall progress and bar data to generate desired progress bars
 const DailyActivities = ({overallProgress, barData}) => (
   <div className="flex flex-col items-start pb-4 text-left gap-10">
     <div className="flex items-center gap-3 w-full">

@@ -1,6 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 import PortalHeader from "../../../components/Portal/Sidebar/PortalHeader";
 import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
-import { Outlet } from "react-router-dom";
 import axios from '../../../api/axios.js'
 
 const res = await axios.get('/users/me');

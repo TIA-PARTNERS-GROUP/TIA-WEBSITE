@@ -1,12 +1,10 @@
+import axios from '../../../api/axios.js';
 import PortalHeader from "../../../components/Portal/Sidebar/PortalHeader";
 import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
 import FocusTab from "../../../components/Portal/Dashboard/FocusTab";
 import GoalTracker from "../../../components/Portal/Dashboard/GoalTracker";
 import NextAction from "../../../components/Portal/Dashboard/NextAction";
 import DailyActivities from "../../../components/Portal/Dashboard/DailyActivities";
-import config from '../../../config.js';
-import axios from '../../../api/axios.js'
-import { useNavigate } from "react-router-dom";
 
 
 const res = await axios.get('/users/me');
@@ -32,7 +30,6 @@ const initialActionData = [
 ]
 
 const DashboardPage = () => {
-  const navigate = useNavigate();
   return (
     <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4"> 
       <div className="bg-white rounded-xl p-8">

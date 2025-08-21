@@ -1,10 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
 import MessageIcon from "../../Icons/MessageIcon";
-import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 import axios from '../../../api/axios.js';
 
 

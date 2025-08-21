@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { motion, easeInOut, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import HorizontalTabs from "../../../components/Button/HorizontalTabs";
 import Connections from "./Connections";
 import CaseStudies from './CaseStudies';
