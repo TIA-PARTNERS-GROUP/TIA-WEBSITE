@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ArrowForwardIcon from "../Icons/ArrowFoward";
 import PrimaryButton from "../Button/PrimaryButton";
 import GhostButton from "../Button/GhostButton";
@@ -37,12 +38,13 @@ const HeroHeading = () => {
 
         {/* Action Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-          <PrimaryButton
-            onClick={() => (window.location.href = "#join")}
-            className="px-6 py-2 text-sm"
-          >
-            <span>Join Now</span>
-          </PrimaryButton>
+          {/* Join Now → /login */}
+          <Link to="/login">
+            <PrimaryButton className="px-6 py-2 text-sm">
+              <span>Join Now</span>
+            </PrimaryButton>
+          </Link>
+          
           <GhostButton
             onClick={() => (handleAPITest())}
             className="px-10 py-2 text-sm flex items-center gap-2"

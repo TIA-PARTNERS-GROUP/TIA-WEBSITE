@@ -5,6 +5,7 @@ import NotificationIcon from "../../../components/Icons/NotificationIcon";
 import MessageIcon from "../../Icons/MessageIcon";
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
+import axios from '../../../api/axios.js';
 
 
 const PortalHeader = ( {module} ) => {
@@ -34,6 +35,14 @@ const PortalHeader = ( {module} ) => {
     const updatedNotificationData = notificationData.filter(notification => notification.description !== description);
     setNotificationData(updatedNotificationData);
     navigate(link);
+  }
+
+  async function logOut() {
+    const res = await axios.post('/auth/logout');
+    if (res.status == 200) {
+      sessionStorage.removeItem("token");
+      window.location.href = "/";
+    }
   }
 
   return (
@@ -89,7 +98,7 @@ const PortalHeader = ( {module} ) => {
           </button>
           
           <SecondaryButton
-            onClick={() => (window.location.href = "/")}
+            onClick={logOut}
             className="block text-center py-2.5 mt-2 w-full"
           >
             Log out

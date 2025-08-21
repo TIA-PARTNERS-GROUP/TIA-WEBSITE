@@ -1,12 +1,13 @@
-import express from 'express'
+import express from 'express';
 import authRoutes from './authRoutes.js';
-import config from '../config/config.js'
+import userRoutes from './userRoutes.js';
+import config from '../config/config.js';
 
 const router = express.Router();
 
 // Appends to api:
 router.use('/auth', authRoutes);
-// router.use('/users', userRoutes);
+router.use('/users', userRoutes);
 // router.use('/chat', chatRoutes);
 // router.use('/chatbot', chatBotRoutes);
 // router.use('/connect', connectRoutes);
@@ -14,7 +15,7 @@ router.use('/auth', authRoutes);
 // router.use('/projects', projectRoutes);
 // router.use('/references', referenceRoutes);
 
-// Redirect to dashaboard for users, devs get direct acsess to api
+// Redirect to dashboard for users, devs get direct access to api
 if (config.env === 'production') {
     const redirectUrl = `${config.FRONTEND_BASE_URL}/dashboard`;
     router.get('/', (req, res) => {

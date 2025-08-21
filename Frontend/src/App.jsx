@@ -27,6 +27,8 @@ const FindJob = React.lazy(() => import("./pages/Portal/Trade/FindJob.jsx"));
 const SubmitJob = React.lazy(() => import("./pages/Portal/Trade/SubmitJob.jsx"));
 const History = React.lazy(() => import("./pages/Portal/Trade/History.jsx"));
 
+const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
+const RegisterPage = React.lazy(() => import("./pages/RegisterPage.jsx"));
 
 function App() {
 

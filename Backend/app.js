@@ -28,17 +28,13 @@ const swaggerOptions = {
       description: 'API documentation for endpoints',
     },
     servers: [
-      { url: `http://localhost:${config.port}/api` },
+      { url: `http://localhost:${config.PORT}/api` },
     ],
   },
   apis: ['./routes/*.js'], // Path to the API docs
 };
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-// Routes
-//app.use('/');
-app.use('/api', routes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware
 if (config.MIDDLEWARE) {
@@ -48,6 +44,13 @@ if (config.MIDDLEWARE) {
   app.use(express.json());
   app.use(cookieParser())
 }
+
+// Routes
+//app.use('/');
+app.use('/api', routes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
 
 // ENV mode error handling for redirecting. Better error handling formatting
 if (config.env === 'production') {

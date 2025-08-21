@@ -4,6 +4,15 @@ import FocusTab from "../../../components/Portal/Dashboard/FocusTab";
 import GoalTracker from "../../../components/Portal/Dashboard/GoalTracker";
 import NextAction from "../../../components/Portal/Dashboard/NextAction";
 import DailyActivities from "../../../components/Portal/Dashboard/DailyActivities";
+import config from '../../../config.js';
+import axios from '../../../api/axios.js'
+import { useNavigate } from "react-router-dom";
+
+
+const res = await axios.get('/users/me');
+
+const userData = res.data;
+
 
 // Sample Data for Daily Activities Progress Bars
 const barData = [
@@ -24,11 +33,15 @@ const initialActionData = [
 ]
 
 const DashboardPage = () => {
+  const navigate = useNavigate();
+  if (!res.ok) {
+    navigate('/login') 
+  }
   return (
     <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4"> 
       <div className="bg-white rounded-xl p-8">
         <PortalHeader module={"Dashboard"}/>
-        <ProfileTab />
+        <ProfileTab data = {userData.data} />
       </div>
       <div className="bg-white rounded-xl p-8">
         <FocusTab />
