@@ -41,7 +41,7 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
     const prevPath = routeHierarchy[activePage];
     const currentPath = routeHierarchy[match];
 
-    setDirection(currentPath > prevPath ? -1 : 1);
+    setDirection(currentPath > prevPath ? "down" : "up");
     setActivePage(match);
     setActiveTab('profile');
     window.scrollTo(0, 0);
@@ -80,7 +80,7 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
                 icon={item.icon} // Use icon from sidebarItems
                 label={item.label} // Use label from sidebarItems
                 match={item.match}
-                isActive={activePage === item.match} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
+                isActive={splitPath === item.match} // Update sidebar selection based on route title e.g. Dashboard selected if on /dashboard
               />
           ))}
         </ul>

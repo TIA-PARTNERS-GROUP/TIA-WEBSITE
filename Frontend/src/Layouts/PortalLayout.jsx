@@ -18,9 +18,9 @@ const PortalLayout = ({activePage, setActivePage, setDirection, direction, setAc
             <div className="flex-1 flex flex-col">
               <main className="flex-1 z-10">
                 <motion.div 
-                  initial={{y: direction > 0 ? "-100%" : "100%" }}
+                  initial={{y: direction > "down" ? "-100%" : "100%" }}
                   animate={{ y: 0 }}
-                  exit={{y: direction > 0 ? "100%" : "-100%" }}
+                  exit={{y: direction > "down" ? "100%" : "-100%" }}
                   transition={{ duration: 0.5, ease: easeInOut }}
                 >
                   <Outlet /> {}

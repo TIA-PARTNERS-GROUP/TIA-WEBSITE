@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 
 
 const res = await axios.get('/users/me');
-
 const userData = res.data;
 
 
@@ -34,9 +33,6 @@ const initialActionData = [
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  if (!res.ok) {
-    navigate('/login') 
-  }
   return (
     <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4"> 
       <div className="bg-white rounded-xl p-8">

@@ -35,8 +35,8 @@ function App() {
   const location = useLocation();
 
   // Active page + direction info for proper sidebar page navigation transitions
-  const [activePage, setActivePage] = useState(location.pathname.split("/")[1]);
-  const [direction, setDirection] = useState(0);
+  const [activePage, setActivePage] = useState("dashboard");
+  const [direction, setDirection] = useState("down");
 
   // Active tab + direction info for proper horizontal tab page navigation transitions
   const [activeTab, setActiveTab] = useState(location.pathname.split("/")[2] || 'profile');
@@ -47,6 +47,8 @@ function App() {
             <Routes location={location} key={location.pathname.split("/")[1]}>
               <Route element={<MainLayout />}>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
               </Route>
               <Route>
                 <Route path="/chat-llm" element={<ChatPage />} />
