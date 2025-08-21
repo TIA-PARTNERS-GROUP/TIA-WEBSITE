@@ -44,11 +44,11 @@ function App() {
   return (
     <AnimatePresence mode="wait"> {/* Trigger page transition exit animations when first path segment changes, see key below */}
       <Routes location={location} key={location.pathname.split("/")[1]}>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-        </Route>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Route>
         <Route>
           <Route path="/chat-llm" element={<ChatPage />} />
         </Route>
