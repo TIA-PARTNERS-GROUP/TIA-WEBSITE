@@ -18,7 +18,7 @@ const HexagonList = ({ listData }) => (
                     {index + 1}
                     </div>
             </div>
-              <p className="text-md">{item.description}</p>
+              <p className="sm:text-xs lg:text-sm 2xl:text-md">{item.description}</p>
             </div>
           </div>
         ))}

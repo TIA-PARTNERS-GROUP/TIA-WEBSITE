@@ -17,21 +17,21 @@ const itemVariants = {
 const FeatureCard = ({ description = "", input = false, onChange }) => (
   <motion.div
     variants={itemVariants}
-    className="w-full p-4 @md:p-6 text-black group hover:bg-gray-200 rounded-lg cursor-pointer"
+    className="w-full sm:p-2 p-4 @md:p-6 text-black group hover:bg-gray-200 rounded-lg cursor-pointer"
   >
     {input ? (
       <div>
-        <span className="mt-1 @md:mt-2 text-md @md:text-md font-semibold">- </span>
+        <span className="mt-1 @md:mt-2 sm:text-xs text-md @md:text-md font-semibold">- </span>
         <input
           autoFocus
           value={description}
           onChange={onChange}
-          className="mt-1 @md:mt-2 group-hover:bg-gray-200 text-md @md:text-md font-semibold placeholder-gray-300"
+          className="mt-1 @md:mt-2 group-hover:bg-gray-200 sm:text-xs text-md @md:text-md font-semibold placeholder-gray-300"
           placeholder="New task name..."
         />
       </div>
     ) : (
-      <span className="mt-1 @md:mt-2 text-md @md:text-md font-semibold">
+      <span className="mt-1 @md:mt-2 sm:text-xs lg:text-sm 2xl:text-md @md:text-md font-semibold">
         - {description}
       </span>
     )}
@@ -58,7 +58,7 @@ const NextAction = ({ initialActionData }) => {
 
   return (
     <div className="container text-left gap-2">
-      <h2 className="pt-1 pb-4 text-2xl @md:text-3xl font-bold text-black-800">Next Action</h2>
+      <h2 className="pt-1 pb-4 sm:text-sm md:text-lg 2xl:text-xl font-bold text-black-800">Next Action</h2>
       <motion.section 
               variants={containerVariants}
               initial="hidden"
@@ -77,7 +77,7 @@ const NextAction = ({ initialActionData }) => {
       </motion.section>
       <SecondaryButton
               onClick={handleAddTask}
-              className="text-sm block text-center py-0.5 mt-2 max-w-[185px]"
+              className="sm:text-xs 2xl:text-sm sm:px-2 sm:py-3 2xl:px-4 text-sm block text-center py-0.5 mt-2 max-w-[185px]"
               >
               + Add new task
           </SecondaryButton>

@@ -44,13 +44,13 @@ const PortalHeader = ( {module} ) => {
   }
 
   return (
-    <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
+    <div className="container mx-auto flex flex-col items-start text-left">
       <div className="flex items-center justify-between w-full">
-        <h1 className="text-3xl @md:text-3xl font-bold text-black-800">{module}</h1>
+        <h1 className="sm:text-xl 2xl:text-3xl md:text-2xl font-bold text-black-800">{module}</h1>
         <div className="flex gap-x-2">
           <div className="relative">
             <button 
-              className="relative translate-y-2.5 translate-x-1 p-1 hover:bg-gray-100 rounded-full transition-colors"
+              className="relative sm:translate-y-0.5 md:translate-y-2 translate-y-2.5 translate-x-1 p-1 hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Notifications"
               aria-expanded={dropdownOpen}
               onClick={toggleDropdown}
@@ -97,7 +97,7 @@ const PortalHeader = ( {module} ) => {
           
           <SecondaryButton
             onClick={logOut}
-            className="block text-center py-2.5 mt-2 w-full"
+            className="sm:text-xs md:text-sm sm:-translate-y-1 sm:p-2 md:p-3 block text-center py-2.5 mt-2 w-full"
           >
             Log out
           </SecondaryButton>

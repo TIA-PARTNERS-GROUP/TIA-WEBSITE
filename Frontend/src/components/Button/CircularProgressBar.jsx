@@ -1,4 +1,4 @@
-const CircularProgressBar = ({ progress = 75, size = 120, strokeWidth = 10 }) => {
+const CircularProgressBar = ({ progress = 75, size = 120, strokeWidth = 10}) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;

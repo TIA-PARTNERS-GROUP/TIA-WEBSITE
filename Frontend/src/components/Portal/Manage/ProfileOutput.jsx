@@ -25,29 +25,29 @@ const ProfileOutput =({
     personalProfile, 
     companyName, 
     companyDescription = defaultCompanyDescription, 
-    whatWeDoData = defaultWhatWeDoData, 
+    whatwedoData = defaultWhatWeDoData, 
     clientData = defaultClientData, 
     contactInfo = defaultContactInfo}) => {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-xl px-8 py-2">
+      <div className="bg-white rounded-xl sm:px-2 px-8 py-2">
           <ProfileHeader personalProfile={personalProfile} companyName={companyName}/>
       </div>
-      <div className="bg-white rounded-xl px-8 py-2">
+      <div className="bg-white rounded-xl sm:px-4 px-8 py-2">
         <ContactInfo contactInfo={contactInfo}/>
       </div>
-      <div className="bg-white rounded-xl px-16 py-2">
-        <h2 className="pt-10 text-4xl @md:text-3xl font-semibold text-black-800">Who We Are</h2>
-        <p className="py-8 text-lg">{companyDescription}</p>
+      <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
+        <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800">Who We Are</h2>
+        <p className="py-8 sm:text-sm 2xl:text-lg">{companyDescription}</p>
       </div>
       <div className="grid grid-cols-2 gap-x-4">
-        <div className="bg-white rounded-xl px-16 py-2">
-          <h2 className="pt-10 text-4xl @md:text-3xl font-semibold text-black-800 pb-8">What We Do</h2>
-          <HexagonList listData={whatWeDoData} />
+        <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
+          <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800 pb-8">What We Do</h2>
+          <HexagonList listData={whatwedoData} />
         </div>
-        <div className="bg-white rounded-xl px-16 py-2">
-          <h2 className="pt-10 text-4xl @md:text-3xl font-semibold text-black-800 pb-8">Our Clients</h2>
+        <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
+          <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800 pb-8">Our Clients</h2>
           <HexagonList listData={clientData} />
         </div>
       </div>

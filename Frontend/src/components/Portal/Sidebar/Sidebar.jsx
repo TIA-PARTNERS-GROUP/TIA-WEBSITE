@@ -47,7 +47,7 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
   }
 
   const NavItem = ({ path, icon, label, match, isActive }) => (
-    <Link to={path} onClick={() => handleModuleClick(match)} className={`font-bold flex items-center p-4 @md:p-2 space-x-2 @md:space-x-3 rounded-md cursor-pointer text-lg @md:text-base ${
+    <Link to={path} onClick={() => handleModuleClick(match)} className={`font-bold flex items-center p-4 @md:p-2 space-x-2 @md:space-x-3 rounded-md cursor-pointer sm:text-xs xl:text-sm 2xl:text-lg @md:text-base ${
       isActive 
         ? "bg-blue-600 text-white" 
         : "text-white-300 hover:bg-gray-700 hover:text-white"
@@ -59,14 +59,14 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
   
   return (
     <motion.div
-      className="flex flex-col w-56 @md:w-64 p-4 @md:p-6 bg-hero_portal-side_bar text-white h-[calc(100vh-footerHeight)] z-50"
+      className="flex flex-col sm:w-38 md:w-40 xl:w-52 2xl:w-56 p-4 @md:p-6 bg-hero_portal-side_bar text-white h-[calc(100vh-footerHeight)] z-50"
       initial={initialLoad ? { x: "-100%" } : {}}
       animate={{ x: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
       style={{ minHeight: '100vh' }}
     >
       <div className="flex justify-center items-center mb-8 @md:mb-10">
-        <div className="text-2xl @md:text-3xl p-1.5 @md:p-2 font-extrabold text-text-light italic pt-6">
+        <div className="text-3xl @md:text-3xl p-1.5 @md:p-2 font-extrabold text-text-light italic pt-6">
           TIA
         </div>
       </div>

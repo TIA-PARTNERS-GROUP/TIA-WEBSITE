@@ -50,10 +50,10 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
     }
     
     return (
-        <div className="grid grid-cols-3 gap-8 w-full mx-auto">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full mx-auto">
             {finalConnectionsData.map((company, index) => (
                 <div key={`connection-${index}`} className="flex flex-col items-center">
-                    <div className="bg-gray-200 w-[400px] h-full rounded-lg shadow-xl">
+                    <div className="bg-gray-200 md:w-[270px] lg:w-[375px] xl:w-[315px] 2xl:w-[400px] h-full rounded-lg shadow-xl">
                         <img
                             src={Banner}
                             alt="Profile Banner"
@@ -76,9 +76,9 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
                                         navigate(`/manage/connections/profile-view`, {
                                         state: { 
                                         companyName: company.title,
+                                        contactInfo: company.contactInfo,
                                         companyDescription: company.description,
                                         whatwedoData: company.whatwedoData,
-                                        contactInfo: company.contactInfo
                                         },
                                     })}}>
                                     View Profile

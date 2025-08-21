@@ -8,7 +8,7 @@ const userData = res.data;
 
 const ManagePage = () => {
   return (
-      <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full py-4 space-y-4"> 
+      <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4"> 
         <div className="bg-white rounded-xl p-8">
           <PortalHeader module={"Manage"}/>
           <ProfileTab data={userData.data}/>

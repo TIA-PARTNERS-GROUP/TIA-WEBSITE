@@ -31,7 +31,7 @@ const initialActionData = [
 
 const DashboardPage = () => {
   return (
-    <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4"> 
+    <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4"> 
       <div className="bg-white rounded-xl p-8">
         <PortalHeader module={"Dashboard"}/>
         <ProfileTab data = {userData.data} />
@@ -39,14 +39,14 @@ const DashboardPage = () => {
       <div className="bg-white rounded-xl p-8">
         <FocusTab />
       </div>
-      <div className="grid grid-cols-3 gap-8 pb-4">
-        <div className="bg-white rounded-xl p-8 h-full">
+      <div className="grid grid-cols-3 sm:gap-2 lg:gap-3 xl:gap-4 2xl:gap-5 pb-4">
+        <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
           <DailyActivities overallProgress = {80} barData = {barData} />
         </div>
-        <div className="bg-white rounded-xl p-8 h-full">
+        <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
           <NextAction initialActionData = {initialActionData}/>
         </div>
-        <div className="bg-white rounded-xl p-8 h-full">
+        <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
           <GoalTracker goalData = {goalData}/>
         </div>
       </div>

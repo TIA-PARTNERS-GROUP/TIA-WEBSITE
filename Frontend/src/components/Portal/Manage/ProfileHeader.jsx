@@ -24,28 +24,28 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
     <img
       src={Banner}
       alt="Profile Banner"
-      className="w-full h-[350px] object-cover object-[0%_20%]"
+      className="w-full sm:h-[100px] md:h-[150px] lg:h-[200px] xl:h-[250px] 2xl:h-[350px] object-cover object-[0%_20%]"
     />
-    <div className="relative flex gap-16 pl-10">
+    <div className="relative flex sm:gap-2 2xl:gap-16 pl-10">
       <div className="">
-        <ProfileIcon className="relative -top-24 left-1/2 -translate-x-1/2 w-48 h-48 @md:w-14 @md:h-14 text-black mt-0.5" />
+        <ProfileIcon className="relative sm:-top-11 md:-top-14 lg:-top-16 2xl:-top-24 sm:left-1/4 2xl:left-1/2 -translate-x-1/2 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 2xl:w-48 2xl:h-48 @md:w-14 @md:h-14 text-black mt-0.5" />
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-10 pt-10">
-          <h2 className="text-4xl @md:text-3xl font-semibold text-black-800">{companyName}</h2>
+        <div className="flex items-center gap-10 sm:pt-2 2xl:pt-10">
+          <h2 className="sm:text-xl xl:text-3xl 2xl:text-4xl lg:text-2xl font-semibold text-black-800">{companyName}</h2>
           {!personalProfile && (
             <PrimaryButton className={`text-xs ${connectionStatus ? "bg-rose-500 hover:bg-rose-600" : "bg-blue-600"}`}  onClick={() => handleConnectSwitch()}> {connectionStatus ? "Disconnect" : "Connect"}</PrimaryButton>
           )}
         </div>
         <div className="flex gap-2 pt-5">
-          <BuildTeamIcon className="text-rose-500 w-6 h-6 @md:w-8 @md:h-8" />
-          <p className="text-lg text-rose-500">{connectionNum} connections</p>
+          <BuildTeamIcon className="text-rose-500 sm:w-4 sm:h-4 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6 @md:w-8 @md:h-8" />
+          <p className="sm:text-xs lg:text-sm 2xl:text-lg text-rose-500">{connectionNum} connections</p>
         </div>
       </div>
       {personalProfile 
-        ? <button className="flex pt-10" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/edit"); }}>
-            <EditIcon className="w-8 h-8"/>
-            <p className="px-2 py-1 text-lg font-semibold">Edit Profile</p>
+        ? <button className="flex sm:pl-2 sm:pt-2 2xl:pt-10" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/edit"); }}>
+            <EditIcon className="sm:translate-y-2 sm:w-3 sm:h-3 2xl:w-5 2xl:h-5"/>
+            <p className="px-2 py-1 sm:text-xs 2xl:text-lg font-semibold">Edit Profile</p>
           </button>
         : <></>}
       

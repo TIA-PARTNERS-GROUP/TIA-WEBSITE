@@ -30,7 +30,7 @@ const SearchContent = ({ activeTab, setActiveTab, tabDirection, setTabDirection 
   }
 
   return (
-    <div className="pt-10 pl-20">
+    <div className="pt-10 sm:pl-4 2xl:pl-20">
       <HorizontalTabs 
         tabData={searchTabData}
         basePath={`/connect/${partnerType}`}
