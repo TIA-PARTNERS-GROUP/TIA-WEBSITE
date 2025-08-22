@@ -18,9 +18,9 @@ export default (db) => ({
     return rows[0];
   },
 
-  async fetchConnections(id) {
+  async getConnections(id) {
     const [rows] = await db.query(`
-      SELECT b.name
+      SELECT s.connection_business_id as id, b.name
       FROM (
         SELECT 
           CASE
@@ -35,5 +35,26 @@ export default (db) => ({
       `, [id, id])
 
       return rows;
+  },
+
+
+  async getServices(id) {
+    const [rows] = await db.query(`
+        SELECT description
+        FROM business_services
+        WHERE business_id = ?
+      `, [id])
+
+    return rows.map((row) => (row.description));
+  },
+
+    async getClients(id) {
+    const [rows] = await db.query(`
+        SELECT description
+        FROM business_clients
+        WHERE business_id = ?
+      `, [id])
+
+    return rows.map((row) => (row.description));
   }
 });

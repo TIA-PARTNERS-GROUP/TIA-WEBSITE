@@ -14,7 +14,9 @@ export const getDashboard = async (req, res) => {
 
     const businessId = businessResult.id;
     const bi = await business.infoFromId(businessId);
-    const connections = await business.fetchConnections(businessId);
+    const connections = await business.getConnections(businessId);
+    const services = await business.getServices(businessId);
+    const clients = await business.getClients(businessId);
 
 
     return res.status(200).json(
@@ -23,10 +25,13 @@ export const getDashboard = async (req, res) => {
             businessName: bi.name,
             contactName: bi.contact_name,
             contactPhone: bi.contact_phone_no,
-            contactEmail: bi.contactEmail,
+            contactEmail: bi.contact_email,
             businessCategory: bi.category, 
             businessDescription: bi.description,
-            connections : connections
+            connections : connections,
+            services: services,
+            clients: clients
+            
         }
     );
 
