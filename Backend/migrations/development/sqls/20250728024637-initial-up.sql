@@ -72,7 +72,7 @@ CREATE TABLE `business_connections` (
   KEY `business_connections_receiving_id_idx` (`receiving_business_id`),
   CONSTRAINT `business_connections_initiating_id` FOREIGN KEY (`initiating_business_id`) REFERENCES `businesses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `business_connections_receiving_id` FOREIGN KEY (`receiving_business_id`) REFERENCES `businesses` (`id`),
-  CONSTRAINT `business_connections_type` FOREIGN KEY (`connection_type_id`) REFERENCES `business_types` (`id`)
+  CONSTRAINT `business_connections_type` FOREIGN KEY (`connection_type_id`) REFERENCES `connection_types` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,6 +191,9 @@ CREATE TABLE `businesses` (
   `name` varchar(100) NOT NULL,
   `tagline` varchar(100) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
+  `contact_name` varchar(60) DEFAULT NULL,
+  `contact_phone_no` varchar(10) DEFAULT NULL,
+  `contact_email` varchar(254) DEFAULT NULL,
   `description` text,
   `address` varchar(100) DEFAULT NULL,
   `city` varchar(60) DEFAULT NULL,
