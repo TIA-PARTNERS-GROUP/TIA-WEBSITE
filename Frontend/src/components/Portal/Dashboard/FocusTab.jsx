@@ -31,32 +31,32 @@ const FeatureCard = ({ icon, title }) => (
     }}
   >
     {icon}
-    <span className="mt-1 @md:mt-2 text-xs @md:text-sm font-semibold">
+    <span className="mt-1 md:mt-2 text-center text-xs md:text-xs font-semibold">
       {title}
     </span>
   </motion.div>
 );
 
 const FocusTab = () => (
-  <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
-    <h2 className="text-lg font-semibold">What do you need help with?</h2>
+  <div className="container mx-auto flex flex-col items-start text-left">
+    <h2 className="sm:text-sm 2xl:text-lg font-semibold">What do you need help with?</h2>
     <motion.section
-        className="grid grid-cols-3 gap-10 @md:gap-6 mt-6 @md:mt-8 @md:grid-cols-3 w-full"
+        className="grid grid-cols-3 sm:gap-5 2xl:gap-8 mt-6 w-full"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
         <FeatureCard
-          icon={<CashFlowIcon className="w-6 h-6 @md:w-8 @md:h-8" />}
+          icon={<CashFlowIcon className="sm:w-4 sm:h-4 w-6 h-6 @md:w-8 @md:h-8" />}
           title="Cashflow"
         />
         <FeatureCard
-          icon={<BuildTeamIcon className="w-6 h-6 @md:w-8 @md:h-8" />}
+          icon={<BuildTeamIcon className="sm:w-4 sm:h-4 w-6 h-6 @md:w-8 @md:h-8" />}
           title="Build Team"
         />
         <FeatureCard
-          icon={<BusinessGrowthIcon className="w-6 h-6 @md:w-8 @md:h-8" />}
+          icon={<BusinessGrowthIcon className="sm:w-4 sm:h-4 w-6 h-6 @md:w-8 @md:h-8" />}
           title="Business Growth"
         />
       </motion.section>

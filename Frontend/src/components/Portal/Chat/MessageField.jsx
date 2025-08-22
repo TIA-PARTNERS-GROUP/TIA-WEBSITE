@@ -3,18 +3,17 @@ import UpArrowIcon from "../../Icons/UpArrowIcon";
 
 const MessageField = ({ messageData }) => {
 
-    // using React States to store variable data for dynamic elements of the page
     const [localMessageData, setLocalMessageData] = useState(messageData);
     const [messageText, setMessageText] = useState('');
 
     const handleMessageChange = (event) => (
-        setMessageText(event.target.value) // update message box
+        setMessageText(event.target.value) // Update message box
     );
 
     const handleMessageSubmission = (event) => {
-        event.preventDefault(); // prevent page reload, defaulting breaks page
-        setLocalMessageData([...localMessageData, {author: "user", text: messageText}]) // add new message to data after previous objects
-        setMessageText(''); // clear message box
+        event.preventDefault(); // Prevent page reload, defaulting breaks page
+        setLocalMessageData([...localMessageData, {author: "user", text: messageText}]) // Add new message to data after previous objects
+        setMessageText(''); // Clear message box
     };
 
     return (

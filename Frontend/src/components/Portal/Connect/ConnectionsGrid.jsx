@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
@@ -9,16 +8,15 @@ import ProfileIcon from "../../Icons/ProfileIcon";
 
 const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule }) => {
 
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
     const filteredData = queryValue
         ? connectionsData.filter(connection => 
             connection.title.toLowerCase().includes(queryValue.toLowerCase())
           )
         : connectionsData;
-
-
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         const urlSearchTerm = searchParams.get('q') || '';
@@ -52,10 +50,10 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
     }
     
     return (
-        <div className="grid grid-cols-3 gap-8 w-full mx-auto">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full mx-auto">
             {finalConnectionsData.map((company, index) => (
                 <div key={`connection-${index}`} className="flex flex-col items-center">
-                    <div className="bg-gray-200 w-[400px] h-full rounded-lg shadow-xl">
+                    <div className="bg-gray-200 sm:w-[400px] md:w-[270px] lg:w-[375px] xl:w-[315px] 2xl:w-[400px] h-full rounded-lg shadow-xl">
                         <img
                             src={Banner}
                             alt="Profile Banner"
@@ -78,9 +76,9 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
                                         navigate(`/manage/connections/profile-view`, {
                                         state: { 
                                         companyName: company.title,
+                                        contactInfo: company.contactInfo,
                                         companyDescription: company.description,
                                         whatwedoData: company.whatwedoData,
-                                        contactInfo: company.contactInfo
                                         },
                                     })}}>
                                     View Profile

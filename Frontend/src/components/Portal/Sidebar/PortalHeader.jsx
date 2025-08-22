@@ -6,10 +6,7 @@ import MessageIcon from "../../Icons/MessageIcon";
 import axios from '../../../api/axios.js';
 
 
-const PortalHeader = () => {
-  // Get route title
-  const routeRaw = location.pathname.split('/')[1] || 'home';
-  const routeFinal = routeRaw.charAt(0).toUpperCase() + routeRaw.slice(1);
+const PortalHeader = ( {module} ) => {
   
   const navigate = useNavigate();
 
@@ -26,11 +23,16 @@ const PortalHeader = () => {
     if (!notificationClicked) {
       setNotificationClicked(true);
     }
+    if (notificationData.length == 0) {
+      setNotificationData([{description: "No new notifications"}]);
+    }
   }
 
-  function handleNotificationClick(link) {
+  function handleNotificationClick(link, description) {
     setDropdownOpen(false);
-    window.location.href = link;
+    const updatedNotificationData = notificationData.filter(notification => notification.description !== description);
+    setNotificationData(updatedNotificationData);
+    navigate(link);
   }
 
   async function logOut() {
@@ -42,21 +44,21 @@ const PortalHeader = () => {
   }
 
   return (
-    <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
+    <div className="container mx-auto flex flex-col items-start text-left">
       <div className="flex items-center justify-between w-full">
-        <h1 className="text-3xl @md:text-3xl font-bold text-black-800">{routeFinal}</h1>
+        <h1 className="sm:text-xl 2xl:text-3xl md:text-2xl font-bold text-black-800">{module}</h1>
         <div className="flex gap-x-2">
           <div className="relative">
             <button 
-              className="relative translate-y-2.5 translate-x-1 p-1 hover:bg-gray-100 rounded-full transition-colors"
+              className="relative sm:translate-y-0.5 md:translate-y-2 translate-y-2.5 translate-x-1 p-1 hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Notifications"
               aria-expanded={dropdownOpen}
               onClick={toggleDropdown}
             >
               <NotificationIcon className="w-7 h-7 @md:w-7 @md:h-7 text-white" />
-              {((notificationData.length >= 2) && !notificationClicked) && (
-                <div className="absolute top-5 right-1.5 w-2.5 h-2.5 bg-red-600 rounded-full text-[0.6rem] text-white">
-                  <span className="absolute -top-0.5 left-0.5">{notificationData.length}</span>
+              {((notificationData.length >= 1 && notificationData[0].description !== "No new notifications")) && (
+                <div className="absolute top-5 right-1.5 w-2.5 h-2.5 bg-red-600 rounded-full text-[0.6rem] text-white justify-center items-center">
+                  <span className="relative -top-0.5">{notificationData.length}</span>
                 </div>
               )}
             </button>
@@ -69,12 +71,11 @@ const PortalHeader = () => {
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                   {notificationData.map((notification, index) => (  
                     <li key={index}>
-                      <a 
-                        href={notification.link}
+                      <a
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                         onClick={(e) => {
                           e.preventDefault();
-                          handleNotificationClick(notification.link);
+                          handleNotificationClick(notification.link, notification.description);
                         }}
                       >
                         {notification.description}
@@ -96,7 +97,7 @@ const PortalHeader = () => {
           
           <SecondaryButton
             onClick={logOut}
-            className="block text-center py-2.5 mt-2 w-full"
+            className="sm:text-xs md:text-sm sm:-translate-y-1 sm:p-2 md:p-3 block text-center py-2.5 mt-2 w-full"
           >
             Log out
           </SecondaryButton>

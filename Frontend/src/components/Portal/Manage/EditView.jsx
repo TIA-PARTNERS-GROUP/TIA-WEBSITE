@@ -13,7 +13,7 @@ const EditView = () => {
  company that takes great pride in offering a wide-range of sophisticated IT products\
   and services designed to meet the ever-growing and ever-expanding needs of our clients\
    and the businesses they operate.');
-  const [whatWeDoData, setWhatWeDoData] = useState([
+  const [whatwedoData, setWhatWeDoData] = useState([
     {description: "DyCom Wireless - Wireless solutions"},
     {description: "DyCom SmartStaff - Staff provision"},
     {description: "DyCom Security - Security, surveillance and alarm services"},
@@ -41,7 +41,7 @@ const EditView = () => {
   }
   
   const handleWhatWeDoChange = (index, newDescription) => {
-    const updatedData = [...whatWeDoData];
+    const updatedData = [...whatwedoData];
     updatedData[index] = {
       ...updatedData[index],
       description: newDescription,
@@ -61,7 +61,7 @@ const EditView = () => {
   }
 
   const handleAddService = () => {
-    setWhatWeDoData([...whatWeDoData, { description: ""}]);
+    setWhatWeDoData([...whatwedoData, { description: ""}]);
   };
   const handleAddClient = () => {
     setClientData([...clientData, { description: ""}]);
@@ -140,7 +140,7 @@ const EditView = () => {
     <div className="grid grid-cols-3 pb-20 gap-x-20">
         <div className="form-group flex flex-col gap-y-6">
                 <p className="pt-4 pb-1 text-md font-semibold text-blue-600">SERVICES</p>
-                {whatWeDoData.map((item, index) => (
+                {whatwedoData.map((item, index) => (
                   <input
                     key={index} 
                     type="text"
@@ -178,16 +178,18 @@ const EditView = () => {
     </div>
     <div className="pt-20 flex gap-x-6">
         <SecondaryButton className="px-20" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/view")}}>Cancel</SecondaryButton>
-        <PrimaryButton className="px-20" onClick={() => {window.scrollTo(0, 0);
-                                        navigate(`/manage/profile/view`, {
-                                        state: { 
-                                        companyName: companyName,
-                                        companyDescription: companyDescription,
-                                        whatWeDoData: whatWeDoData,
-                                        clientData: clientData,
-                                        contactInfo: contactInfo
-                                        },
-                                    })}}>Save</PrimaryButton>
+        <PrimaryButton 
+          className="px-20" 
+          onClick={() => {window.scrollTo(0, 0);
+          navigate(`/manage/profile/view`, {
+          state: { 
+          companyName: companyName,
+          companyDescription: companyDescription,
+          whatwedoData: whatwedoData,
+          clientData: clientData,
+          contactInfo: contactInfo
+          },
+      })}}>Save</PrimaryButton>
     </div>
   </div>
 )

@@ -3,44 +3,44 @@ import ConnectionsGrid from "../Connect/ConnectionsGrid";
 const connectionsData = [
     {
         title: "DexRouter Ltd.", 
+        contactInfo: ["Tim Matters", "0123 456 789", "tim@dexrouter.com.au"],
         description: "Here at DexRouter, we manufacture and distribute cutting-edge router products.", 
         whatwedoData: [
             {description: "Router Manufacturing"}
-        ],
-        contactInfo: ["Tim Matters", "0123 456 789", "tim@dexrouter.com.au"]
+        ]
     },
     {
         title: "Jim's Cabling", 
+        contactInfo: ["Jim Bean", "0123 456 789", "jim@jimscabling.com.au"],
         description: "Providing all of your cabling needs!",
         whatwedoData: [
             {description: "Cabling Installation"}
-        ],
-        contactInfo: ["Jim Bean", "0123 456 789", "jim@jimscabling.com.au"]
+        ]
     },
     {
         title: "Westmine Solutions", 
+        contactInfo: ["Anton Kirkegard", "0123 456 789", "anton@dwestminesolutions.com.au"],
         description: "Westmine Solutions is a bustling startup focusing on providing high-quality web development solutions.",
         whatwedoData: [
             {description: "Website creation"},
             {description: "Custom LLM creation"}
-        ],
-        contactInfo: ["Anton Kirkegard", "0123 456 789", "anton@dwestminesolutions.com.au"]
+        ]
     },
     {
         title: "AccuT", 
+        contactInfo: ["Franz Kafka", "0123 456 789", "franz@accut.com.au"],
         description: "Fast, reliable, and always on time.",
         whatwedoData: [
             {description: "Package Delivery"}
-        ],
-        contactInfo: ["Franz Kafka", "0123 456 789", "franz@accut.com.au"]
+        ]
     }
 ];
 
 const GridView = () => {
   return (
-    <div className="bg-white rounded-xl px-8 py-2">
-        <h2 className="pt-10 text-4xl @md:text-3xl font-semibold text-black-800">Connections</h2>
-        <p className="py-8 text-lg">You are currently connected to these companies:</p>
+    <div className="bg-white rounded-xl sm:px-6 lg:px-6 2xl:px-8 py-2">
+        <h2 className="lg:pl-4 2xl:pl-10 pt-10 sm:text-xl 2xl:text-4xl md:text-2xl font-semibold text-black-800">Connections</h2>
+        <p className="lg:pl-4 2xl:pl-10 py-8 sm:text-xs 2xl:text-lg">You are currently connected to these companies:</p>
         <ConnectionsGrid connectionsData={connectionsData} connectionModule={true} />
     </div>
   );

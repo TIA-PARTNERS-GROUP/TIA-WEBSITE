@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import HorizontalTabs from "../../../components/Button/HorizontalTabs";
 import Connections from "./Connections";
 import CaseStudies from './CaseStudies';
@@ -17,11 +18,10 @@ const tabData = [
     {description: "Mastermind", path: "mastermind", element: <MasterMind />}
 ];
 
-const ManageContent = () => {
+const ManageContent = ({activeTab, setActiveTab, tabDirection, setTabDirection}) => {
   const { manageType } = useParams();
   const activeManage = manageType || tabData[0].path
-
-  const activeTab = tabData.find(tab => tab.path === activeManage) || tabData[0];
+  const activeTabElement = tabData.find(tab => tab.path === activeManage).element || tabData[0].element;
   
   return (
     <div>
@@ -29,10 +29,24 @@ const ManageContent = () => {
         tabData={tabData}
         basePath="/manage/"
         activePath={activeManage}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        setTabDirection={setTabDirection}
       />
-      <div>
-        {activeTab.element}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeManage}
+          initial={{x: tabDirection === "right" ? "100%" : "-100%" }}
+          animate={{ x: 0 }}
+          exit={{x: tabDirection === "right" ? "-100%" : "100%"}}
+          transition={{ 
+            duration: 0.3,
+            ease: "easeInOut"
+          }}
+        >
+          {activeTabElement}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

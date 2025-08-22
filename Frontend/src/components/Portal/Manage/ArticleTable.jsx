@@ -6,7 +6,7 @@ const ArticleTable = ({ initialTableData }) => {
   const { manageType } = useParams();
 
   return (
-  <table className="relative w-full text-left border-y table-auto"> 
+  <table className="relative w-full sm:text-xs text-left border-y table-auto"> 
     <thead>
       <tr>
         <th className="border-y-2 border-black py-2">Title</th>
@@ -16,7 +16,7 @@ const ArticleTable = ({ initialTableData }) => {
     <tbody>
       {initialTableData?.map((row, index) => (
         <tr 
-          id={index} 
+          key={index}
           className="group hover:bg-gray-100 hover:cursor-pointer" 
           onClick={() => {
             navigate(`/manage/${manageType}/individual-view`, {
