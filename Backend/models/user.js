@@ -95,5 +95,23 @@ export default (db) => ({
       SET revoked_at = CURRENT_TIMESTAMP()
       WHERE id = ?
       `, [id])
+  },
+
+  async fetchBusinessFromOwnerId(id) {
+    const [rows] = await db.query(`
+      SELECT id
+      FROM businesses
+      WHERE operator_user_id = ?
+      `, [id])
+
+    if (rows.length == 0 ) {
+      return null;
+    }
+
+    if (rows.length > 1 ) {
+      throw new Error("Multiple businesses returned!"); // If we ever move to multiple businesses per account, this will have to change
+    }
+
+    return rows[0];
   }
 });
