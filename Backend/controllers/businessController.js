@@ -2,7 +2,7 @@ import db from "../config/db.js";
 import businessModel from '../models/business.js';
 import userModel from '../models/user.js';
 
-export const getDashboard = async (req, res) => {
+export const getProfile = async (req, res) => {
     const user = userModel(db);
     const business = businessModel(db);
 
@@ -34,9 +34,30 @@ export const getDashboard = async (req, res) => {
             
         }
     );
+}
 
 
+export const updateProfile = async (req, res) => {
+    try {
+        const business = businessModel(db);
+        const user = userModel(db);
+        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
+
+        if (businessResult == null) {
+            req.status(404).json({message: "No business exists for user"});
+        }
+        const businessId = businessResult.id;
+
+        try {
+            await business.updateBusiness(businessId, req.body);
+        } catch (error) {
+            return res.status(400).json({message: "Bad request"});
+        }
+
+        return res.status(201).json({message: "Business updated"});
+    } catch (error) {
+        return res.status(500).json({message: "Internal server error"});
+    }
 
 
-    
 }

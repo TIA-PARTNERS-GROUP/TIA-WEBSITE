@@ -136,7 +136,7 @@ router.post('/login', login);
 
 /**
  * @swagger
- * /refresh:
+ * /auth/refresh:
  *   post:
  *     summary: Refresh the access token using a valid refresh token
  *     description: |
@@ -200,7 +200,7 @@ router.post('/refresh', verifyRefreshToken, refresh)
 
 /**
  * @swagger
- * /logout:
+ * /auth/logout:
  *   post:
  *     summary: Log out the user
  *     description: >

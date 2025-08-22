@@ -40,21 +40,80 @@ export default (db) => ({
 
   async getServices(id) {
     const [rows] = await db.query(`
-        SELECT description
+        SELECT id description
         FROM business_services
         WHERE business_id = ?
       `, [id])
 
-    return rows.map((row) => (row.description));
+    return rows;
   },
 
     async getClients(id) {
-    const [rows] = await db.query(`
-        SELECT description
+      const [rows] = await db.query(`
+        SELECT id, description
         FROM business_clients
         WHERE business_id = ?
       `, [id])
 
-    return rows.map((row) => (row.description));
+    return rows;
+  },
+
+  async updateBusiness(id, request) {
+    console.log(request);
+    const params = {
+      name: null,
+      tagline: null,
+      website: null,
+      contactName: null,
+      contactPhoneNo: null,
+      contactEmail: null,
+      description: null,
+      address: null,
+      city: null,
+      businessType: null,
+      businessCategory: null,
+      businessPhase: null,
+    };
+
+
+    for (const key of Object.keys(request)) {
+      if (params.hasOwnProperty(key)) {
+        params[key] = request[key];
+      } else {
+        throw new Error("Invalid parameter");
+      }
+    }
+
+    await db.query(`
+      UPDATE businesses
+      SET
+        name = COALESCE(?, name),
+        tagline = COALESCE(?, tagline),
+        website = COALESCE(?, website),
+        contact_name = COALESCE(?, contact_name),
+        contact_phone_no = COALESCE(?, contact_phone_no),
+        contact_email = COALESCE(?, contact_email),
+        description = COALESCE(?, description),
+        address = COALESCE(?, address),
+        city = COALESCE(?, city),
+        business_type_id = COALESCE(?, business_type_id),
+        business_category_id = COALESCE(?, business_category_id),
+        business_phase = COALESCE(?, business_phase)
+      WHERE id = ?
+      `, [
+          params.name,
+          params.tagline,
+          params.website,
+          params.contactName,
+          params.contactPhoneNo,
+          params.contactEmail,
+          params.description,
+          params.address,
+          params.city,
+          params.businessType,
+          params.businessCategory,
+          params.businessPhase,
+          id
+        ])
   }
 });

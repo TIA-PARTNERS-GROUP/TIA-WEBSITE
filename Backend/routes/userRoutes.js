@@ -62,7 +62,7 @@ router.get('/exists/:email', checkUserExists);
 
 /**
  * @swagger
- * /me:
+ * /users/me:
  *   get:
  *     summary: Get the currently authenticated user's profile
  *     description: |
@@ -71,7 +71,7 @@ router.get('/exists/:email', checkUserExists);
  *       
  *       The JWT is verified and decoded to obtain the user ID, which is then used to fetch user information from the database.
  *     tags:
- *       - Auth
+ *       - User
  *     security:
  *       - bearerAuth: []
  *     responses:
