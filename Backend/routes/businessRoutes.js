@@ -1,5 +1,5 @@
 import Router from 'express';
-import { getProfile, updateProfile } from '../controllers/businessController.js';
+import { getProfile, updateProfile, addServices, addClients, removeServices, removeClients } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 
 const router = Router();
@@ -217,5 +217,301 @@ router.get('/myinfo', verifyToken, getProfile);
  *                   example: Internal server error
  */
 router.patch('/update', verifyToken, updateProfile)
+
+/**
+ * @swagger
+ * /addservice:
+ *   post:
+ *     summary: Add one or more services to the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Adds one or more services (by name/description) to the business associated with the authenticated user.  
+ *       Returns the IDs of the newly created services.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - services
+ *             properties:
+ *               services:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Web Design", "SEO Optimization", "Consulting"]
+ *     responses:
+ *       201:
+ *         description: Services added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 newServices:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: integer
+ *                   example:
+ *                     "Web Design": 12
+ *                     "SEO Optimization": 13
+ *       400:
+ *         description: No services provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No services provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/addservice', verifyToken, addServices)
+
+/**
+ * @swagger
+ * /addclient:
+ *   post:
+ *     summary: Add one or more clients to the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Adds one or more clients (by name/description) to the business associated with the authenticated user.  
+ *       Returns the IDs of the newly created clients.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - clients
+ *             properties:
+ *               clients:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Acme Corp", "Beta Ltd", "Charlie Industries"]
+ *     responses:
+ *       201:
+ *         description: Clients added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 newClients:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: integer
+ *                   example:
+ *                     "Acme Corp": 21
+ *                     "Beta Ltd": 22
+ *       400:
+ *         description: No clients provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No clients provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/addclient', verifyToken, addClients)
+
+/**
+ * @swagger
+ * /removeservice:
+ *   delete:
+ *     summary: Remove one or more services from the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Removes one or more services (by ID) from the business associated with the authenticated user.  
+ *       Each provided service ID will return a success or failure outcome.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - services
+ *             properties:
+ *               services:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [12, 13, 14]
+ *     responses:
+ *       201:
+ *         description: Service removal attempted, results returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 outcomes:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *                   example:
+ *                     "12": "Success"
+ *                     "13": "No service with that id for this business"
+ *       400:
+ *         description: No services provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No services provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/removeservice', verifyToken, removeServices)
+
+/**
+ * @swagger
+ * /removeclient:
+ *   delete:
+ *     summary: Remove one or more clients from the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Removes one or more clients (by ID) from the business associated with the authenticated user.  
+ *       Each provided client ID will return a success or failure outcome.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - clients
+ *             properties:
+ *               clients:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [21, 22, 23]
+ *     responses:
+ *       201:
+ *         description: Client removal attempted, results returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 outcomes:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *                   example:
+ *                     "21": "Success"
+ *                     "22": "No client with that id for this business"
+ *       400:
+ *         description: No clients provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No clients provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/removeclient', verifyToken, removeClients)
 
 export default router;

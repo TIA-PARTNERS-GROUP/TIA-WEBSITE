@@ -102,7 +102,7 @@ router.get('/exists/:email', checkUserExists);
  *                       example: john.doe@example.com
  *                     contactPhone:
  *                       type: string
- *                       example: "+1 555 123 4567"
+ *                       example: "1555124567"
  *                     loginEmail:
  *                       type: string
  *                       example: john.doe@login.com
@@ -131,6 +131,7 @@ router.get('/exists/:email', checkUserExists);
  *               message: Server error verifying token
  */
 router.get('/me', verifyToken, getMe)
+
 /**
  * @swagger
  * /users/{id}:

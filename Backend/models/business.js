@@ -40,7 +40,7 @@ export default (db) => ({
 
   async getServices(id) {
     const [rows] = await db.query(`
-        SELECT id description
+        SELECT service_id, description
         FROM business_services
         WHERE business_id = ?
       `, [id])
@@ -50,7 +50,7 @@ export default (db) => ({
 
     async getClients(id) {
       const [rows] = await db.query(`
-        SELECT id, description
+        SELECT client_id, description
         FROM business_clients
         WHERE business_id = ?
       `, [id])
@@ -115,5 +115,44 @@ export default (db) => ({
           params.businessPhase,
           id
         ])
-  }
+  },
+
+  async addClient(id, clientDescription) {
+    const [result] = await db.query(`
+      INSERT INTO business_clients (business_id, description)
+      VALUES (?, ?)
+      `, [id, clientDescription])
+
+    return result.insertId;
+  },
+
+
+  async addService(id, serviceDescription) {
+    const [result] = await db.query(`
+      INSERT INTO business_services (business_id, description)
+      VALUES (?, ?)
+      `, [id, serviceDescription])
+
+    return result.insertId;
+  },
+
+  async removeClient(id, businessId) {
+    const [result] = await db.query(`
+      DELETE FROM business_clients
+      WHERE client_id = ?
+      AND business_id = ?
+      `, [id, businessId])
+
+      return result.affectedRows;
+  },
+
+  async removeService(id, businessId) {
+    const [result] = await db.query(`
+      DELETE FROM business_services
+      WHERE service_id = ?
+      AND business_id = ?
+      `, [id, businessId])
+
+      return result.affectedRows;
+  },
 });
