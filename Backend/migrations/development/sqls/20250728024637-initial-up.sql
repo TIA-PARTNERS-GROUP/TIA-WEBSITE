@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `tiapartners` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `tiapartners`;
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: tiapartners
@@ -32,6 +34,24 @@ CREATE TABLE `business_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `business_clients`
+--
+
+DROP TABLE IF EXISTS `business_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `business_clients` (
+  `client_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `business_id` int unsigned NOT NULL,
+  `description` varchar(50) NOT NULL,
+  PRIMARY KEY (`client_id`),
+  UNIQUE KEY `client_id_UNIQUE` (`client_id`),
+  KEY `business_clients_business_id_idx` (`business_id`),
+  CONSTRAINT `business_clients_business_id` FOREIGN KEY (`business_id`) REFERENCES `businesses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `business_connections`
 --
 
@@ -52,7 +72,7 @@ CREATE TABLE `business_connections` (
   KEY `business_connections_receiving_id_idx` (`receiving_business_id`),
   CONSTRAINT `business_connections_initiating_id` FOREIGN KEY (`initiating_business_id`) REFERENCES `businesses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `business_connections_receiving_id` FOREIGN KEY (`receiving_business_id`) REFERENCES `businesses` (`id`),
-  CONSTRAINT `business_connections_type` FOREIGN KEY (`connection_type_id`) REFERENCES `business_types` (`id`)
+  CONSTRAINT `business_connections_type` FOREIGN KEY (`connection_type_id`) REFERENCES `connection_types` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,6 +105,23 @@ CREATE TABLE `business_roles` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `business_services`
+--
+
+DROP TABLE IF EXISTS `business_services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `business_services` (
+  `service_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `business_id` int unsigned NOT NULL,
+  `description` varchar(50) NOT NULL,
+  PRIMARY KEY (`service_id`),
+  KEY `business_services_business_id_idx` (`business_id`),
+  CONSTRAINT `business_services_business_id` FOREIGN KEY (`business_id`) REFERENCES `businesses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -154,6 +191,9 @@ CREATE TABLE `businesses` (
   `name` varchar(100) NOT NULL,
   `tagline` varchar(100) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
+  `contact_name` varchar(60) DEFAULT NULL,
+  `contact_phone_no` varchar(10) DEFAULT NULL,
+  `contact_email` varchar(254) DEFAULT NULL,
   `description` text,
   `address` varchar(100) DEFAULT NULL,
   `city` varchar(60) DEFAULT NULL,
@@ -184,6 +224,7 @@ CREATE TABLE `case_studies` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `owner_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
   `content` longtext NOT NULL,
   `thumbnail` varchar(255) DEFAULT NULL,
   `video_url` varchar(255) DEFAULT NULL,
@@ -362,7 +403,7 @@ CREATE TABLE `migrations` (
   `name` varchar(255) NOT NULL,
   `run_on` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -668,10 +709,11 @@ CREATE TABLE `user_sessions` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `user_session_user_id_idx` (`user_id`),
   KEY `user_session_rotated_from_id_idx` (`rotated_from_id`),
+  KEY `user_session_rotated_to_id` (`rotated_to_id`),
   CONSTRAINT `user_session_rotated_from_id` FOREIGN KEY (`rotated_from_id`) REFERENCES `user_sessions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `user_session_rotated_to_id` FOREIGN KEY (`rotated_to_id`) REFERENCES `user_sessions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_session_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -735,6 +777,29 @@ CREATE TABLE `user_subscriptions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `user_testimonials`
+--
+
+DROP TABLE IF EXISTS `user_testimonials`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_testimonials` (
+  `id` int unsigned NOT NULL,
+  `poster_user_id` int unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
+  `content` longtext NOT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `video` varchar(255) DEFAULT NULL,
+  `published` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `user_testimonials_poster_id_idx` (`poster_user_id`),
+  CONSTRAINT `user_testimonials_poster_id` FOREIGN KEY (`poster_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `users`
 --
 
@@ -749,7 +814,7 @@ CREATE TABLE `users` (
   `contact_phone_no` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -761,4 +826,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-14 22:56:27
+-- Dump completed on 2025-08-21 17:04:22
