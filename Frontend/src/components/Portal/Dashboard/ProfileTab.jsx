@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import ProfileIcon from "../../Icons/ProfileIcon";
 
 const progress = 80;
@@ -16,10 +17,13 @@ const ProfileTab = (props) => {
           <h2 className="2xl:pt-1 sm:text-xs md:text-sm 2xl:text-lg font-semibold text-black-800">Welcome back, {props.data.firstName}!</h2>
           <div className="flex items-center gap-3 sm:w-[50%] 2xl:w-[26%]">
             <div className="flex-1 bg-gray-200 rounded-full h-2.5">
-              <div 
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
                 className="bg-blue-600 h-2.5 rounded-full" 
                 style={{ width: `${progress}%` }} // Width based on progress
-              ></div>
+              ></motion.div>
             </div>
             <p className="text-right sm:text-xs text-sm text-gray-500 mt-1">
               {progress}% complete

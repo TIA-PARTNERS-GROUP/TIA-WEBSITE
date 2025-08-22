@@ -45,8 +45,8 @@ const QuickSearch = () => {
 
   return (
   <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
-    <h2 className="text-3xl font-semibold">Quick Search</h2>
-    <p className="pt-2 pb-10 text-md">Manually search for connections:</p>
+    <h2 className="lg:pl-4 2xl:pl-10 pt-10 sm:text-xl 2xl:text-4xl md:text-2xl font-semibold text-black-800">Quick Search</h2>
+    <p className="lg:pl-4 2xl:pl-10 py-8 sm:text-xs 2xl:text-lg">Manually search for connections:</p>
     <SearchBar />
     <ConnectionsGrid queryValue={queryValue} connectionsData={connectionsData}/>
   </div>

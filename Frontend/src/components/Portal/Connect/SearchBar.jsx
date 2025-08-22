@@ -30,9 +30,9 @@ const SearchBar = () => {
 
     return (
     <div className="w-full">
-        <form onSubmit={handleSubmit} className="text-black pb-10 pr-10 w-full">
+        <form onSubmit={handleSubmit} className="text-black sm:text-xs pb-10 pr-10 w-full">
             <div className="flex justify-between"> 
-                <div className="flex gap-x-2 border-b-2 border-gray-500 pb-1 w-1/2 items-center">
+                <div className="flex lg:translate-x-4 2xl:translate-x-10 gap-x-2 border-b-2 border-gray-500 pb-1 w-1/2 items-center">
                     <SearchIcon /> 
                     <input 
                                 type="search" 
@@ -45,21 +45,21 @@ const SearchBar = () => {
                 </div>
                 <div className="flex gap-x-2">
                     <div className="flex">
-                        <SecondaryButton className="px-2 py-0 flex gap-x-1 items-center">
+                        <SecondaryButton className="sm:px-1 lg:px-2 py-0 flex gap-x-1 items-center">
                             SORT BY
-                            <PlusIcon className="w-5 h-5"/>
+                            <PlusIcon className="sm:w-3 sm:h-3 w-5 h-5"/>
                         </SecondaryButton>
                     </div>
                     <div className="flex">
-                        <SecondaryButton className="px-2 py-0 flex gap-x-1 items-center">
+                        <SecondaryButton className="sm:px-1 lg:px-2 py-0 flex gap-x-1 items-center">
                             FILTER
-                            <FilterIcon className="w-5 h-5"/>
+                            <FilterIcon className="sm:w-3 sm:h-3 w-5 h-5"/>
                         </SecondaryButton>    
                     </div>
                 </div>
             </div>  
         </form>
-        {queryEntered && <p className="pb-8 text-lg">Showing results for: <strong>{searchParams.get('q') || ''}</strong></p>}
+        {queryEntered && <p className="pb-8 sm:text-xs 2xl:text-lg">Showing results for: <strong>{searchParams.get('q') || ''}</strong></p>}
     </div>
     )
 }
