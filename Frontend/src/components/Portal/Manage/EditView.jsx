@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCurrentBusinessInfo, updateCurrentBusinessProfile } from "../../../api/business.js";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 
@@ -7,12 +8,11 @@ const EditView = () => {
 
   const navigate = useNavigate();
 
-  const [companyName, setCompanyName] = useState('DyCom Group');
-  const [contactInfo, setContactInfo] = useState(["Mark Stecher", "123 456 7890", "mark@dycom.com.au"]);
-  const [companyDescription, setCompanyDescription] = useState('DyCom is a seasoned and experienced Network Services\
- company that takes great pride in offering a wide-range of sophisticated IT products\
-  and services designed to meet the ever-growing and ever-expanding needs of our clients\
-   and the businesses they operate.');
+  const [saving, setSaving] = useState(false);
+
+  const [companyName, setCompanyName] = useState("Loading...");
+  const [contactInfo, setContactInfo] = useState(["Loading...", "Loading...", "Loading..."]);
+  const [companyDescription, setCompanyDescription] = useState("Loading...");
   const [whatwedoData, setWhatWeDoData] = useState([
     {description: "DyCom Wireless - Wireless solutions"},
     {description: "DyCom SmartStaff - Staff provision"},
@@ -23,6 +23,16 @@ const EditView = () => {
   const [clientData, setClientData] = useState([
     {description: "Small technology businesses"}
   ]);
+
+  useEffect(() => {
+    getCurrentBusinessInfo()
+      .then((res) => {
+        setCompanyDescription(res.data.businessDescription);
+        setContactInfo([res.data.contactName, res.data.contactPhone, res.data.contactEmail]);
+        setCompanyName(res.data.businessName);
+      })
+      .catch((error) => {console.error('Error fetching username:', error);});
+  }, []);
 
   const handleCompanyNameChange = (event) => {
     setCompanyName(event.target.value);
@@ -66,6 +76,17 @@ const EditView = () => {
   const handleAddClient = () => {
     setClientData([...clientData, { description: ""}]);
   };
+
+  const handleSave = () => {
+    setSaving(true);
+    updateCurrentBusinessProfile(companyName, contactInfo[0], contactInfo[1], contactInfo[2], companyDescription)
+      .then(() => {
+        window.scrollTo(0, 0);
+        navigate(`/manage/profile/view`)
+      })
+      .catch((error) => {console.error('Error fetching username:', error);}
+    );
+  }
 
   return (
   <div className="bg-white rounded-xl px-8 py-2">
@@ -176,21 +197,13 @@ const EditView = () => {
                 </SecondaryButton>
         </div>
     </div>
-    <div className="pt-20 flex gap-x-6">
-        <SecondaryButton className="px-20" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/view")}}>Cancel</SecondaryButton>
-        <PrimaryButton 
-          className="px-20" 
-          onClick={() => {window.scrollTo(0, 0);
-          navigate(`/manage/profile/view`, {
-          state: { 
-          companyName: companyName,
-          companyDescription: companyDescription,
-          whatwedoData: whatwedoData,
-          clientData: clientData,
-          contactInfo: contactInfo
-          },
-      })}}>Save</PrimaryButton>
-    </div>
+      <div className="pt-20 flex gap-x-6 items-center">
+          <SecondaryButton className="px-20" onClick={() => {window.scrollTo(0, 0); navigate("/manage/profile/view")}}>Cancel</SecondaryButton>
+          <PrimaryButton 
+            className="px-20" 
+            onClick={() => {handleSave()}}>Save</PrimaryButton>
+          {saving && <p>Saving...</p>}
+      </div>
   </div>
 )
 };

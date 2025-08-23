@@ -9,7 +9,7 @@ export const getProfile = async (req, res) => {
     const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
     if (businessResult == null) {
-        req.status(404).json({message: "No business exists for user"});
+        res.status(404).json({message: "No business exists for user"});
     }
 
     const businessId = businessResult.id;
@@ -44,7 +44,7 @@ export const updateProfile = async (req, res) => {
         const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
         if (businessResult == null) {
-            req.status(404).json({message: "No business exists for user"});
+            res.status(404).json({message: "No business exists for user"});
         }
         const businessId = businessResult.id;
 
@@ -72,7 +72,7 @@ export const addServices = async (req, res) => {
         const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
         if (businessResult == null) {
-            req.status(404).json({message: "No business exists for user"});
+            res.status(404).json({message: "No business exists for user"});
         }
         const businessId = businessResult.id;
 
@@ -105,7 +105,7 @@ export const addClients = async (req, res) => {
         const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
         if (businessResult == null) {
-            req.status(404).json({message: "No business exists for user"});
+            res.status(404).json({message: "No business exists for user"});
         }
         const businessId = businessResult.id;
 
@@ -138,7 +138,7 @@ export const removeServices = async (req, res) => {
         const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
         if (businessResult == null) {
-            req.status(404).json({message: "No business exists for user"});
+            res.status(404).json({message: "No business exists for user"});
         }
         const businessId = businessResult.id;
 
@@ -174,7 +174,7 @@ export const removeClients = async (req, res) => {
         const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
         if (businessResult == null) {
-            req.status(404).json({message: "No business exists for user"});
+            res.status(404).json({message: "No business exists for user"});
         }
         const businessId = businessResult.id;
 

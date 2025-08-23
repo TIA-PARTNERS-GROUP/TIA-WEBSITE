@@ -1,11 +1,15 @@
+import { useEffect, useState } from "react";
+import { getCurrentBusinessInfo } from "../../../api/business";
 import ProfileHeader from "./ProfileHeader";
 import ContactInfo from "./ContactInfo";
 import HexagonList from "./HexagonList";
 
+/*
 const defaultCompanyDescription = 'DyCom is a seasoned and experienced Network Services\
  company that takes great pride in offering a wide-range of sophisticated IT products\
   and services designed to meet the ever-growing and ever-expanding needs of our clients\
    and the businesses they operate.';
+  */
 
 const defaultWhatWeDoData = [
     {description: "DyCom Wireless - Wireless solutions"},
@@ -19,15 +23,35 @@ const defaultClientData = [
     {description: "Small technology businesses"}
 ];
 
-const defaultContactInfo = ["Mark Stecher", "123 456 7890", "mark@dycom.com.au"];
+//const defaultContactInfo = ["Mark Stecher", "123 456 7890", "mark@dycom.com.au"];
+
+
 
 const ProfileOutput =({ 
     personalProfile, 
     companyName, 
-    companyDescription = defaultCompanyDescription, 
+    companyDescription, 
     whatwedoData = defaultWhatWeDoData, 
     clientData = defaultClientData, 
-    contactInfo = defaultContactInfo}) => {
+    contactInfo}) => {
+  
+  const [defaultCompanyDescription, setDefaultCompanyDescription] = useState("Loading...");
+  const [defaultContactInfo, setDefaultContactInfo] = useState(["Loading...", "Loading...", "Loading..."]);
+  const [defaultCompanyName, setDefaultCompanyName] = useState("Loading...");
+
+  companyName = companyName ?? defaultCompanyName;
+  companyDescription = companyDescription ?? defaultCompanyDescription;
+  contactInfo = contactInfo ?? defaultContactInfo;
+  
+  useEffect(() => {
+      getCurrentBusinessInfo()
+        .then((res) => {
+          setDefaultCompanyDescription(res.data.businessDescription);
+          setDefaultContactInfo([res.data.contactName, res.data.contactPhone, res.data.contactEmail]);
+          setDefaultCompanyName(res.data.businessName);
+        })
+        .catch((error) => {console.error('Error fetching username:', error);});
+    }, []);
 
   return (
     <div className="space-y-4">

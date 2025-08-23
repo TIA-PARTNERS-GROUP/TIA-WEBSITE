@@ -1,12 +1,22 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { getCurrentUserInfo } from "../../../api/user";
 import ProfileIcon from "../../Icons/ProfileIcon";
 
-const progress = 80;
-
-const ProfileTab = (props) => {
+const ProfileTab = () => {
 
   const navigate = useNavigate();
+  const [userName, setUsername] = useState("");
+  const progress = 80;
+
+  useEffect(() => {
+    getCurrentUserInfo()
+      .then((res) => {
+        setUsername(res.data.data.firstName);
+      })
+      .catch((error) => {console.error('Error fetching username:', error);});
+  }, []);
   
   return (
     <div className="container mx-auto flex flex-col items-start pt-4 pb-4 text-left">
@@ -14,7 +24,9 @@ const ProfileTab = (props) => {
         <button onClick={() => (navigate("/manage/profile"))}><ProfileIcon className="sm:w-10 sm:h-10 2xl:w-14 2xl:h-14 md:w-14 md:h-14 text-black mt-0.5" /></button>
         
         <div className="flex-1">
-          <h2 className="2xl:pt-1 sm:text-xs md:text-sm 2xl:text-lg font-semibold text-black-800">Welcome back, {props.data.firstName}!</h2>
+          <h2 className="2xl:pt-1 sm:text-xs md:text-sm 2xl:text-lg font-semibold text-black-800">
+            Welcome back{userName ? `, ${userName}` : ''}!
+          </h2>
           <div className="flex items-center gap-3 sm:w-[50%] 2xl:w-[26%]">
             <div className="flex-1 bg-gray-200 rounded-full h-2.5">
               <motion.div 
