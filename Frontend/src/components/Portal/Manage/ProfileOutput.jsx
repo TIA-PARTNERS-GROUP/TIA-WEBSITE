@@ -11,6 +11,7 @@ const defaultCompanyDescription = 'DyCom is a seasoned and experienced Network S
    and the businesses they operate.';
   */
 
+   /*
 const defaultWhatWeDoData = [
     {description: "DyCom Wireless - Wireless solutions"},
     {description: "DyCom SmartStaff - Staff provision"},
@@ -22,6 +23,7 @@ const defaultWhatWeDoData = [
 const defaultClientData = [
     {description: "Small technology businesses"}
 ];
+*/
 
 //const defaultContactInfo = ["Mark Stecher", "123 456 7890", "mark@dycom.com.au"];
 
@@ -31,17 +33,21 @@ const ProfileOutput =({
     personalProfile, 
     companyName, 
     companyDescription, 
-    whatwedoData = defaultWhatWeDoData, 
-    clientData = defaultClientData, 
+    whatwedoData, 
+    clientData, 
     contactInfo}) => {
   
   const [defaultCompanyDescription, setDefaultCompanyDescription] = useState("Loading...");
   const [defaultContactInfo, setDefaultContactInfo] = useState(["Loading...", "Loading...", "Loading..."]);
   const [defaultCompanyName, setDefaultCompanyName] = useState("Loading...");
+  const [defaultWhatWeDoData, setDefaultWhatWeDoData] = useState([{description: "Loading..."}]);
+  const [defaultClientData, setDefaultClientData] = useState([{description: "Loading..."}]);
 
   companyName = companyName ?? defaultCompanyName;
   companyDescription = companyDescription ?? defaultCompanyDescription;
   contactInfo = contactInfo ?? defaultContactInfo;
+  whatwedoData = whatwedoData ?? defaultWhatWeDoData;
+  clientData = clientData ?? defaultClientData;
   
   useEffect(() => {
       getCurrentBusinessInfo()
@@ -49,9 +55,11 @@ const ProfileOutput =({
           setDefaultCompanyDescription(res.data.businessDescription);
           setDefaultContactInfo([res.data.contactName, res.data.contactPhone, res.data.contactEmail]);
           setDefaultCompanyName(res.data.businessName);
+          setDefaultWhatWeDoData(res.data.services);
+          setDefaultClientData(res.data.clients);
         })
         .catch((error) => {console.error('Error fetching username:', error);});
-    }, []);
+  }, []);
 
   return (
     <div className="space-y-4">

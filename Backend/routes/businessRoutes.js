@@ -220,7 +220,7 @@ router.patch('/update', verifyToken, updateProfile)
 
 /**
  * @swagger
- * /addservice:
+ * /business/addservice:
  *   post:
  *     summary: Add one or more services to the authenticated user's business
  *     description: >
@@ -294,7 +294,7 @@ router.post('/addservice', verifyToken, addServices)
 
 /**
  * @swagger
- * /addclient:
+ * /business/addclient:
  *   post:
  *     summary: Add one or more clients to the authenticated user's business
  *     description: >
@@ -368,7 +368,7 @@ router.post('/addclient', verifyToken, addClients)
 
 /**
  * @swagger
- * /removeservice:
+ * /business/removeservice:
  *   delete:
  *     summary: Remove one or more services from the authenticated user's business
  *     description: >
@@ -442,7 +442,7 @@ router.delete('/removeservice', verifyToken, removeServices)
 
 /**
  * @swagger
- * /removeclient:
+ * /business/removeclient:
  *   delete:
  *     summary: Remove one or more clients from the authenticated user's business
  *     description: >

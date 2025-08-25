@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentBusinessInfo, updateCurrentBusinessProfile } from "../../../api/business.js";
+import { addClients, addServices, getCurrentBusinessInfo, removeClients, removeServices, updateCurrentBusinessProfile } from "../../../api/business.js";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
+import DeleteIcon from "../../Icons/DeleteIcon.jsx";
 
 const EditView = () => {
 
@@ -13,16 +14,11 @@ const EditView = () => {
   const [companyName, setCompanyName] = useState("Loading...");
   const [contactInfo, setContactInfo] = useState(["Loading...", "Loading...", "Loading..."]);
   const [companyDescription, setCompanyDescription] = useState("Loading...");
-  const [whatwedoData, setWhatWeDoData] = useState([
-    {description: "DyCom Wireless - Wireless solutions"},
-    {description: "DyCom SmartStaff - Staff provision"},
-    {description: "DyCom Security - Security, surveillance and alarm services"},
-    {description: "DyCom Technology - Network services for IT products"},
-    {description: "DyCom Cloud - Compute cloud environments"},
-  ]);
-  const [clientData, setClientData] = useState([
-    {description: "Small technology businesses"}
-  ]);
+  const [whatwedoData, setWhatWeDoData] = useState([{description: "Loading..."}]);
+  const [clientData, setClientData] = useState([{description: "Loading..."}]);
+
+  const [originalWhatWeDoData, setOriginalWhatWeDoData] = useState([{}]);
+  const [originalClientData, setOriginalClientData] = useState([{}]);
 
   useEffect(() => {
     getCurrentBusinessInfo()
@@ -30,6 +26,11 @@ const EditView = () => {
         setCompanyDescription(res.data.businessDescription);
         setContactInfo([res.data.contactName, res.data.contactPhone, res.data.contactEmail]);
         setCompanyName(res.data.businessName);
+        setWhatWeDoData(res.data.services.map(service => ({description: service.description})));
+        setClientData(res.data.clients.map(client => ({description: client.description})));
+
+        setOriginalWhatWeDoData(res.data.services);
+        setOriginalClientData(res.data.clients);
       })
       .catch((error) => {console.error('Error fetching username:', error);});
   }, []);
@@ -77,14 +78,56 @@ const EditView = () => {
     setClientData([...clientData, { description: ""}]);
   };
 
+  const handleRemoveService = (index) => {
+    setWhatWeDoData(whatwedoData => whatwedoData.filter((_, i) => i !== index));
+  }
+  const handleRemoveClient = (index) => {
+    setClientData(clientData => clientData.filter((_, i) => i !== index));
+  }
+
+
   const handleSave = () => {
     setSaving(true);
-    updateCurrentBusinessProfile(companyName, contactInfo[0], contactInfo[1], contactInfo[2], companyDescription)
+    const serviceIds = originalWhatWeDoData.map(service => service.service_id);
+    const clientIds = originalClientData.map(client => client.client_id);
+    const serviceDescriptions = whatwedoData.map(service => service.description);
+    const clientDescriptions = clientData.map(client => client.description);
+
+    console.log(originalWhatWeDoData);
+    console.log([serviceIds, clientIds, serviceDescriptions, clientDescriptions]);
+
+    const pRemoveServices = removeServices(serviceIds)
+      .then((data) => {data})
+      .catch((error) => {console.error('Error removing services:', error);}
+    );
+
+    const pRemoveClients = removeClients(clientIds)
+      .then((data) => {data})
+      .catch((error) => {console.error('Error removing clients:', error);}
+    );
+
+    const pAddServices = addServices(serviceDescriptions)
+      .then((data) => {data})
+      .catch((error) => {console.error('Error adding services:', error);}
+    );
+
+    const pAddClients = addClients(clientDescriptions)
+      .then((data) => {data})
+      .catch((error) => {console.error('Error adding clients:', error);}
+    );
+
+    const pUpdateProfile = updateCurrentBusinessProfile(companyName, contactInfo[0], contactInfo[1], contactInfo[2], companyDescription)
+      .then((data) => {data})
+      .catch((error) => {console.error('Error fetching username:', error);}
+    );
+
+    // Wait until promises are returned for all three axios calls before rerouting
+    Promise.all([pRemoveServices, pRemoveClients, pAddServices, pAddClients, pUpdateProfile])
       .then(() => {
         window.scrollTo(0, 0);
         navigate(`/manage/profile/view`)
       })
-      .catch((error) => {console.error('Error fetching username:', error);}
+      .catch((error) => {console.error('Error fetching promises:', error);}
     );
   }
 
@@ -162,14 +205,19 @@ const EditView = () => {
         <div className="form-group flex flex-col gap-y-6">
                 <p className="pt-4 pb-1 text-md font-semibold text-blue-600">SERVICES</p>
                 {whatwedoData.map((item, index) => (
-                  <input
-                    key={index} 
-                    type="text"
-                    value={item.description} 
-                    onChange={(e) => handleWhatWeDoChange(index, e.target.value)}
-                    className="border-b-2 placeholder-gray-300" 
-                    placeholder="What does your company do?..." 
-                  />
+                  <div key={index} className="flex w-full justify-between gap-x-2">
+                    <input
+                      key={index} 
+                      type="text"
+                      value={item.description} 
+                      onChange={(e) => handleWhatWeDoChange(index, e.target.value)}
+                      className="border-b-2 placeholder-gray-300 w-full" 
+                      placeholder="What does your company do?..." 
+                    />
+                    <button onClick={() => handleRemoveService(index)}>
+                      <DeleteIcon />
+                    </button>
+                  </div>
                 ))}
                 <SecondaryButton 
                     className="relative -translate-y-4 text-sm block text-center py-0.5 mt-2 max-w-[185px]"
@@ -181,14 +229,19 @@ const EditView = () => {
         <div className="form-group flex flex-col gap-y-6">
                 <p className="pt-4 pb-1 text-md font-semibold text-blue-600">CLIENTS</p>
                 {clientData.map((item, index) => (
+                  <div key={index} className="flex w-full justify-between gap-x-2">
                   <input
                     key={index} 
                     type="text"
                     value={item.description} 
                     onChange={(e) => handleClientChange(index, e.target.value)}
-                    className="border-b-2 placeholder-gray-300" 
+                    className="border-b-2 placeholder-gray-300 w-full" 
                     placeholder="What type of client does your company serve?..." 
                   />
+                  <button onClick={() => handleRemoveClient(index)}>
+                      <DeleteIcon />
+                    </button>
+                  </div>
                 ))}
                 <SecondaryButton 
                     className="relative -translate-y-4 text-sm block text-center py-0.5 mt-2 max-w-[185px]"
