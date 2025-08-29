@@ -678,6 +678,7 @@ CREATE TABLE `user_posts` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `poster_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
   `content` longtext NOT NULL,
   `thumbnail` varchar(255) DEFAULT NULL,
   `video_url` varchar(255) DEFAULT NULL,
