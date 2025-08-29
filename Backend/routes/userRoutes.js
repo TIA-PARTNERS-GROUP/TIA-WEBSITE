@@ -1,6 +1,8 @@
 import Router from 'express';
 import { checkUserExists, getUserDetails, getMe} from '../controllers/userController.js';
+import { getPosts, addPost, removePost } from '../controllers/postController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
+import { verify } from 'crypto';
 
 const router = Router();
 
@@ -130,7 +132,13 @@ router.get('/exists/:email', checkUserExists);
  *             example:
  *               message: Server error verifying token
  */
-router.get('/me', verifyToken, getMe)
+router.get('/me', verifyToken, getMe);
+
+router.get('/myposts', verifyToken, getPosts);
+
+router.post('/addpost', verifyToken, addPost);
+
+router.delete('/removepost', verifyToken, removePost);
 
 /**
  * @swagger

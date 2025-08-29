@@ -14,6 +14,19 @@ export default (db) => ({
     return rows;
   },
 
+  async getPost(postId) {
+    const [rows] = await db.query(
+        `
+        SELECT id, poster_user_id, title, date, content, published
+        FROM user_posts
+        WHERE id = ?
+        `, [postId]);
+    if (rows.length == 0) {
+        return null;
+    }
+    return rows[0];
+  },
+
 
   async addPost(posterId, title, date, content, published) {
     const [result] = await db.query(
@@ -35,5 +48,15 @@ export default (db) => ({
         `,
         [status, postId]
     )
+  },
+
+  async deletePost(postId) {
+    await db.query(
+      `
+      DELETE FROM user_posts
+      WHERE id = ?
+      `, 
+      [postId]
+    );
   }
 });

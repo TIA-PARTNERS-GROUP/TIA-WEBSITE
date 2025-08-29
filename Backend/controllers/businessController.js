@@ -63,7 +63,6 @@ export const updateProfile = async (req, res) => {
 export const addServices = async (req, res) => {
     try {
         const { services } = req.body;
-        console.log(services);
         if (!services || services.length == 0) {
             return res.status(400).json({message: "No services provided"})
         }
