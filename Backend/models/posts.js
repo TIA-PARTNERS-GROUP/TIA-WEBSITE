@@ -1,12 +1,14 @@
 export default (db) => ({
-  async getUserPosts(userId) {
+  async getUserPosts(userId, includeDraft = true) {
+
     const [rows] = await db.query(
         `
         SELECT id, poster_user_id, title, date, content, published
         FROM user_posts
         WHERE poster_user_id = ?
+        AND published >= ?
         ORDER BY date DESC
-        `, [userId]);
+        `, [userId, includeDraft ? 0 : 1]);
 
     if (rows.length == 0) {
         return null;
@@ -58,5 +60,6 @@ export default (db) => ({
       `, 
       [postId]
     );
-  }
+  },
+  
 });

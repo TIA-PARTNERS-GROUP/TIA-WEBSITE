@@ -1,8 +1,7 @@
 import Router from 'express';
 import { checkUserExists, getUserDetails, getMe} from '../controllers/userController.js';
-import { getPosts, addPost, removePost } from '../controllers/postController.js';
+import { getUserPosts, getMyPosts, addPost, removePost, publishPost } from '../controllers/postController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
-import { verify } from 'crypto';
 
 const router = Router();
 
@@ -134,10 +133,186 @@ router.get('/exists/:email', checkUserExists);
  */
 router.get('/me', verifyToken, getMe);
 
-router.get('/myposts', verifyToken, getPosts);
+/**
+ * @swagger
+ * /users/myposts:
+ *   get:
+ *     summary: Get posts created by the authenticated user
+ *     description: Returns all posts authored by the currently authenticated user. Requires a valid Bearer JWT token.
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user's posts.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       postedBy:
+ *                         type: integer
+ *                       title:
+ *                         type: string
+ *                       content:
+ *                         type: string
+ *                       status:
+ *                         type: string
+ *                         enum: [published, draft]
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       500:
+ *         description: Internal server error.
+ */
+router.get('/myposts', verifyToken, getMyPosts);
 
+/**
+ * @swagger
+ * /users/addpost:
+ *   post:
+ *     summary: Add a new post for the authenticated user
+ *     description: Creates a new post for the authenticated user. Requires a valid Bearer JWT token.
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - date
+ *               - content
+ *               - status
+ *             properties:
+ *               title:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *               content:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [published, draft]
+ *     responses:
+ *       201:
+ *         description: Post created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 postId:
+ *                   type: integer
+ *       400:
+ *         description: Missing or invalid fields.
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post('/addpost', verifyToken, addPost);
 
+/**
+ * @swagger
+ * /users/publishpost:
+ *   post:
+ *     summary: Publish an existing post
+ *     description: Publishes a draft post for the authenticated user. Requires a valid Bearer JWT token.
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: The ID of the post to publish.
+ *     responses:
+ *       200:
+ *         description: Post published successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Missing required fields.
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       404:
+ *         description: Post not found or not owned by user.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/publishpost', verifyToken, publishPost)
+
+/**
+ * @swagger
+ * /users/removepost:
+ *   delete:
+ *     summary: Remove a post created by the authenticated user
+ *     description: Deletes a post authored by the authenticated user. Requires a valid Bearer JWT token.
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: The ID of the post to delete.
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Missing required fields.
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       404:
+ *         description: Post not found or not owned by user.
+ *       500:
+ *         description: Internal server error.
+ */
 router.delete('/removepost', verifyToken, removePost);
 
 /**
@@ -214,6 +389,60 @@ router.delete('/removepost', verifyToken, removePost);
  *                   example: Failed to process request
  */
 router.get('/:id', verifyToken, getUserDetails);
+
+/**
+ * @swagger
+ * /users/{id}/posts:
+ *   get:
+ *     summary: Get posts created by a specific user
+ *     description: Returns all published posts authored by the specified user. Requires a valid Bearer JWT token.
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the user whose posts to retrieve.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user's posts.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       postedBy:
+ *                         type: integer
+ *                       title:
+ *                         type: string
+ *                       content:
+ *                         type: string
+ *                       status:
+ *                         type: string
+ *                         enum: [published, draft]
+ *       400:
+ *         description: Missing required fields.
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
+ */
+router.get('/:id/posts', verifyToken, getUserPosts)
 
 
 export default router;
