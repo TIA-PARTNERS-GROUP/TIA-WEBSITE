@@ -214,13 +214,13 @@ CREATE TABLE `businesses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `case_studies`
+-- Table structure for table `user_case_studies`
 --
 
-DROP TABLE IF EXISTS `case_studies`;
+DROP TABLE IF EXISTS `user_case_studies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `case_studies` (
+CREATE TABLE `user_case_studies` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `owner_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -678,6 +678,7 @@ CREATE TABLE `user_posts` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `poster_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
   `content` longtext NOT NULL,
   `thumbnail` varchar(255) DEFAULT NULL,
   `video_url` varchar(255) DEFAULT NULL,
@@ -784,7 +785,7 @@ DROP TABLE IF EXISTS `user_testimonials`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_testimonials` (
-  `id` int unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `poster_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `date` timestamp NULL DEFAULT NULL,
