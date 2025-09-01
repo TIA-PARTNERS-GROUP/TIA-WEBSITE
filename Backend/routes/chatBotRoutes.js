@@ -1,7 +1,11 @@
 import Router from 'express';
+import { sendMessage } from '../controllers/chatBotController.js'
+import { verifyToken } from '../middleware/authTolkien.js';
 
 const router = Router();
 
-// ROUTES GO HERE
+// POST /chatbot/message
+// add ,verifyToken 
+router.post('/message', sendMessage)
 
 export default router;
