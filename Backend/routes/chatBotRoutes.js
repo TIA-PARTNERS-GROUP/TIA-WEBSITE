@@ -6,6 +6,6 @@ const router = Router();
 
 // POST /chatbot/message
 // add ,verifyToken 
-router.post('/message', sendMessage)
+router.post('/message', verifyToken, sendMessage)
 
 export default router;
