@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { addCaseStudy } from '../../../api/caseStudies';
+import { addTestimonial } from '../../../api/testimonials';
+import { addBlog } from '../../../api/blogs';
 import Quill from 'quill'; // Used for rich text editor
 import 'quill/dist/quill.snow.css';
 import PrimaryButton from '../../Button/PrimaryButton';
+import SecondaryButton from '../../Button/SecondaryButton';
+
 
 const WriteView = () => {
 
@@ -10,7 +15,8 @@ const WriteView = () => {
   const { manageType } = useParams();
 
   const [title, setTitle] = useState('');
-  const [articleData, setArticleData] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [publishingStatus, setPublishingStatus] = useState("draft");
 
   const editorRef = useRef(null);
   const quillInstance = useRef(null);
@@ -31,29 +37,43 @@ const WriteView = () => {
     setTitle(event.target.value);
   }
 
-  const handleSubmit = (event) => {
+  const handleCancel = () => {
+    const inputs = document.querySelectorAll('input[required]');
+    inputs.forEach(input => input.removeAttribute('required'));
+    window.scrollTo(0, 0);
+    navigate(`/manage/${manageType}/table-view`);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setSaving(true);
     if (quillInstance.current) {
       const content = quillInstance.current.root.innerHTML;
       const delta = quillInstance.current.getContents();
       const type = manageType;
-      const date = new Date().toLocaleDateString();
+      const date = new Date().toISOString();
 
       console.log(content, delta);
 
-      setArticleData({ title, content, delta, type, date });
-
-      navigate(`/manage/${manageType}/table-view`, {
-      state: { 
-        newArticle: { 
-          title, 
-          type, 
-          date,
-          content 
-        } 
-      },
-      replace: true
-    });
+      try {
+        let result;
+        switch (manageType) {
+          case "case-studies":
+            result = await addCaseStudy(title, date, content, publishingStatus);
+            break;
+          case "testimonials":
+            result = await addTestimonial(title, date, content, publishingStatus);
+            break;
+          case "blogs":
+            result = await addBlog(title, date, content, publishingStatus);
+            break;
+        }
+        
+        window.scrollTo(0, 0);
+        navigate(`/manage/${manageType}/table-view`);
+      } catch (error) {
+        console.error('Error adding content:', error);
+      }
     }
   }
 
@@ -91,8 +111,11 @@ const WriteView = () => {
             <div ref={editorRef} style={{ height: '300px' }}></div>
         </div>
         
-        <div className="py-8">
-            <PrimaryButton type="submit">Publish</PrimaryButton>
+        <div className="pt-20 flex gap-x-6 items-center">
+            <SecondaryButton type="button" className="px-20" onClick={() => (handleCancel())}>Cancel</SecondaryButton>
+            <PrimaryButton onClick={() => (setPublishingStatus("draft"))} type="submit">Save as Draft</PrimaryButton>
+            <PrimaryButton onClick={() => (setPublishingStatus("published"))} type="submit">Publish</PrimaryButton>
+            {saving && <p>Saving...</p>}
         </div>
       </form>
     </div>

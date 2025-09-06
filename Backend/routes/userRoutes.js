@@ -19,7 +19,7 @@ const router = Router();
 
 /**
  * @swagger
- * /users/check/{email}:
+ * /users/exists/{email}:
  *   get:
  *     summary: Check if a user exists by email
  *     tags:

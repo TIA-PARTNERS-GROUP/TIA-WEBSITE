@@ -1,33 +1,9 @@
 import { useEffect, useState } from "react";
 import { getCurrentBusinessInfo } from "../../../api/business";
+import { useLoading } from "../../../utils/LoadingContext";
 import ProfileHeader from "./ProfileHeader";
 import ContactInfo from "./ContactInfo";
 import HexagonList from "./HexagonList";
-
-/*
-const defaultCompanyDescription = 'DyCom is a seasoned and experienced Network Services\
- company that takes great pride in offering a wide-range of sophisticated IT products\
-  and services designed to meet the ever-growing and ever-expanding needs of our clients\
-   and the businesses they operate.';
-  */
-
-   /*
-const defaultWhatWeDoData = [
-    {description: "DyCom Wireless - Wireless solutions"},
-    {description: "DyCom SmartStaff - Staff provision"},
-    {description: "DyCom Security - Security, surveillance and alarm services"},
-    {description: "DyCom Technology - Network services for IT products"},
-    {description: "DyCom Cloud - Compute cloud environments"},
-];
-
-const defaultClientData = [
-    {description: "Small technology businesses"}
-];
-*/
-
-//const defaultContactInfo = ["Mark Stecher", "123 456 7890", "mark@dycom.com.au"];
-
-
 
 const ProfileOutput =({ 
     personalProfile, 
@@ -36,6 +12,8 @@ const ProfileOutput =({
     whatwedoData, 
     clientData, 
     contactInfo}) => {
+  
+  const { startLoading, stopLoading } = useLoading();
   
   const [defaultCompanyDescription, setDefaultCompanyDescription] = useState("Loading...");
   const [defaultContactInfo, setDefaultContactInfo] = useState(["Loading...", "Loading...", "Loading..."]);
@@ -50,6 +28,7 @@ const ProfileOutput =({
   clientData = clientData ?? defaultClientData;
   
   useEffect(() => {
+    startLoading();
       getCurrentBusinessInfo()
         .then((res) => {
           setDefaultCompanyDescription(res.data.businessDescription);
@@ -57,6 +36,7 @@ const ProfileOutput =({
           setDefaultCompanyName(res.data.businessName);
           setDefaultWhatWeDoData(res.data.services);
           setDefaultClientData(res.data.clients);
+          stopLoading();
         })
         .catch((error) => {console.error('Error fetching username:', error);});
   }, []);

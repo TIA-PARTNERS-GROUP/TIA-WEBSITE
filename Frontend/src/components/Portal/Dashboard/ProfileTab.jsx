@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getCurrentUserInfo } from "../../../api/user";
+import { useLoading } from "../../../utils/LoadingContext";
 import ProfileIcon from "../../Icons/ProfileIcon";
 
 const ProfileTab = () => {
 
+  const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
   const [userName, setUsername] = useState("");
   const progress = 80;
 
   useEffect(() => {
+    startLoading();
     getCurrentUserInfo()
       .then((res) => {
         setUsername(res.data.data.firstName);
+        stopLoading();
       })
       .catch((error) => {console.error('Error fetching username:', error);});
   }, []);

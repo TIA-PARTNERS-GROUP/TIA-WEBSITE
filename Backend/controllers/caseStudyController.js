@@ -20,6 +20,7 @@ export const getMyCaseStudies = async (req, res) => {
                 id: item.id,
                 postedBy: item.owner_user_id,
                 title: item.title,
+                date: item.date,
                 content: item.content,
                 status: item.published ? "published" : "draft"
             })
@@ -62,7 +63,7 @@ export const removeCaseStudy = async (req, res) => {
             return res.status(400).json({ message: "Missing required fields" });
         }
         const caseStudy = await caseStudies.getCaseStudy(id);
-        if ( caseStudy == null || caseStudy.poster_user_id != req.user.id) {
+        if ( caseStudy == null || caseStudy.owner_user_id != req.user.id) {
             return res.status(404).json({ message: "No case study with that id" });
         }
         await caseStudies.deleteCaseStudy(id);

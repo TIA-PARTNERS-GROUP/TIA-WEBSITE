@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
+import { LoadingProvider } from "./utils/LoadingContext.jsx";
+
 import MainLayout from "./Layouts/MainLayout.jsx";
 import PortalLayout from "./Layouts/PortalLayout.jsx";
 
@@ -42,6 +44,7 @@ function App() {
   const [tabDirection, setTabDirection] = useState("right");
 
   return (
+    <LoadingProvider>
     <AnimatePresence mode="wait"> {/* Trigger page transition exit animations when first path segment changes, see key below */}
       <Routes location={location} key={location.pathname.split("/")[1]}>
           <Route element={<MainLayout />}>
@@ -79,6 +82,7 @@ function App() {
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
     </AnimatePresence>
+    </LoadingProvider>
   );
 }
 

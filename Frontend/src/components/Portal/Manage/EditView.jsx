@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addClients, addServices, getCurrentBusinessInfo, removeClients, removeServices, updateCurrentBusinessProfile } from "../../../api/business.js";
+import { useLoading } from "../../../utils/LoadingContext.jsx";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import DeleteIcon from "../../Icons/DeleteIcon.jsx";
@@ -9,6 +10,7 @@ const EditView = () => {
 
   const navigate = useNavigate();
 
+  const { startLoading, stopLoading } = useLoading();
   const [saving, setSaving] = useState(false);
 
   const [companyName, setCompanyName] = useState("Loading...");
@@ -21,6 +23,7 @@ const EditView = () => {
   const [originalClientData, setOriginalClientData] = useState([{}]);
 
   useEffect(() => {
+    startLoading();
     getCurrentBusinessInfo()
       .then((res) => {
         setCompanyDescription(res.data.businessDescription);
@@ -31,6 +34,8 @@ const EditView = () => {
 
         setOriginalWhatWeDoData(res.data.services);
         setOriginalClientData(res.data.clients);
+
+        stopLoading();
       })
       .catch((error) => {console.error('Error fetching username:', error);});
   }, []);

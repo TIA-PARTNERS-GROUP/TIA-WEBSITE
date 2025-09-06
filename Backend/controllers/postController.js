@@ -25,6 +25,7 @@ export const getMyPosts = async (req, res) => {
                 id: item.id,
                 postedBy: item.poster_user_id,
                 title: item.title,
+                date: item.date,
                 content: item.content,
                 status: item.published ? "published" : "draft"
             })
