@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
+import { useLoading } from "../../../utils/LoadingContext";
+import { getCurrentBusinessInfo, getOtherBusinessInfo } from "../../../api/business";
 import ConnectionsGrid from "../Connect/ConnectionsGrid";
 
-const connectionsData = [
+
+/*const connectionsData = [
     {
         title: "DexRouter Ltd.", 
         contactInfo: ["Tim Matters", "0123 456 789", "tim@dexrouter.com.au"],
@@ -34,9 +38,55 @@ const connectionsData = [
             {description: "Package Delivery"}
         ]
     }
-];
+];*/
 
 const GridView = () => {
+
+  const { startLoading, stopLoading } = useLoading();
+  const [ connectionsData, setConnectionsData ] = useState([]);
+  const [ selectedIDs, setSelectedIDs ] = useState([]);
+
+  useEffect(() => {
+
+    const fetchConnections = async () => {
+        startLoading();
+        
+        try {
+ 
+        const res = await getCurrentBusinessInfo();
+        const connectionIDs = res.data.connections.map(item => item.id);
+        
+
+        const connectionPromises = connectionIDs.map(id => 
+            getOtherBusinessInfo(id)
+            .then(businessRes => ({
+                title: businessRes.data.businessName, 
+                contactInfo: [businessRes.data.contactName, businessRes.data.contactPhone, businessRes.data.contactEmail],
+                description: businessRes.data.businessDescription,
+                whatwedoData: businessRes.data.services || [],
+                clientData: businessRes.data.clients || [],
+                connectionNum: businessRes.data.connections.length || 0
+            }))
+            .catch(error => {
+                console.error(`Error fetching business ${id}:`, error);
+                return null;
+            })
+        );
+        
+        const connectionsData = await Promise.all(connectionPromises);
+        const validConnections = connectionsData.filter(connection => connection !== null);
+        setConnectionsData(validConnections);
+        
+        } catch (error) {
+        console.error('Error fetching connections:', error);
+        } finally {
+        stopLoading();
+        }
+    };
+
+    fetchConnections();
+  }, [])
+
   return (
     <div className="bg-white rounded-xl sm:px-6 lg:px-6 2xl:px-8 py-2">
         <h2 className="lg:pl-4 2xl:pl-10 pt-10 sm:text-xl 2xl:text-4xl md:text-2xl font-semibold text-black-800">Connections</h2>

@@ -33,3 +33,7 @@ export function removeClients(clients) {
         data: { clients: clients }
     });
 }
+
+export function getOtherBusinessInfo(id) {
+    return api.get(`/business/${id}`);
+};

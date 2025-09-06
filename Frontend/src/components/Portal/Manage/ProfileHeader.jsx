@@ -8,9 +8,8 @@ import ProfileIcon from "../../Icons/ProfileIcon";
 import BuildTeamIcon from "../../Icons/TeamBuildingIcon";
 
 const defaultCompanyName = "DyCom Group";
-const connectionNum = 8;
 
-const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName }) => {
+const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName, connectionNum = 0}) => {
 
   const navigate = useNavigate();
   const [connectionStatus, setConnectionStatus] = useState(false);

@@ -11,7 +11,8 @@ const ProfileOutput =({
     companyDescription, 
     whatwedoData, 
     clientData, 
-    contactInfo}) => {
+    contactInfo,
+    connectionNum}) => {
   
   const { startLoading, stopLoading } = useLoading();
   
@@ -20,12 +21,14 @@ const ProfileOutput =({
   const [defaultCompanyName, setDefaultCompanyName] = useState("Loading...");
   const [defaultWhatWeDoData, setDefaultWhatWeDoData] = useState([{description: "Loading..."}]);
   const [defaultClientData, setDefaultClientData] = useState([{description: "Loading..."}]);
+  const [defaultConnectionNum, setDefaultConnectionNum] = useState(0);
 
   companyName = companyName ?? defaultCompanyName;
   companyDescription = companyDescription ?? defaultCompanyDescription;
   contactInfo = contactInfo ?? defaultContactInfo;
   whatwedoData = whatwedoData ?? defaultWhatWeDoData;
   clientData = clientData ?? defaultClientData;
+  connectionNum = connectionNum ?? defaultConnectionNum;
   
   useEffect(() => {
     startLoading();
@@ -36,6 +39,7 @@ const ProfileOutput =({
           setDefaultCompanyName(res.data.businessName);
           setDefaultWhatWeDoData(res.data.services);
           setDefaultClientData(res.data.clients);
+          setDefaultConnectionNum(res.data.connections.length)
           stopLoading();
         })
         .catch((error) => {console.error('Error fetching username:', error);});
@@ -44,7 +48,7 @@ const ProfileOutput =({
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-xl sm:px-2 px-8 py-2">
-          <ProfileHeader personalProfile={personalProfile} companyName={companyName}/>
+          <ProfileHeader personalProfile={personalProfile} companyName={companyName} connectionNum={connectionNum}/>
       </div>
       <div className="bg-white rounded-xl sm:px-4 px-8 py-2">
         <ContactInfo contactInfo={contactInfo}/>

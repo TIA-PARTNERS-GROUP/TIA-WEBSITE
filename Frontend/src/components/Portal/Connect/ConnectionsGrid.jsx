@@ -29,9 +29,18 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
         setFinalConnectionsData(filtered);
         
     }, [location.search, connectionsData]);
+    
 
     const [finalConnectionsData, setFinalConnectionsData] = useState(filteredData);
-    const [connectionStatus, setConnectionStatus] = useState(connectionsData.reduce((acc, _, index) => ({ ...acc, [index]: connectionModule || false }), {}));
+    const [connectionStatus, setConnectionStatus] = useState({});
+
+    useEffect(() => {
+        const initialStatus = {};
+        connectionsData.forEach((_, index) => {
+            initialStatus[index] = connectionModule;
+        });
+        setConnectionStatus(initialStatus);
+    }, [connectionsData, connectionModule]);
 
     const handleConnectSwitch = (index) => {
         if (connectionModule) {
@@ -79,6 +88,8 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
                                         contactInfo: company.contactInfo,
                                         companyDescription: company.description,
                                         whatwedoData: company.whatwedoData,
+                                        clientData: company.clientData,
+                                        connectionNum: company.connectionNum
                                         },
                                     })}}>
                                     View Profile

@@ -1,5 +1,5 @@
 import Router from 'express';
-import { getProfile, updateProfile, addServices, addClients, removeServices, removeClients } from '../controllers/businessController.js';
+import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 
 const router = Router();
@@ -98,7 +98,7 @@ const router = Router();
  *                   type: string
  *                   example: Internal server error
  */
-router.get('/myinfo', verifyToken, getProfile);
+router.get('/myinfo', verifyToken, getMyProfile);
 
 /**
  * @swagger
@@ -513,5 +513,109 @@ router.delete('/removeservice', verifyToken, removeServices)
  *         description: Internal server error
  */
 router.delete('/removeclient', verifyToken, removeClients)
+
+/**
+ * @swagger
+ * /business/{id}:
+ *   get:
+ *     summary: Get business details by ID
+ *     description: Returns detailed information about the business owned by a specified user, including basic info, connections, services, and clients.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the user to retrieve.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved business information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 businessName:
+ *                   type: string
+ *                   description: Name of the business
+ *                 contactName:
+ *                   type: string
+ *                   description: Contact person's name
+ *                 contactPhone:
+ *                   type: string
+ *                   description: Contact phone number
+ *                 contactEmail:
+ *                   type: string
+ *                   description: Contact email address
+ *                 businessCategory:
+ *                   type: string
+ *                   description: Name of the business category
+ *                 businessDescription:
+ *                   type: string
+ *                   description: Business description
+ *                 connections:
+ *                   type: array
+ *                   description: Array of connected businesses
+ *                   items:
+ *                     type: object
+ *                 services:
+ *                   type: array
+ *                   description: Array of services offered by the business
+ *                   items:
+ *                     type: object
+ *                 clients:
+ *                   type: array
+ *                   description: Array of clients of the business
+ *                   items:
+ *                     type: object
+ *       401:
+ *         description: Authorization header missing or invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authorization header missing
+ *       403:
+ *         description: Invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid or expired token
+ *       404:
+ *         description: No business found for the authenticated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+router.get('/:id', verifyToken, getUserProfile);
 
 export default router;

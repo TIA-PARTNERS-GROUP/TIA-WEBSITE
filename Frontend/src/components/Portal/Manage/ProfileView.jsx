@@ -11,7 +11,9 @@ const ProfileView = () => {
       companyName={location.state?.companyName} 
       companyDescription={location.state?.companyDescription} 
       whatwedoData={location.state?.whatwedoData}
+      clientData={location.state?.clientData}
       contactInfo={location.state?.contactInfo} 
+      connectionNum={location.state?.connectionNum}
     />
   );
 };

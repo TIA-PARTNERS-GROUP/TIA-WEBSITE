@@ -2,7 +2,7 @@ import db from "../config/db.js";
 import businessModel from '../models/business.js';
 import userModel from '../models/user.js';
 
-export const getProfile = async (req, res) => {
+export const getMyProfile = async (req, res) => {
     const user = userModel(db);
     const business = businessModel(db);
 
@@ -36,6 +36,40 @@ export const getProfile = async (req, res) => {
     );
 }
 
+export const getUserProfile = async (req, res) => {
+    const user = userModel(db);
+    const business = businessModel(db);
+    const { id } = req.params;
+
+    const businessResult = { id: id }
+
+    if (businessResult == null) {
+        return res.status(404).json({message: "No business exists for user"});
+    }
+
+    const businessId = businessResult.id;
+    const bi = await business.infoFromId(businessId);
+    const connections = await business.getConnections(businessId);
+    const services = await business.getServices(businessId);
+    const clients = await business.getClients(businessId);
+
+
+    return res.status(200).json(
+        {
+            message:"Success",
+            businessName: bi.name,
+            contactName: bi.contact_name,
+            contactPhone: bi.contact_phone_no,
+            contactEmail: bi.contact_email,
+            businessCategory: bi.category, 
+            businessDescription: bi.description,
+            connections : connections,
+            services: services,
+            clients: clients
+            
+        }
+    );
+}
 
 export const updateProfile = async (req, res) => {
     try {
