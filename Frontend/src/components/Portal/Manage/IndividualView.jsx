@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import PrimaryButton from "../../Button/PrimaryButton";
+import SecondaryButton from "../../Button/SecondaryButton";
 import { publishCaseStudy } from "../../../api/caseStudies";
 import { publishTestimonial } from "../../../api/testimonials";
 import { publishBlog } from "../../../api/blogs";
@@ -19,6 +20,11 @@ const IndividualView = () => {
       year: 'numeric'
     });
   };
+
+  const handleCancel = () => {
+    window.scrollTo(0, 0);
+    navigate(`/manage/${manageType}/table-view`);
+  }
 
   const handleSubmit = async (event) => {
       event.preventDefault();
@@ -54,6 +60,7 @@ const IndividualView = () => {
         dangerouslySetInnerHTML={{ __html: location.state?.content || '' }}
       />
       <div className="pt-20 flex gap-x-6 items-center flex">
+        <SecondaryButton type="button" className="px-20" onClick={() => (handleCancel())}>Cancel</SecondaryButton>
         {isDraft && <PrimaryButton onClick={(event)=>(handleSubmit(event))} type="submit">Publish</PrimaryButton>}
         {isSaving && <p>Saving...</p>}
       </div>
