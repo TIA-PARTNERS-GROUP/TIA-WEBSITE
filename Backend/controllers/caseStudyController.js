@@ -83,7 +83,7 @@ export const publishCaseStudy = async (req, res) => {
             return res.status(400).json({ message: "Missing required fields" });
         }
         const caseStudy = await caseStudies.getCaseStudy(id)
-        if ( caseStudy == null || caseStudy.poster_user_id != req.user.id) {
+        if ( caseStudy == null || caseStudy.owner_user_id != req.user.id) {
             return res.status(404).json({ message: "No case study with that id" });
         }
         await caseStudies.publishCaseStudy(id);

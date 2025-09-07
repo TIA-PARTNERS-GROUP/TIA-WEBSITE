@@ -31,19 +31,37 @@ const ProfileOutput =({
   connectionNum = connectionNum ?? defaultConnectionNum;
   
   useEffect(() => {
+  const fetchBusinessInfo = async () => {
     startLoading();
-      getCurrentBusinessInfo()
-        .then((res) => {
-          setDefaultCompanyDescription(res.data.businessDescription);
-          setDefaultContactInfo([res.data.contactName, res.data.contactPhone, res.data.contactEmail]);
-          setDefaultCompanyName(res.data.businessName);
-          setDefaultWhatWeDoData(res.data.services);
-          setDefaultClientData(res.data.clients);
-          setDefaultConnectionNum(res.data.connections.length)
-          stopLoading();
-        })
-        .catch((error) => {console.error('Error fetching username:', error);});
-  }, []);
+    
+    try {
+      const res = await getCurrentBusinessInfo();
+      const { 
+        businessDescription, 
+        contactName, 
+        contactPhone, 
+        contactEmail, 
+        businessName, 
+        services, 
+        clients, 
+        connections 
+      } = res.data;
+      
+      setDefaultCompanyDescription(businessDescription);
+      setDefaultContactInfo([contactName, contactPhone, contactEmail]);
+      setDefaultCompanyName(businessName);
+      setDefaultWhatWeDoData(services);
+      setDefaultClientData(clients);
+      setDefaultConnectionNum(connections.length);
+    } catch (error) {
+      console.error('Error fetching business info:', error);
+    } finally {
+      stopLoading();
+    }
+  };
+
+  fetchBusinessInfo();
+}, []);
 
   return (
     <div className="space-y-4">

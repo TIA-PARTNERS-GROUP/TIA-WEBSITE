@@ -23,22 +23,38 @@ const EditView = () => {
   const [originalClientData, setOriginalClientData] = useState([{}]);
 
   useEffect(() => {
+  const fetchBusinessInfo = async () => {
     startLoading();
-    getCurrentBusinessInfo()
-      .then((res) => {
-        setCompanyDescription(res.data.businessDescription);
-        setContactInfo([res.data.contactName, res.data.contactPhone, res.data.contactEmail]);
-        setCompanyName(res.data.businessName);
-        setWhatWeDoData(res.data.services.map(service => ({description: service.description})));
-        setClientData(res.data.clients.map(client => ({description: client.description})));
+    
+    try {
+      const res = await getCurrentBusinessInfo();
+      const { 
+        businessDescription, 
+        contactName, 
+        contactPhone, 
+        contactEmail, 
+        businessName, 
+        services, 
+        clients 
+      } = res.data;
+      
+      setCompanyDescription(businessDescription);
+      setContactInfo([contactName, contactPhone, contactEmail]);
+      setCompanyName(businessName);
+      setWhatWeDoData(services.map(service => ({ description: service.description })));
+      setClientData(clients.map(client => ({ description: client.description })));
+      
+      setOriginalWhatWeDoData(services);
+      setOriginalClientData(clients);
+    } catch (error) {
+      console.error('Error fetching business info:', error);
+    } finally {
+      stopLoading();
+    }
+  };
 
-        setOriginalWhatWeDoData(res.data.services);
-        setOriginalClientData(res.data.clients);
-
-        stopLoading();
-      })
-      .catch((error) => {console.error('Error fetching username:', error);});
-  }, []);
+  fetchBusinessInfo();
+}, []);
 
   const handleCompanyNameChange = (event) => {
     setCompanyName(event.target.value);

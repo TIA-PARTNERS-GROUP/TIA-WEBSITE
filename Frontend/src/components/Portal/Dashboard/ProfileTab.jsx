@@ -13,13 +13,20 @@ const ProfileTab = () => {
   const progress = 80;
 
   useEffect(() => {
-    startLoading();
-    getCurrentUserInfo()
-      .then((res) => {
+    const fetchUserInfo = async () => {
+      startLoading();
+      
+      try {
+        const res = await getCurrentUserInfo();
         setUsername(res.data.data.firstName);
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      } finally {
         stopLoading();
-      })
-      .catch((error) => {console.error('Error fetching username:', error);});
+      }
+    };
+
+    fetchUserInfo();
   }, []);
   
   return (

@@ -20,50 +20,47 @@ const ArticleTable = () => {
   const [checkedItems, setCheckedItems] = useState({});
   const [ tableData, setTableData ] = useState([{title: "Loading...", date: "Loading..."}]);
 
-   useEffect(() => {
-      startLoading();
+  useEffect(() => {
+  const fetchData = async () => {
+    startLoading();
+    
+    try {
+      let response;
       switch (manageType) {
         case "case-studies":
-          getCurrentUserCaseStudies()
-            .then((res) => {
-              setTableData(res.data.caseStudies);
-              const initialCheckedState = res.data.caseStudies.reduce((acc, item) => {
-              acc[item.id] = false;
-              return acc;
-              }, {});
-              setCheckedItems(initialCheckedState);
-              stopLoading();
-            })
-            .catch((error) => {console.error('Error fetching case studies:', error);});
+          response = await getCurrentUserCaseStudies();
           break;
         case "testimonials":
-          getCurrentUserTestimonials()
-            .then((res) => {
-              setTableData(res.data.testimonials);
-              const initialCheckedState = res.data.testimonials.reduce((acc, item) => {
-              acc[item.id] = false;
-              return acc;
-              }, {});
-              setCheckedItems(initialCheckedState);
-              stopLoading();
-            })
-            .catch((error) => {console.error('Error fetching testimonials', error);});
+          response = await getCurrentUserTestimonials();
           break;
         case "blogs":
-          getCurrentUserBlogs()
-            .then((res) => {
-              setTableData(res.data.posts);
-              const initialCheckedState = res.data.posts.reduce((acc, item) => {
-              acc[item.id] = false;
-              return acc;
-              }, {});
-              setCheckedItems(initialCheckedState);
-              stopLoading();
-            })
-            .catch((error) => {console.error('Error fetching blogs', error);});
+          response = await getCurrentUserBlogs();
           break;
+        default:
+          return;
       }
-  }, []);
+      
+      const data = manageType === "blogs" ? response.data.posts : 
+                  manageType === "testimonials" ? response.data.testimonials : 
+                  response.data.caseStudies;
+      
+      setTableData(data);
+      
+      const initialCheckedState = data.reduce((acc, item) => {
+        acc[item.id] = false;
+        return acc;
+      }, {});
+      
+      setCheckedItems(initialCheckedState);
+    } catch (error) {
+      console.error(`Error fetching ${manageType}:`, error);
+    } finally {
+      stopLoading();
+    }
+  };
+
+  fetchData();
+}, []);
 
   useEffect(() => {
     const allChecked = Object.values(checkedItems).length > 0 && 
@@ -106,9 +103,11 @@ const ArticleTable = () => {
   const handleRowClick = (row) => {
     navigate(`/manage/${manageType}/individual-view`, {
       state: {
+        id: row.id,
         title: row.title,
         date: row.date,
-        content: row.content
+        content: row.content,
+        status: row.status
       },
     });
   };

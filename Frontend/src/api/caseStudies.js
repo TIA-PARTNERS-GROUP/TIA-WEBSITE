@@ -21,3 +21,4 @@ export function removeCaseStudy(id) {
         data: { id: id }
     });
 }
+
