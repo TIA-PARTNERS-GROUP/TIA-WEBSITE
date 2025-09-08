@@ -1,5 +1,5 @@
 import Router from 'express';
-import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients } from '../controllers/businessController.js';
+import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 
 const router = Router();
@@ -364,7 +364,7 @@ router.post('/addservice', verifyToken, addServices)
  *       500:
  *         description: Internal server error
  */
-router.post('/addclient', verifyToken, addClients)
+router.post('/addclient', verifyToken, addClients);
 
 /**
  * @swagger
@@ -512,7 +512,175 @@ router.delete('/removeservice', verifyToken, removeServices)
  *       500:
  *         description: Internal server error
  */
-router.delete('/removeclient', verifyToken, removeClients)
+router.delete('/removeclient', verifyToken, removeClients);
+
+
+/**
+ * @swagger
+ * /business/addconnection:
+ *   post:
+ *     summary: Create a connection between two businesses
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Creates a connection between the initiating and receiving business IDs. The authenticated user must own one of the businesses.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - initiatingBusinessId
+ *               - receivingBusinessId
+ *             properties:
+ *               initiatingBusinessId:
+ *                 type: integer
+ *                 description: ID of the business initiating the connection
+ *               receivingBusinessId:
+ *                 type: integer
+ *                 description: ID of the business receiving the connection
+ *     responses:
+ *       201:
+ *         description: Connection added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Connection added
+ *                 connectionId:
+ *                   type: integer
+ *                   description: ID of the new connection
+ *       400:
+ *         description: Missing or invalid business IDs, or cannot connect to self
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Cannot connect to self
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token, or user does not own either business
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: You can only create connections for your own business
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+router.post('/addconnection', verifyToken, addConnection);
+
+/**
+ * @swagger
+ * /business/removeconnection:
+ *   delete:
+ *     summary: Remove a business connection
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Removes a connection by its ID. The authenticated user must own one of the businesses in the connection.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: ID of the connection to remove
+ *     responses:
+ *       200:
+ *         description: Connection removed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Connection removed
+ *       400:
+ *         description: No connection id provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No connection id provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token, or user does not own either business in the connection
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: You can only remove connections for your own business
+ *       404:
+ *         description: No business exists for user or no connection with that id
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No connection with that id
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+router.delete('/removeconnection', verifyToken, removeConnection);
 
 /**
  * @swagger
