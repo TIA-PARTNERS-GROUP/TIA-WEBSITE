@@ -1,0 +1,12 @@
+import api from './axios';
+
+// Send a message to the ADK agent
+export const sendChatbotMessage = async ({ user_id, name, message }) => {
+    try {
+        const res = await api.post('/chatbot/message', { user_id, name, message });
+        return res.data;
+    } catch (error) {
+        console.error('Chatbot call failed:', error);
+        throw error;
+    }
+};
