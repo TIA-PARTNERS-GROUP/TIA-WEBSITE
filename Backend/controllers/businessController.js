@@ -230,3 +230,84 @@ export const removeClients = async (req, res) => {
         return res.status(500).json({message: "Internal server error"});
     }
 }
+
+export const addConnection = async (req, res) => {
+    try {
+        const business = businessModel(db);
+        const user = userModel(db);
+        const { initiatingBusinessId, receivingBusinessId } = req.body;
+        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
+        if (businessResult == null) {
+            res.status(404).json({message: "No business exists for user"});
+        }
+        const userBusinessId = businessResult.id;
+        if (!receivingBusinessId) {
+            return res.status(400).json({message: "No receiving business id provided"})
+        }
+        if (!initiatingBusinessId) {
+            return res.status(400).json({message: "No initiating business id provided"})
+        }
+
+        if (userBusinessId != initiatingBusinessId & userBusinessId != receivingBusinessId) {
+            return res.status(403).json({message: "You can only create connections for your own business"})
+        }
+        
+        
+        
+
+        if (initiatingBusinessId == receivingBusinessId) {
+            return res.status(400).json({message: "Cannot connect to self"})
+        }
+        const connectionId = await business.addConnection(initiatingBusinessId, receivingBusinessId);
+        return res.status(201).json({message: "Connection added", connectionId: connectionId})
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
+export const removeConnection = async (req, res) => {
+    try {
+        const business = businessModel(db);
+        const user = userModel(db);
+        const { id } = req.body;
+        if (!id) {
+            return res.status(400).json({message: "No connection id provided"})
+        }
+        const userBusiness = await user.fetchBusinessFromOwnerId(req.user.id);
+        if (userBusiness == null) {
+            res.status(404).json({message: "No business exists for user"});
+        }
+
+        const connection = await business.getConnectionInfo(id);
+
+        if (connection == null) {
+            return res.status(404).json({message: "No connection with that id"});
+        }
+
+
+        const initiatingBusinessId = connection.initiating_business_id;
+        const receivingBusinessId = connection.receiving_business_id;
+        
+
+        console.log(id)
+        console.log(initiatingBusinessId)
+        console.log(receivingBusinessId)
+        
+        if (id != initiatingBusinessId & id != receivingBusinessId) {
+            return res.status(403).json({message: "You can only remove connections for your own business"})
+        }
+        const rowsAffected = await business.removeConnection(id);
+        if (rowsAffected == 0) {
+            return res.status(404).json({message: "No connection with that id"})
+        }
+
+        return res.status(200).json({message: "Connection removed"})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+        
+

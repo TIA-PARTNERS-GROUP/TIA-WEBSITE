@@ -155,4 +155,32 @@ export default (db) => ({
 
       return result.affectedRows;
   },
+
+  async addConnection(initiatingBusinessId, receivingBusinessId) {
+    const [result] = await db.query(`
+      INSERT INTO business_connections (initiating_business_id, receiving_business_id, date_initiated, active, connection_type_id)
+      VALUES (?, ?, CURRENT_TIMESTAMP, 1, 1)
+      `, [initiatingBusinessId, receivingBusinessId])
+
+    return result.insertId;
+  },
+  async removeConnection(id,) {
+    const [result] = await db.query(`
+      DELETE FROM business_connections
+      WHERE id = ?
+      `, [id])
+
+      return result.affectedRows;
+  },
+  async getConnectionInfo(id) {
+    const [rows] = await db.query(`
+      SELECT id, initiating_business_id, receiving_business_id, date_initiated, active, connection_type_id
+      FROM business_connections
+      WHERE id = ?
+      `, [id])
+    if (rows.length == 0) {
+      return null;
+    }   
+    return rows[0];
+  }
 });
