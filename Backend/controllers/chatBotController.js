@@ -2,6 +2,9 @@ import { sendToAdkAgent } from '../services/adkServices.js'; // Make sure to imp
 import db from "../config/db.js";
 import userModel from '../models/user.js';
 
+// JOSHUA TODO: Refactor to use a proper database for session management
+const userSessions = {};
+
 export const sendMessage = async (req, res) => {
   try {
     const user_id = req.user.id;
@@ -9,17 +12,26 @@ export const sendMessage = async (req, res) => {
     const userObj = await user.infoFromId(user_id);
     const name = userObj.first_name;
     const message = req.body.message;
-    // const user_id = "1"
-    // const name = "Josh"
+    const region = req.body.region || "au";
+    const lat = req.body.lat || -27.4705;
+    const lng = req.body.lng || 153.0260;
+
+    let session_id = userSessions[user_id] || null;
 
     console.log(`User ID: ${user_id}\nName: ${name}\nMessage: ${message}`);
 
     if (!message) {
       return res.status(400).json({ error: 'user_id, name, and message are required.' });
     }
-    const adkResponse = await sendToAdkAgent({ user_id, name, message });
-    
-    res.json(adkResponse);
+    const adkResponse = await sendToAdkAgent({ user_id, session_id, name, message, region, lat, lng });
+    // If a new session_id is returned, update the map
+    if (adkResponse.session_id) {
+      userSessions[user_id] = adkResponse.session_id;
+    } else if (session_id) {
+      adkResponse.session_id = session_id;
+    }
+
+    res.json(adkResponse.response);
   } catch (err) {
     console.error('Error communicating with ADK agent:', err);
     res.status(500).json({ error: 'Failed to communicate with ADK agent.' });
