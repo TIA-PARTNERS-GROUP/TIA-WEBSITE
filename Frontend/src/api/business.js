@@ -34,6 +34,18 @@ export function removeClients(clients) {
     });
 }
 
+export function addConnection(initiatingBusinessId, receivingBusinessId) {
+    return api.post('/business/addconnection',
+        { initiatingBusinessId: initiatingBusinessId, receivingBusinessId: receivingBusinessId }
+    );
+};
+
+export function removeConnection(id) {
+    return api.delete('/business/removeconnection', {
+        data: { id: id }
+    });
+}
+
 export function getOtherBusinessInfo(id) {
     return api.get(`/business/${id}`);
 };

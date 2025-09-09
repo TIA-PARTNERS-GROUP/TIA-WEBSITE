@@ -6,7 +6,7 @@ export default (db) => ({
 
   async infoFromId(id) {
     const [rows] = await db.query(`
-      SELECT b.name, b.contact_name, b.contact_phone_no, b.contact_email, bc.name as category, b.description
+      SELECT b.id, b.name, b.contact_name, b.contact_phone_no, b.contact_email, bc.name as category, b.description
       FROM businesses b
       LEFT JOIN business_categories bc ON b.business_category_id = bc.id
       WHERE b.id = ?
@@ -20,19 +20,22 @@ export default (db) => ({
 
   async getConnections(id) {
     const [rows] = await db.query(`
-      SELECT s.connection_business_id as id, b.name
-      FROM (
-        SELECT 
-          CASE
-          WHEN initiating_business_id = ? THEN receiving_business_id
-          ELSE initiating_business_id
-          END AS connection_business_id, date_initiated
-        FROM business_connections
-        WHERE ? IN (initiating_business_id, receiving_business_id)
-        AND active = 1
-      ) AS s
-      LEFT JOIN businesses b ON s.connection_business_id = b.id;
-      `, [id, id])
+      SELECT 
+        bc.id as connection_id,
+        CASE
+          WHEN bc.initiating_business_id = ? THEN bc.receiving_business_id
+          ELSE bc.initiating_business_id
+        END AS business_id,
+        b.name as business_name
+      FROM business_connections bc
+      JOIN businesses b ON 
+        b.id = CASE
+          WHEN bc.initiating_business_id = ? THEN bc.receiving_business_id
+          ELSE bc.initiating_business_id
+        END
+      WHERE ? IN (bc.initiating_business_id, bc.receiving_business_id)
+      AND bc.active = 1;
+    `, [id, id, id])
 
       return rows;
   },

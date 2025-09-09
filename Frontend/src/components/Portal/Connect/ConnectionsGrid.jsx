@@ -5,6 +5,7 @@ import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
+import { removeConnection } from "../../../api/business";
 
 const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule }) => {
 
@@ -42,13 +43,20 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
         setConnectionStatus(initialStatus);
     }, [connectionsData, connectionModule]);
 
-    const handleConnectSwitch = (index) => {
+    const handleConnectSwitch = async (index) => {
         if (connectionModule) {
-            // Remove connection from finalConnectionsData
-            setFinalConnectionsData(prev => 
-                prev.filter((_, i) => i !== index)
-            );
-            
+            try {
+                // API Call
+                console.log(finalConnectionsData[index].connectionId)
+                const res = await removeConnection(finalConnectionsData[index].connectionId);
+
+                // Remove connection from finalConnectionsData
+                setFinalConnectionsData(prev => 
+                    prev.filter((_, i) => i !== index)
+                );
+            } catch (error) {
+                console.error('Failed to remove connection:', error);
+            }
             
         } else {
             setConnectionStatus(prev => ({
@@ -84,6 +92,9 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
                                     onClick={() => {
                                         navigate(`/manage/connections/profile-view`, {
                                         state: { 
+                                        connectionId: company.connectionId,
+                                        businessId: company.businessId,
+                                        connected: connectionModule,
                                         companyName: company.title,
                                         contactInfo: company.contactInfo,
                                         companyDescription: company.description,

@@ -54,12 +54,12 @@ const GridView = () => {
         try {
  
         const res = await getCurrentBusinessInfo();
-        const connectionIDs = res.data.connections.map(item => item.id);
-        
 
-        const connectionPromises = connectionIDs.map(id => 
-            getOtherBusinessInfo(id)
+        const connectionPromises = res.data.connections.map(connection => 
+            getOtherBusinessInfo(connection.business_id) 
             .then(businessRes => ({
+                connectionId: connection.connection_id,
+                businessId: connection.business_id,
                 title: businessRes.data.businessName, 
                 contactInfo: [businessRes.data.contactName, businessRes.data.contactPhone, businessRes.data.contactEmail],
                 description: businessRes.data.businessDescription,

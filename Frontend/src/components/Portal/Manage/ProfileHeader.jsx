@@ -6,16 +6,32 @@ import PrimaryButton from "../../Button/PrimaryButton";
 import EditIcon from "../../Icons/EditIcon";
 import ProfileIcon from "../../Icons/ProfileIcon";
 import BuildTeamIcon from "../../Icons/TeamBuildingIcon";
+import { addConnection, getCurrentBusinessInfo, removeConnection } from "../../../api/business";
+import { m } from "framer-motion";
 
 const defaultCompanyName = "DyCom Group";
 
-const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName, connectionNum = 0}) => {
+const ProfileHeader = ({ personalProfile = true, connected = false, companyName = defaultCompanyName, connectionNum = 0, connectionId, businessId}) => {
 
   const navigate = useNavigate();
-  const [connectionStatus, setConnectionStatus] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState(connected ?? false);
+  const [localConnectionId, setConnectionId] = useState(connectionId ?? null);
 
-  const handleConnectSwitch = () => {
-    setConnectionStatus(!connectionStatus);
+  const handleConnectSwitch = async () => {
+    try {
+      if (connectionStatus) {
+        const res = await removeConnection(localConnectionId)
+      }
+      else {
+        const res = await getCurrentBusinessInfo();
+        const personalId = res.data.id;
+        const pConnection = await addConnection(personalId, businessId);
+        setConnectionId(pConnection.connectionId);
+      };
+      setConnectionStatus(!connectionStatus);
+    } catch (error) {
+      console.error(`Connection operation ${connectionStatus ? 'remove' : 'add'} failed:`, error);
+    }
   }
   
   return (

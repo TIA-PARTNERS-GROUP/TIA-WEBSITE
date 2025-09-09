@@ -22,6 +22,7 @@ export const getMyProfile = async (req, res) => {
     return res.status(200).json(
         {
             message:"Success",
+            id: bi.id,
             businessName: bi.name,
             contactName: bi.contact_name,
             contactPhone: bi.contact_phone_no,
@@ -295,7 +296,7 @@ export const removeConnection = async (req, res) => {
         console.log(initiatingBusinessId)
         console.log(receivingBusinessId)
         
-        if (id != initiatingBusinessId & id != receivingBusinessId) {
+        if (userBusiness.id != initiatingBusinessId && userBusiness.id != receivingBusinessId) {
             return res.status(403).json({message: "You can only remove connections for your own business"})
         }
         const rowsAffected = await business.removeConnection(id);
