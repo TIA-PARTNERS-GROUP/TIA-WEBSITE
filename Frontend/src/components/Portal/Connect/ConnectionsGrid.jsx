@@ -1,47 +1,22 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import { getCurrentBusinessInfo, addConnection, removeConnection, getOtherBusinessInfo } from "../../../api/business";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
-import { removeConnection } from "../../../api/business";
 
-const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule }) => {
+const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const [searchParams] = useSearchParams();
-
-    const filteredData = queryValue
-        ? connectionsData.filter(connection => 
-            connection.title.toLowerCase().includes(queryValue.toLowerCase())
-          )
-        : connectionsData;
 
     useEffect(() => {
-        const urlSearchTerm = searchParams.get('q') || '';
-        
-        // Filter based on URL search term
-        const filtered = connectionsData.filter(connection => 
-            connection.title.toLowerCase().includes(urlSearchTerm.toLowerCase())
-        );
-        
-        setFinalConnectionsData(filtered);
-        
-    }, [location.search, connectionsData]);
-    
+        setFinalConnectionsData(connectionsData || []);
+    }, [connectionsData]);
 
-    const [finalConnectionsData, setFinalConnectionsData] = useState(filteredData);
-    const [connectionStatus, setConnectionStatus] = useState({});
-
-    useEffect(() => {
-        const initialStatus = {};
-        connectionsData.forEach((_, index) => {
-            initialStatus[index] = connectionModule;
-        });
-        setConnectionStatus(initialStatus);
-    }, [connectionsData, connectionModule]);
+    const [finalConnectionsData, setFinalConnectionsData] = useState(connectionsData);
 
     const handleConnectSwitch = async (index) => {
         if (connectionModule) {
@@ -59,13 +34,48 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
             }
             
         } else {
-            setConnectionStatus(prev => ({
-                ...prev,
-                [index]: !prev[index]
-            }));
+            try {
+                if (finalConnectionsData[index].connectionId) {
+                    await removeConnection(finalConnectionsData[index].connectionId);
+                    setFinalConnectionsData(prev => prev.map((item, i) => 
+                        i === index 
+                            ? { ...item, connectionId: null }
+                            : item
+                    ));
+                }
+                else {
+                    const res = await getCurrentBusinessInfo();
+                    const personalId = res.data.id;
+                    const pConnection = await addConnection(personalId, finalConnectionsData[index].businessId);
+                    setFinalConnectionsData(prev => prev.map((item, i) => 
+                        i === index 
+                            ? { ...item, connectionId: pConnection.data.connectionId}
+                            : item
+                    ));
+                };
+            } catch (error) {
+                console.error(`Connection operation ${finalConnectionsData[index].connectionId ? 'remove' : 'add'} failed:`, error);
+            }
         }
     }
-    
+
+    const handleViewProfile = async (connectionId, businessId) => {
+        const businessRes = await getOtherBusinessInfo(businessId);
+        window.scrollTo(0, 0);
+        navigate(`/manage/connections/profile-view`, {
+            state: { 
+            connectionId: connectionId,
+            businessId: businessId,
+            companyName: businessRes.data.businessName, 
+            contactInfo: [businessRes.data.contactName, businessRes.data.contactPhone, businessRes.data.contactEmail],
+            companyDescription: businessRes.data.businessDescription,
+            whatwedoData: businessRes.data.services || [],
+            clientData: businessRes.data.clients || [],
+            connectionNum: businessRes.data.connections.length || 0
+            },
+        })
+    }
+
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full mx-auto">
             {finalConnectionsData.map((company, index) => (
@@ -82,27 +92,14 @@ const ConnectionsGrid = ({ queryValue = null, connectionsData, connectionModule 
                             <p className="text-center text-xs font-normal px-6 pt-4 pb-8">{company.description}</p>
                             <div className="flex flex-col items-center gap-y-2 mb-4">
                                 <PrimaryButton 
-                                    className={`text-xs ${connectionStatus[index] ? "bg-rose-500 hover:bg-rose-600" : "bg-blue-600"}`} 
+                                    className={`text-xs ${company.connectionId ? "bg-rose-500 hover:bg-rose-600" : "bg-blue-600"}`} 
                                     onClick={() => handleConnectSwitch(index)}
                                 >
-                                    {connectionStatus[index] ? "Disconnect" : "Connect"}
+                                    {company.connectionId ? "Disconnect" : "Connect"}
                                 </PrimaryButton>
                                 <SecondaryButton 
                                     className="text-xs bg-white"
-                                    onClick={() => {
-                                        navigate(`/manage/connections/profile-view`, {
-                                        state: { 
-                                        connectionId: company.connectionId,
-                                        businessId: company.businessId,
-                                        connected: connectionModule,
-                                        companyName: company.title,
-                                        contactInfo: company.contactInfo,
-                                        companyDescription: company.description,
-                                        whatwedoData: company.whatwedoData,
-                                        clientData: company.clientData,
-                                        connectionNum: company.connectionNum
-                                        },
-                                    })}}>
+                                    onClick={() => {handleViewProfile(company.connectionId, company.businessId)}}>
                                     View Profile
                                 </SecondaryButton>
                             </div>

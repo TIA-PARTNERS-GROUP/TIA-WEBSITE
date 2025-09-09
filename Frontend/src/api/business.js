@@ -1,5 +1,15 @@
 import api from "./axios";
 
+export function queryBusinesses(page, limit, search = null) {
+    return api.get('/business/query', {
+        params: {
+            page,
+            limit,
+            ...(search && { search }) // Only include search if not null
+        }
+    });
+};
+
 export function getCurrentBusinessInfo() {
     return api.get('/business/myinfo');
 };

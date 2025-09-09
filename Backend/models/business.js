@@ -185,5 +185,72 @@ export default (db) => ({
       return null;
     }   
     return rows[0];
+  },
+
+  async getPaginated(page = 1, limit = 10, tags = [], searchQuery = '') {
+    const offset = (page - 1) * limit;
+    let query = `
+      SELECT 
+        b.id, b.name, b.description, b.contact_name, b.contact_email,
+        bc.name as category_name
+      FROM businesses b
+      LEFT JOIN business_categories bc ON b.business_category_id = bc.id
+      WHERE 1=1
+    `;
+    let params = [];
+
+    // Add search filter
+    if (searchQuery) {
+      query += ` AND (b.name LIKE ? OR b.description LIKE ? OR b.tagline LIKE ?)`;
+      const searchParam = `%${searchQuery}%`;
+      params.push(searchParam, searchParam, searchParam);
+    }
+
+    // Add tags filter
+    if (tags.length > 0) {
+      query += ` AND b.business_category_id IN (${tags.map(() => '?').join(',')})`;
+      params.push(...tags);
+    }
+
+    // Get data and total count using window functions
+    const fullQuery = `
+      SELECT *, COUNT(*) OVER() AS total_count
+      FROM (${query} ORDER BY b.name ASC LIMIT ? OFFSET ?) AS paginated_data
+    `;
+
+    params.push(limit, offset);
+    const [rows] = await db.query(fullQuery, params);
+
+    if (rows.length === 0) {
+      return {
+        data: [],
+        pagination: {
+          currentPage: page,
+          totalPages: 0,
+          totalItems: 0,
+          itemsPerPage: limit,
+          hasNext: false,
+          hasPrev: false
+        }
+      };
+    }
+
+    const total = rows[0].total_count;
+    const totalPages = Math.ceil(total / limit);
+
+    // Remove the total_count property from each row before returning
+    const data = rows.map(({ total_count, ...rest }) => rest);
+
+    return {
+      data,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalItems: total,
+        itemsPerPage: limit,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    };
   }
 });

@@ -10,7 +10,6 @@ const ProfileView = () => {
       personalProfile={false} 
       connectionId={location.state?.connectionId}
       businessId={location.state?.businessId}
-      connected={location.state?.connected}
       companyName={location.state?.companyName} 
       companyDescription={location.state?.companyDescription} 
       whatwedoData={location.state?.whatwedoData}

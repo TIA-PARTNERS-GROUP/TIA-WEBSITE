@@ -11,22 +11,27 @@ import { m } from "framer-motion";
 
 const defaultCompanyName = "DyCom Group";
 
-const ProfileHeader = ({ personalProfile = true, connected = false, companyName = defaultCompanyName, connectionNum = 0, connectionId, businessId}) => {
+const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName, connectionNum = 0, connectionId, businessId}) => {
 
   const navigate = useNavigate();
-  const [connectionStatus, setConnectionStatus] = useState(connected ?? false);
+  let connected = false;
+  if (connectionId) {connected = true}
+  const [localConnectionNum, setConnectionNum] = useState(connectionNum);
+  const [connectionStatus, setConnectionStatus] = useState(connected);
   const [localConnectionId, setConnectionId] = useState(connectionId ?? null);
 
   const handleConnectSwitch = async () => {
     try {
       if (connectionStatus) {
-        const res = await removeConnection(localConnectionId)
+        await removeConnection(localConnectionId);
+        setConnectionNum(localConnectionNum - 1);
       }
       else {
         const res = await getCurrentBusinessInfo();
         const personalId = res.data.id;
         const pConnection = await addConnection(personalId, businessId);
         setConnectionId(pConnection.connectionId);
+        setConnectionNum(localConnectionNum + 1);
       };
       setConnectionStatus(!connectionStatus);
     } catch (error) {
@@ -54,7 +59,7 @@ const ProfileHeader = ({ personalProfile = true, connected = false, companyName 
         </div>
         <div className="flex gap-2 pt-5">
           <BuildTeamIcon className="text-rose-500 sm:w-4 sm:h-4 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6 @md:w-8 @md:h-8" />
-          <p className="sm:text-xs lg:text-sm 2xl:text-lg text-rose-500">{connectionNum} connections</p>
+          <p className="sm:text-xs lg:text-sm 2xl:text-lg text-rose-500">{localConnectionNum} connections</p>
         </div>
       </div>
       {personalProfile 

@@ -1,8 +1,121 @@
 import Router from 'express';
-import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection } from '../controllers/businessController.js';
+import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 
 const router = Router();
+/**
+ * @swagger
+ * /business/query:
+ *   get:
+ *     summary: Get paginated list of businesses with filtering
+ *     description: Returns a paginated list of businesses with optional search and tag filtering. Supports pagination parameters.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search query to filter businesses by name, description, or tagline
+ *       - in: query
+ *         name: tags
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: integer
+ *         description: Array of business category IDs to filter by (can be specified multiple times)
+ *         style: form
+ *         explode: true
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved paginated businesses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: Business ID
+ *                       name:
+ *                         type: string
+ *                         description: Business name
+ *                       tagline:
+ *                         type: string
+ *                         description: Business tagline
+ *                       contact_name:
+ *                         type: string
+ *                         description: Contact person's name
+ *                       contact_email:
+ *                         type: string
+ *                         description: Contact email address
+ *                       category_name:
+ *                         type: string
+ *                         description: Business category name
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *                     totalItems:
+ *                       type: integer
+ *                       example: 42
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
+ *                     hasNext:
+ *                       type: boolean
+ *                       example: true
+ *                     hasPrev:
+ *                       type: boolean
+ *                       example: false
+ *       400:
+ *         description: Invalid query parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Page must be at least 1
+ *       401:
+ *         description: Authorization header missing or invalid
+ *       403:
+ *         description: Invalid or expired token
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/query', verifyToken, queryBusinesses);
 /**
  * @swagger
  * /business/myinfo:

@@ -311,4 +311,42 @@ export const removeConnection = async (req, res) => {
     }
 }
         
+export const queryBusinesses = async (req, res) => {
+  try {
+    const business = businessModel(db);
+    
+    // Query parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+    
+    // Tags
+    let tags = [];
+    if (req.query.tags) {
+      tags = Array.isArray(req.query.tags) 
+        ? req.query.tags.map(tag => parseInt(tag)) 
+        : [parseInt(req.query.tags)];
+    }
 
+    // Validate parameters
+    if (page < 1) {
+      return res.status(400).json({ message: "Page must be at least 1" });
+    }
+    if (limit < 1 || limit > 100) {
+      return res.status(400).json({ message: "Limit must be between 1 and 100" });
+    }
+
+    // Get paginated results
+    const result = await business.getPaginated(page, limit, tags, search);
+
+    return res.status(200).json({
+      message: "Success",
+      data: result.data,
+      pagination: result.pagination
+    });
+
+  } catch (error) {
+    console.error("Error in getBusinesses:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

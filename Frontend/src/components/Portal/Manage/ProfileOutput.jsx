@@ -7,7 +7,6 @@ import HexagonList from "./HexagonList";
 
 const ProfileOutput =({ 
     personalProfile, 
-    connected,
     connectionId,
     businessId,
     companyName, 
@@ -69,7 +68,7 @@ const ProfileOutput =({
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-xl sm:px-2 px-8 py-2">
-          <ProfileHeader personalProfile={personalProfile} connected={connected} companyName={companyName} connectionNum={connectionNum} connectionId={connectionId} businessId={businessId}/>
+          <ProfileHeader personalProfile={personalProfile} companyName={companyName} connectionNum={connectionNum} connectionId={connectionId} businessId={businessId}/>
       </div>
       <div className="bg-white rounded-xl sm:px-4 px-8 py-2">
         <ContactInfo contactInfo={contactInfo}/>
