@@ -16,18 +16,26 @@ const MessageField = ({ messageData, user_id, name }) => {
         event.preventDefault();
         if (!messageText.trim()) return;
 
-        // Add user message
         setLocalMessageData(prev => [...prev, { author: "user", text: messageText }]);
         setMessageText('');
         setLoading(true);
 
-        // Call the backend API to send message to ADK agent
         try {
             const response = await sendChatbotMessage({ user_id, name, message: messageText });
-            setLocalMessageData(prev => [...prev, { author: "bot", text: response || "No response" }]);
+
+            let botText = "No response";
+            if (typeof response === "string") {
+                botText = response;
+            } else if (response && typeof response === "object") {
+                botText = response.text || response.message || response.error || response.detail || JSON.stringify(response);
+                botText = `Sorry, something went wrong. ${botText.data}`;
+
+            }
+
+            setLocalMessageData(prev => [...prev, { author: "bot", text: botText }]);
         } catch (error) {
             console.error('Error sending message:', error);
-            setLocalMessageData(prev => [...prev, { author: "bot", text: "Sorry, something went wrong." }]);
+            setLocalMessageData(prev => [...prev, { author: "bot", text: `Sorry, something went wrong. ${error.message}` }]);
         } finally {
             setLoading(false);
         }
@@ -41,7 +49,9 @@ const MessageField = ({ messageData, user_id, name }) => {
                         key={index}
                         className={`flex rounded-full py-2 px-4 ${message.author === "user" ? "self-end bg-blue-600" : "self-start bg-white"}`}
                     >
-                        {message.text}
+                        {typeof message.text === "object"
+                            ? JSON.stringify(message.text)
+                            : message.text}
                     </li>
                 ))}
                 {loading && (
