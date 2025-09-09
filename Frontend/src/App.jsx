@@ -28,6 +28,8 @@ const FindJob = React.lazy(() => import("./pages/Portal/Trade/FindJob.jsx"));
 const SubmitJob = React.lazy(() => import("./pages/Portal/Trade/SubmitJob.jsx"));
 const History = React.lazy(() => import("./pages/Portal/Trade/History.jsx"));
 
+const BusinessValueEstimatorPage = React.lazy(() => import("./pages/Portal/Tools/BusinessValueEstimatorPage.jsx"));
+
 const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
 const RegisterPage = React.lazy(() => import("./pages/RegisterPage.jsx"));
 
@@ -78,6 +80,7 @@ function App() {
             <Route path="submit" element={<SubmitJob />} />
             <Route path="history" element={<History />} />
           </Route>
+          <Route path="/tools/business-value-estimator" element={<BusinessValueEstimatorPage />} />
         </Route>
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
