@@ -6,12 +6,15 @@
   "scripts": {
     "test": "jest --coverage",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "migrate": "db-migrate up:development",
+    "setup-db:linux": "bash ./migrations/createDatabaseContainer.sh && sleep 15 && npm run migrate",
+    "setup-db:win": "migrations\\createDatabaseContainer.bat && timeout /t 15 /nobreak > nul && npm run migrate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "dependencies": { 
     "argon2": "^0.43.1",
     "axios": "^1.11.0",
     "cookie-parser": "^1.4.7",

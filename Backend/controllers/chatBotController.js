@@ -1,9 +1,9 @@
 import { sendToAdkAgent } from '../services/adkServices.js'; // Make sure to import the service
 import db from "../config/db.js";
 import userModel from '../models/user.js';
+import chatBotModel from '../models/chatBot.js'; // Import the chatBot model
 
-// JOSHUA TODO: Refactor to use a proper database for session management
-const userSessions = {};
+// Removed: const userSessions = {}; // No longer needed, using DB
 
 export const sendMessage = async (req, res) => {
   try {
@@ -11,22 +11,24 @@ export const sendMessage = async (req, res) => {
     const user = userModel(db);
     const userObj = await user.infoFromId(user_id);
     const name = userObj.first_name;
+    const connection_type = req.body.connection_type || "complementary";
     const message = req.body.message;
     const region = req.body.region || "au";
     const lat = req.body.lat || -27.4705;
     const lng = req.body.lng || 153.0260;
 
-    let session_id = userSessions[user_id] || null;
+    const chatBot = chatBotModel(db); // Initialize the model
+    let session_id = await chatBot.getAdkSessionId(user_id); // Get session_id from DB
 
     console.log(`User ID: ${user_id}\nName: ${name}\nMessage: ${message}`);
 
     if (!message) {
       return res.status(400).json({ error: 'user_id, name, and message are required.' });
     }
-    const adkResponse = await sendToAdkAgent({ user_id, session_id, name, message, region, lat, lng });
-    // If a new session_id is returned, update the map
+    const adkResponse = await sendToAdkAgent({ user_id, session_id, name, connection_type, message, region, lat, lng });
+    // If a new session_id is returned, update the DB
     if (adkResponse.session_id) {
-      userSessions[user_id] = adkResponse.session_id;
+      await chatBot.setAdkSessionId(user_id, adkResponse.session_id); // Set in DB
     } else if (session_id) {
       adkResponse.session_id = session_id;
     }
@@ -38,57 +40,4 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-// // Send a message in an existing conversation
-// export const sendMessage = async (req, res) => {
-//     try {
-
-//     } catch (error) {
-//         console.error('ah shit', error);
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Failed to process request'
-//         });
-//     }
-// }
-
-// // Save or update a user profile by receiving constructed json object defining the user details
-// export const saveProfile = async (req, res) => {
-//     try {
-
-//     } catch (error) {
-//         console.error('FUCK YOU BALTIMORE!', error)
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Failed to save profile'
-//         });
-//     }
-// }
-
-// // Wipe history and restart conversation
-// export const restartConversation = async (req, res) => {
-//     try {
-
-//     } catch (error) {
-//         console.error('Average error message', error)
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Failed to restart conversation'
-//         });
-//     }
-// }
-
-// // Creating a chat conversation for the user
-// // Attempt running resumeConversation
-// export const startConversation = async (req, res) => {
-//     try {
-//         // CHECK CHATBOT DB FOR PREVIOUS CONVO
-//             // ATTEMPT RESUME
-//         // CREATE NEW IF NOTHING IS FOUND
-//     } catch (error) {
-//         console.error('console.error', error)
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Failed to start conversation'
-//         });
-//     }
-// }
+// ...existing code...

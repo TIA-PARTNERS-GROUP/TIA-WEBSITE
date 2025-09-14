@@ -813,6 +813,7 @@ CREATE TABLE `users` (
   `last_name` varchar(60) DEFAULT NULL,
   `contact_email` varchar(254) DEFAULT NULL,
   `contact_phone_no` varchar(10) DEFAULT NULL,
+  `adk_session_id` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

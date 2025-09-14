@@ -3,9 +3,9 @@ import path from 'path';
 
 // Hardcoded list of test case file paths (each is a saved conversation JSON)
 const TEST_CASES = [
-  path.join(process.cwd(), 'tmp', 'agent_chat_history', 'test_case_1.json'),
-  path.join(process.cwd(), 'tmp', 'agent_chat_history', 'test_case_2.json'),
-  // Add more file paths here as needed
+  path.join(process.cwd(), 'tmp', 'agent_chat_history', '73450214-ce38-4fe3-836c-3b3822b113ff.json'),
+  //path.join(process.cwd(), 'tmp', 'agent_chat_history', '.json'),
+
 ].map(filePath => ({
   name: `Test Case: ${path.basename(filePath)}`,
   expected: filePath

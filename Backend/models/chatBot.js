@@ -1,19 +1,21 @@
 export default (db) => ({
-  async getAll() {
-    const [rows] = await db.query('SELECT * FROM [table_name]');
-    return rows;
+  // New methods for adk_session_id
+  async getAdkSessionId(userId) {
+    const [rows] = await db.query('SELECT adk_session_id FROM users WHERE id = ?', [userId]);
+    return rows[0] ? rows[0].adk_session_id : null;  // Return null if not found
   },
 
-  async findById(id) {
-    const [rows] = await db.query('SELECT * FROM [table_name] WHERE id = ?', [id]);
-    return rows[0];
-  },
-
-  async create(data) {
+  async setAdkSessionId(userId, sessionId) {
+    // Only update existing user (no INSERT, since user should exist)
     const [result] = await db.query(
-      'INSERT INTO [table_name] SET ?',
-      [data]
+      'UPDATE users SET adk_session_id = ? WHERE id = ?',
+      [sessionId, userId]
     );
-    return result.insertId;
+    return result.affectedRows > 0;  // Return true if updated
+  },
+
+  async checkAdkSessionExists(userId) {
+    const sessionId = await this.getAdkSessionId(userId);
+    return sessionId !== null;  // Return true if exists
   }
 });

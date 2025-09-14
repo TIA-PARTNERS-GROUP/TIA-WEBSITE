@@ -5,12 +5,13 @@ const RECORD_TEST = process.env.ADK_RECORD_TEST || false;
 
 // TODO: ADD Region, lat, long -> location_data
 // TODO: Return, session_id, state
-export async function sendToAdkAgent({ user_id, session_id, name, message, region, lat, lng }) {
+export async function sendToAdkAgent({ user_id, session_id, name, connection_type, message, region, lat, lng }) {
   try {
     const requestData = {
       user_id,
       name,
       message,
+      connection_type,
       session_id,
       region,
       lat,
