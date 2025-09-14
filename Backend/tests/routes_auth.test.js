@@ -1,13 +1,56 @@
 import request from 'supertest';
 
-let validToken = ''; // Store the real token from login
+let validToken = '';
+let refreshToken = '';
+const userData = {
+  email: `test${Date.now()}@example.com`,  // Use unique email to avoid duplicates
+  password: 'password123',
+  firstName: 'John',
+  lastName: 'Doe'
+};
+
+// Test Set 2 - Auth Endpoints:
+// Test 1 - Register (Signup)
+describe('POST /api/auth/signup', () => {
+  it('should register a new user successfully', async () => {
+    const res = await request('http://localhost:5000')
+      .post('/api/auth/signup')
+      .send(userData);
+
+    console.log('Full route/URL:', res.request.url);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty('id');
+    expect(res.body.email).toBe(userData.email);
+  });
+
+  // BUG: Expects duplicate users
+  it('should return 409 for duplicate email', async () => {
+    const duplicateUserData = {
+      email: userData.email,  // Use the outer userData
+      password: 'password123',
+      firstName: 'Jane',
+      lastName: 'Doe'
+    };
+
+    const res = await request('http://localhost:5000')
+      .post('/api/auth/signup')
+      .send(duplicateUserData);
+
+    console.log('Full route/URL:', res.request.url);
+
+    expect(res.statusCode).toBe(409);
+    expect(res.body.message).toBe('Email already in use');
+    // Remove email check for 409, as it's not typically returned
+  });
+});
 
 // Test 2 - Login
 describe('POST /api/auth/login', () => {
   it('should login a user successfully', async () => {
     const loginData = {
-      email: 'test@example.com',  // Use real credentials from your DB
-      password: 'password123'
+      email: userData.email,
+      password: userData.password,
     };
 
     const res = await request('http://localhost:5000')
@@ -18,6 +61,14 @@ describe('POST /api/auth/login', () => {
 
     if (res.statusCode === 200) {
       validToken = res.body.token;  // Store the real token
+      // Extract refresh token from cookies
+      const cookies = res.headers['set-cookie'];
+      if (cookies) {
+        const refreshCookie = cookies.find(cookie => cookie.startsWith('refreshToken='));
+        if (refreshCookie) {
+          refreshToken = refreshCookie.split('=')[1].split(';')[0];
+        }
+      }
     }
 
     expect(res.statusCode).toBe(200);
@@ -47,7 +98,7 @@ describe('POST /api/auth/refresh', () => {
   it('should refresh the token successfully', async () => {
     const res = await request('http://localhost:5000')
       .post('/api/auth/refresh')
-      .set('Cookie', 'refreshToken=validtoken');  // Use a real refresh token if available
+      .set('Cookie', `refreshToken=${refreshToken}`);
 
     console.log('Full route/URL:', res.request.url);
 
@@ -62,7 +113,7 @@ describe('POST /api/auth/logout', () => {
   it('should logout the user successfully', async () => {
     const res = await request('http://localhost:5000')
       .post('/api/auth/logout')
-      .set('Cookie', 'refreshToken=validtoken');  // Use a real refresh token
+      .set('Cookie', `refreshToken=${refreshToken}`);
 
     console.log('Full route/URL:', res.request.url);
 
@@ -70,4 +121,3 @@ describe('POST /api/auth/logout', () => {
     expect(res.body.message).toBe('Successfully logged out');
   });
 });
-

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757835203766" clover="3.2.0">
-  <project timestamp="1757835203766" name="All files">
-    <metrics statements="832" coveredstatements="122" conditionals="328" coveredconditionals="10" methods="102" coveredmethods="1" elements="1262" coveredelements="133" complexity="0" loc="832" ncloc="832" packages="7" files="27" classes="27"/>
+<coverage generated="1757836475776" clover="3.2.0">
+  <project timestamp="1757836475776" name="All files">
+    <metrics statements="832" coveredstatements="127" conditionals="328" coveredconditionals="10" methods="102" coveredmethods="1" elements="1262" coveredelements="138" complexity="0" loc="832" ncloc="832" packages="7" files="27" classes="27"/>
     <package name="Backend">
-      <metrics statements="20" coveredstatements="10" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
+      <metrics statements="20" coveredstatements="15" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
       <file name="app.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/app.js">
-        <metrics statements="20" coveredstatements="10" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
+        <metrics statements="20" coveredstatements="15" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
         <line num="40" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
         <line num="50" count="1" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
         <line num="56" count="1" type="cond" truecount="1" falsecount="1"/>
