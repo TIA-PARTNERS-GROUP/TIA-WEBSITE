@@ -35,7 +35,7 @@ const env = {
       multipleStatements: false,
     },
     test: {
-      frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
+      // frontendBaseUrl: valEnv.FRONTEND_BASE_URL,
       host: valEnv.DB_HOST,
       user: valEnv.DB_USER,
       password: valEnv.DB_PASS,
