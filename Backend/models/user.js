@@ -36,6 +36,11 @@ export default (db) => ({
       'INSERT INTO user_logins (user_id, login_email, password_hash) VALUES (?, ?, ?)',
       [result.insertId, email, password_hash]
     );
+    
+    await db.query(
+      'INSERT INTO businesses (operator_user_id, name, contact_name) VALUES (?, ?, ?)',
+      [result.insertId, `${firstName} ${lastName}'s Business`, `${firstName} ${lastName}`]
+    )
     return result.insertId;
   },
 
