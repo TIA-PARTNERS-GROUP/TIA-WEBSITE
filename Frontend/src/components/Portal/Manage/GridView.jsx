@@ -3,43 +3,6 @@ import { useLoading } from "../../../utils/LoadingContext";
 import { getCurrentBusinessInfo, getOtherBusinessInfo } from "../../../api/business";
 import ConnectionsGrid from "../Connect/ConnectionsGrid";
 
-
-/*const connectionsData = [
-    {
-        title: "DexRouter Ltd.", 
-        contactInfo: ["Tim Matters", "0123 456 789", "tim@dexrouter.com.au"],
-        description: "Here at DexRouter, we manufacture and distribute cutting-edge router products.", 
-        whatwedoData: [
-            {description: "Router Manufacturing"}
-        ]
-    },
-    {
-        title: "Jim's Cabling", 
-        contactInfo: ["Jim Bean", "0123 456 789", "jim@jimscabling.com.au"],
-        description: "Providing all of your cabling needs!",
-        whatwedoData: [
-            {description: "Cabling Installation"}
-        ]
-    },
-    {
-        title: "Westmine Solutions", 
-        contactInfo: ["Anton Kirkegard", "0123 456 789", "anton@dwestminesolutions.com.au"],
-        description: "Westmine Solutions is a bustling startup focusing on providing high-quality web development solutions.",
-        whatwedoData: [
-            {description: "Website creation"},
-            {description: "Custom LLM creation"}
-        ]
-    },
-    {
-        title: "AccuT", 
-        contactInfo: ["Franz Kafka", "0123 456 789", "franz@accut.com.au"],
-        description: "Fast, reliable, and always on time.",
-        whatwedoData: [
-            {description: "Package Delivery"}
-        ]
-    }
-];*/
-
 const GridView = () => {
 
   const { startLoading, stopLoading } = useLoading();
