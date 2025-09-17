@@ -25,7 +25,7 @@ const router = Router();
  *                 type: string
  *                 description: The user's message to send to the chatbot.
  *                 example: "Hello, I want to connect with partners."
- *               chatType:
+ *               chat_type:
  *                 type: string
  *                 description: The type of chat ("vision", "connect", "ladder" or "default"). "default" or leaving the field empty grants access to all the chat types, mainly for testing and development.
  *                 example: "default"
@@ -58,14 +58,92 @@ const router = Router();
  *                 response:
  *                   type: string
  *                   description: The chatbot's response message.
- *                   example: "Hello! How can I help you today?"
+ *                   example: "Hello! How can I assist you today? Would you like to explore potential partnership opportunities, or do you have something else in mind?"
  *                 session_id:
  *                   type: string
  *                   description: The session ID for the conversation.
- *                   example: "123e4567-e89b-12d3-a456-426614174000"
+ *                   example: "bf36f521-b33a-4478-930a-225a9d74bc16"
  *                 state:
  *                   type: object
- *                   description: The current state of the session.
+ *                   description: The current state of the session, including user details and agent data.
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       description: The user's name.
+ *                       example: "joshua"
+ *                     user_id:
+ *                       type: string
+ *                       description: The user's ID.
+ *                       example: "6"
+ *                     connection_type:
+ *                       type: string
+ *                       description: The type of connection.
+ *                       example: "complementary"
+ *                     region:
+ *                       type: string
+ *                       description: The user's region.
+ *                       example: "au"
+ *                     lat:
+ *                       type: number
+ *                       description: Latitude of the user's location.
+ *                       example: -27.4705
+ *                     lng:
+ *                       type: number
+ *                       description: Longitude of the user's location.
+ *                       example: 153.026
+ *                     user_profile:
+ *                       type: string
+ *                       description: The status of the user profile.
+ *                       example: "generated"
+ *                     set_agent:
+ *                       type: string
+ *                       description: The current agent set for the session.
+ *                       example: "CoordinatorAgent"
+ *                     Generated_Profile:
+ *                       type: object
+ *                       description: The generated user profile details.
+ *                       properties:
+ *                         UserName:
+ *                           type: string
+ *                           example: "joshua Wlodarczyk"
+ *                         Business_Name:
+ *                           type: string
+ *                           example: "TIA TEST"
+ *                         Contact_Email:
+ *                           type: string
+ *                           example: "joshuawlod2003@gmail.com"
+ *                         Contact_Phone_No:
+ *                           type: string
+ *                           example: "0423158014"
+ *                         Business_Type:
+ *                           type: string
+ *                           example: "AI-powered customer service automation"
+ *                         UserJob:
+ *                           type: string
+ *                           example: "Founder and CEO"
+ *                         User_Strength:
+ *                           type: string
+ *                           example: "Empowering small businesses to thrive"
+ *                         User_skills:
+ *                           type: string
+ *                           example: "Leadership, Strategic planning, AI implementation, AI solutions, Customer service automation, Problem-solving"
+ *                         Business_Strength:
+ *                           type: string
+ *                           example: "Enhancing efficiency and reducing stress for clients"
+ *                         Business_Skills:
+ *                           type: string
+ *                           example: "Leadership, Strategic planning, AI implementation, AI solutions, Customer service automation, Problem-solving"
+ *                         Business_Category:
+ *                           type: string
+ *                           example: "Technology and services"
+ *                     ConnectAgent:
+ *                       type: object
+ *                       description: Data from the ConnectAgent, including connection results.
+ *                       properties:
+ *                         connection_result:
+ *                           type: object
+ *                           description: The result of the connection process.
+ *                           example: {}  # Placeholder; actual object would be detailed based on data
  *                 author:
  *                   type: string
  *                   description: The author of the response (e.g., "CoordinatorAgent").
@@ -78,7 +156,6 @@ const router = Router();
  *         description: Internal server error.
  */
 router.post('/message', verifyToken, sendMessage);
-
 /**
  * @swagger
  * /chatbot/reset:
