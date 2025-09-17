@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757836475776" clover="3.2.0">
-  <project timestamp="1757836475776" name="All files">
-    <metrics statements="832" coveredstatements="127" conditionals="328" coveredconditionals="10" methods="102" coveredmethods="1" elements="1262" coveredelements="138" complexity="0" loc="832" ncloc="832" packages="7" files="27" classes="27"/>
+<coverage generated="1757907451960" clover="3.2.0">
+  <project timestamp="1757907451960" name="All files">
+    <metrics statements="834" coveredstatements="127" conditionals="328" coveredconditionals="10" methods="102" coveredmethods="1" elements="1264" coveredelements="138" complexity="0" loc="834" ncloc="834" packages="7" files="27" classes="27"/>
     <package name="Backend">
       <metrics statements="20" coveredstatements="15" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
       <file name="app.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/app.js">
@@ -621,9 +621,9 @@
       </file>
     </package>
     <package name="Backend.middleware">
-      <metrics statements="52" coveredstatements="11" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="54" coveredstatements="11" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
       <file name="authTolkien.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/authTolkien.js">
-        <metrics statements="41" coveredstatements="4" conditionals="22" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="43" coveredstatements="4" conditionals="22" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="11" count="1" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -654,17 +654,19 @@
         <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="83" count="1" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="96" count="1" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
       </file>
       <file name="errorHandler.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/errorHandler.js">
         <metrics statements="3" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>

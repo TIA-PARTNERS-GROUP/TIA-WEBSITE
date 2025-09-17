@@ -199,17 +199,17 @@ CREATE TABLE `businesses` (
   `city` varchar(60) DEFAULT NULL,
   `business_type_id` int unsigned DEFAULT NULL,
   `business_category_id` int unsigned DEFAULT NULL,
-  `business_phase` int unsigned DEFAULT NULL,
+  `business_phase_id` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `businesses_user_id_idx` (`operator_user_id`),
   KEY `businesses_type_id_idx` (`business_type_id`),
   KEY `businesses_category_id_idx` (`business_category_id`),
-  KEY `businesss_phase_id_idx` (`business_phase`),
+  KEY `businesss_phase_id_idx` (`business_phase_id`),
   CONSTRAINT `businesses_category_id` FOREIGN KEY (`business_category_id`) REFERENCES `business_categories` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `businesses_type_id` FOREIGN KEY (`business_type_id`) REFERENCES `connection_types` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `businesses_type_id` FOREIGN KEY (`business_type_id`) REFERENCES `business_types` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `businesses_user_id` FOREIGN KEY (`operator_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `businesss_phase_id` FOREIGN KEY (`business_phase`) REFERENCES `business_phases` (`id`)
+  CONSTRAINT `businesss_phase_id` FOREIGN KEY (`business_phase_id`) REFERENCES `business_phases` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

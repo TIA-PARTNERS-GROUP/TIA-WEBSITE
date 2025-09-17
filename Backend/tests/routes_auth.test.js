@@ -60,8 +60,8 @@ describe('POST /api/auth/login', () => {
     console.log('Full route/URL:', res.request.url);
 
     if (res.statusCode === 200) {
-      validToken = res.body.token;  // Store the real token
-      // Extract refresh token from cookies
+      validToken = res.body.token;
+
       const cookies = res.headers['set-cookie'];
       if (cookies) {
         const refreshCookie = cookies.find(cookie => cookie.startsWith('refreshToken='));

@@ -101,7 +101,7 @@ export default (db) => ({
         city = COALESCE(?, city),
         business_type_id = COALESCE(?, business_type_id),
         business_category_id = COALESCE(?, business_category_id),
-        business_phase = COALESCE(?, business_phase)
+        business_phase_id = COALESCE(?, business_phase_id)
       WHERE id = ?
       `, [
           params.name,

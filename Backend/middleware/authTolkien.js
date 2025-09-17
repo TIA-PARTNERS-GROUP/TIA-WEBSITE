@@ -60,7 +60,7 @@ export const verifyRefreshToken = async (req, res, next) => {
         // Grace period is for race conditions.
         // TODO revoke the full token chain in the event that an obsolete refresh token is provided
         if (session.rotated_to_id) {
-          const newerSession = user.fetchSessionFromId(session.rotated_to_id);
+          const newerSession = await user.fetchSessionFromId(session.rotated_to_id);
           if (newerSession == null) return res.status(500).json({message: "Internal server error"}); // Bad if happens
           const newTokenCreatedAt = new Date(newerSession.created_at.toString().replace(" ", "T"));
           if (new Date(now.getTime() + 30 * 1000) > newTokenCreatedAt) return res.status(403).json({message: "Obsolete token"})
