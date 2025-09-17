@@ -9,7 +9,9 @@ const router = Router();
  * /chatbot/message:
  *   post:
  *     summary: Send a message to the chatbot
- *     description: Sends a user message to the TIA chatbot and returns the response. Requires authentication.
+ *     description: Sends a user message to the Google ADK server and returns the response. Requires authentication.
+ *     tags:
+ *       - Chatbot
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -83,6 +85,8 @@ router.post('/message', verifyToken, sendMessage);
  *   post:
  *     summary: Reset the chatbot session
  *     description: Resets the user's chatbot session. Requires authentication.
+ *     tags:
+ *       - Chatbot
  *     security:
  *       - bearerAuth: []
  *     responses:

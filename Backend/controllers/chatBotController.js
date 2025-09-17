@@ -29,7 +29,7 @@ export const sendMessage = async (req, res) => {
     const user = userModel(db);
     const userObj = await user.infoFromId(user_id);
     const name = userObj.first_name;
-    const chatType = req.body.chatType || "default";
+    const chat_type = req.body.chat_type || "default";
     const connection_type = req.body.connection_type || "complementary";
     const message = req.body.message;
     const region = req.body.region || "au";
@@ -56,7 +56,7 @@ export const sendMessage = async (req, res) => {
     }
 
     // Proceed with normal ADK agent call if not reset
-    const adkResponse = await sendToAdkAgent({ user_id, session_id, name, chatType, connection_type, message, region, lat, lng });
+    const adkResponse = await sendToAdkAgent({ user_id, session_id, name, chat_type, connection_type, message, region, lat, lng });
     // If a new session_id is returned, update the DB
     if (adkResponse.session_id) {
       await chatBot.setAdkSessionId(user_id, adkResponse.session_id); // Set in DB

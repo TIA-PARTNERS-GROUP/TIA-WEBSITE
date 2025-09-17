@@ -4,13 +4,13 @@ const ADK_API_URL = process.env.ADK_API_URL;
 const RECORD_TEST = process.env.ADK_RECORD_TEST || false;
 
 // TODO: ADD Region, lat, long -> location_data
-export async function sendToAdkAgent({ user_id, session_id, name, chatType, connection_type, message, region, lat, lng }) {
+export async function sendToAdkAgent({ user_id, session_id, name, chatType: chat_type, connection_type, message, region, lat, lng }) {
   try {
     const requestData = {
       user_id,
       name,
       message,
-      chatType,
+      chat_type,
       connection_type,
       session_id,
       region,
