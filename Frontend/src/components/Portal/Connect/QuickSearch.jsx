@@ -13,6 +13,7 @@ const QuickSearch = () => {
     const queryValue = searchParams.get('q') || null;
     const categoriesParam = searchParams.get('categories') || '';
     const connectionStatus = searchParams.get('status') || null;
+    const sortParam = searchParams.get('sort') || 'name-asc';
     const categories = categoriesParam ? categoriesParam.split(',').map(id => parseInt(id)).filter(id => !isNaN(id)) : [];
     const pageFromParams = parseInt(searchParams.get('page')) || 1;
 
@@ -63,6 +64,12 @@ const QuickSearch = () => {
                 }
             }
 
+            if (sortParam === 'name-asc') {
+                    filteredData.sort((a, b) => a.title.localeCompare(b.title));
+                } else if (sortParam === 'name-desc') {
+                    filteredData.sort((a, b) => b.title.localeCompare(a.title));
+            }
+
             setConnectionsData(filteredData);
 
             setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
@@ -76,7 +83,7 @@ const QuickSearch = () => {
     };
 
     fetchConnections(queryValue);
-    }, [queryValue, categoriesParam, connectionStatus, currentPage])
+    }, [queryValue, categoriesParam, connectionStatus, sortParam, currentPage])
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {

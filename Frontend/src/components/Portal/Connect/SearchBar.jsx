@@ -46,6 +46,8 @@ const SearchBar = () => {
             params.append('status', statusParam);
         }
         
+        params.append('sort', selectedSort);
+
         navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
     };
 
@@ -110,8 +112,27 @@ const SearchBar = () => {
     const handleSortSelect = (value) => {
         setSelectedSort(value);
         setIsSortOpen(false);
-        // Sort logic here
-        console.log("Selected sort:", value);
+
+        const params = new URLSearchParams();
+        
+        if (searchText) {
+            params.append('q', searchText);
+        }
+        
+        const selectedCategories = selectedFilters['business-category'];
+        if (selectedCategories && selectedCategories.length > 0) {
+            params.append('categories', selectedCategories.join(','));
+        }
+        
+        const connectionStatus = selectedFilters['connection-status'];
+        if (connectionStatus) {
+            const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
+            params.append('status', statusParam);
+        }
+        
+        params.append('sort', value);
+        
+        navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
     };
 
     const [selectedFilters, setSelectedFilters] = useState(
@@ -152,7 +173,7 @@ const SearchBar = () => {
             }, {})
         );
         
-        navigate(`/connect/${partnerType}/${searchType}`);
+        navigate(`/connect/${partnerType}/${searchType}?q=${searchText}`);
         setIsFilterOpen(false);
     };
 
@@ -174,6 +195,8 @@ const SearchBar = () => {
             const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
             params.append('status', statusParam);
         }
+
+        params.append('sort', selectedSort);
         
         setIsFilterOpen(false);
         navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
