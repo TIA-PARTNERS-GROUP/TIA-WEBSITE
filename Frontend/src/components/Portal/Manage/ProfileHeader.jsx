@@ -11,7 +11,7 @@ import { m } from "framer-motion";
 
 const defaultCompanyName = "DyCom Group";
 
-const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName, connectionNum = 0, connectionId, businessId}) => {
+const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName, connectionNum = 0, connectionId, businessId, companyCategory = null}) => {
 
   const navigate = useNavigate();
   let connected = false;
@@ -19,6 +19,15 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
   const [localConnectionNum, setConnectionNum] = useState(connectionNum);
   const [connectionStatus, setConnectionStatus] = useState(connected);
   const [localConnectionId, setConnectionId] = useState(connectionId ?? null);
+
+  function formatString(str) {
+    return str
+        .split('-') 
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+        .join(' '); 
+  }
+
+  const formattedCategory = formatString(companyCategory);
 
   useEffect(() => {
     setConnectionNum(connectionNum);
@@ -61,7 +70,8 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
             <PrimaryButton className={`text-xs ${connectionStatus ? "bg-rose-500 hover:bg-rose-600" : "bg-blue-600"}`}  onClick={() => handleConnectSwitch()}> {connectionStatus ? "Disconnect" : "Connect"}</PrimaryButton>
           )}
         </div>
-        <div className="flex gap-2 pt-5">
+        <p className="sm:text-xs lg:text-sm 2xl:text-lg pt-2">{formattedCategory}</p>
+        <div className="flex gap-2 pt-2">
           <BuildTeamIcon className="text-rose-500 sm:w-4 sm:h-4 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6 @md:w-8 @md:h-8" />
           <p className="sm:text-xs lg:text-sm 2xl:text-lg text-rose-500">{localConnectionNum} connections</p>
         </div>

@@ -24,7 +24,8 @@ const GridView = () => {
                 connectionId: connection.connection_id,
                 businessId: connection.business_id,
                 title: businessRes.data.businessName, 
-                description: businessRes.data.businessDescription
+                description: businessRes.data.businessDescription,
+                category: businessRes.data.businessCategory
             }))
             .catch(error => {
                 console.error(`Error fetching business ${id}:`, error);

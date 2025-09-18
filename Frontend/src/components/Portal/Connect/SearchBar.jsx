@@ -92,8 +92,8 @@ const SearchBar = () => {
             options: [
                 { id: 1, label: 'Manufacturing' },
                 { id: 2, label: 'Installation' },
-                { id: 3, label: 'Cybersecurity' },
-                { id: 4, label: 'Software Development' }
+                { id: 3, label: 'Software Development' },
+                { id: 4, label: 'Cybersecurity' }
             ],
             type: 'checkbox'
         },

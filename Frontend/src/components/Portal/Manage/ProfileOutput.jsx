@@ -14,7 +14,9 @@ const ProfileOutput =({
     whatwedoData, 
     clientData, 
     contactInfo,
-    connectionNum}) => {
+    connectionNum,
+    companyCategory
+  }) => {
   
   const { startLoading, stopLoading } = useLoading();
   
@@ -24,6 +26,7 @@ const ProfileOutput =({
   const [defaultWhatWeDoData, setDefaultWhatWeDoData] = useState([{description: "Loading..."}]);
   const [defaultClientData, setDefaultClientData] = useState([{description: "Loading..."}]);
   const [defaultConnectionNum, setDefaultConnectionNum] = useState(0);
+  const [defaultCategory, setDefaultCategory] = useState("");
 
   companyName = companyName ?? defaultCompanyName;
   companyDescription = companyDescription ?? defaultCompanyDescription;
@@ -31,6 +34,7 @@ const ProfileOutput =({
   whatwedoData = whatwedoData ?? defaultWhatWeDoData;
   clientData = clientData ?? defaultClientData;
   connectionNum = connectionNum ?? defaultConnectionNum;
+  companyCategory = companyCategory ?? defaultCategory;
   
   useEffect(() => {
   const fetchBusinessInfo = async () => {
@@ -46,7 +50,8 @@ const ProfileOutput =({
         businessName, 
         services, 
         clients, 
-        connections 
+        connections,
+        businessCategory 
       } = res.data;
       
       setDefaultCompanyDescription(businessDescription);
@@ -55,6 +60,7 @@ const ProfileOutput =({
       setDefaultWhatWeDoData(services);
       setDefaultClientData(clients);
       setDefaultConnectionNum(connections.length);
+      setDefaultCategory(businessCategory);
     } catch (error) {
       console.error('Error fetching business info:', error);
     } finally {
@@ -68,7 +74,7 @@ const ProfileOutput =({
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-xl sm:px-2 px-8 py-2">
-          <ProfileHeader personalProfile={personalProfile} companyName={companyName} connectionNum={connectionNum} connectionId={connectionId} businessId={businessId}/>
+          <ProfileHeader personalProfile={personalProfile} companyName={companyName} connectionNum={connectionNum} connectionId={connectionId} businessId={businessId} companyCategory={companyCategory}/>
       </div>
       <div className="bg-white rounded-xl sm:px-4 px-8 py-2">
         <ContactInfo contactInfo={contactInfo}/>

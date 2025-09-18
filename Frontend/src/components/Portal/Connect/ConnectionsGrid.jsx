@@ -71,10 +71,19 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
             companyDescription: businessRes.data.businessDescription,
             whatwedoData: businessRes.data.services || [],
             clientData: businessRes.data.clients || [],
-            connectionNum: businessRes.data.connections.length || 0
+            connectionNum: businessRes.data.connections.length || 0,
+            companyCategory: businessRes.data.businessCategory
             },
         })
     }
+
+    function formatString(str) {
+    if (!str) {return null};
+    return str
+        .split('-') 
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+        .join(' '); 
+  }
 
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full mx-auto">
@@ -89,6 +98,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                         <div className="relative -top-14 flex flex-col items-center">
                             <ProfileIcon className="w-24 h-24 @md:w-14 @md:h-14 text-black mt-0.5" />
                             <h2 className="text-center text-lg font-medium text-blue-600">{company.title}</h2>
+                            <p className="text-center text-xs font-semibold px-6 pt-2 pb-2">{formatString(company.category)}</p>
                             <p className="text-center text-xs font-normal px-6 pt-4 pb-8">{company.description}</p>
                             <div className="flex flex-col items-center gap-y-2 mb-4">
                                 <PrimaryButton 

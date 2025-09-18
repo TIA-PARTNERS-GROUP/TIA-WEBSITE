@@ -16,6 +16,7 @@ const ProfileView = () => {
       clientData={location.state?.clientData}
       contactInfo={location.state?.contactInfo} 
       connectionNum={location.state?.connectionNum}
+      companyCategory={location.state?.companyCategory}
     />
   );
 };

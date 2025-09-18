@@ -37,7 +37,8 @@ const SmartConnect = ({ partnerType }) => {
                     connectionId: connection ? connection.connection_id : null,
                     businessId: businessRes.id,
                     title: businessRes.name,
-                    description: businessRes.description
+                    description: businessRes.description,
+                    category: businessRes.category_name
                 }
             });
             
