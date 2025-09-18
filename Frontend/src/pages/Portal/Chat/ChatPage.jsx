@@ -5,8 +5,7 @@ import { getCurrentUserInfo } from "../../../api/user";
 
 // Message data, including author type and associated text, placeholder for now until persistence back end solution
 let messageData = [
-    {author: "agent", text: "Hello Mark!"},
-    {author: "user", text: "Hello"}
+    {author: "agent", text: "Hello how can I help you today?"},
 ]
 
 const ChatPage = ({ chatType }) => {

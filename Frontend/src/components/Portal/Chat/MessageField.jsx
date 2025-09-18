@@ -11,10 +11,16 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
+    const textareaRef = useRef(null);
 
-    const handleMessageChange = (event) => (
-        setMessageText(event.target.value)
-    );
+    const handleMessageChange = (event) => {
+        setMessageText(event.target.value);
+        
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+        }
+    };
 
     const handleBack = () => {
         switch (chatType) {
@@ -47,6 +53,10 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         setMessageText('');
         setLoading(true);
 
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+        }
+
         try {
             const response = await sendChatbotMessage({ user_id, name, message: messageText });
 
@@ -68,6 +78,13 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleMessageSubmission(event);
+        }
+    };
+
     return (
         <div>
             <div className="sticky z-20">
@@ -83,7 +100,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 <h1 className="text-lg font-bold text-center text-gray-800">{chatType}</h1>
             </div>
             <div className="flex flex-col justify-center items-center gap-y-10 h-screen pt-4 pb-24">
-                <ul ref={messagesContainerRef} className="flex flex-col w-[40%] gap-y-4 overflow-y-auto px-8">
+                <ul ref={messagesContainerRef} className="flex flex-col w-[40%] gap-y-14 overflow-y-auto px-8">
                     {localMessageData.map((message, index) => (
                         <li
                             key={index}
@@ -101,17 +118,23 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                     )}
                     <div ref={messagesEndRef} />
                 </ul>
-                <form onSubmit={handleMessageSubmission} className="flex justify-between bg-gray-200 rounded-full w-[38%] py-2 px-4">
-                    <input 
-                        type="search" 
+                <form onSubmit={handleMessageSubmission} className="flex items-center bg-gray-200 rounded-2xl w-[38%] py-2 px-4">
+                    <textarea
+                        ref={textareaRef}
                         value={messageText}
                         onChange={handleMessageChange}
-                        className="placeholder w-4/5 focus:outline-none bg-gray-200" 
-                        placeholder="Message LLM..." 
+                        onKeyPress={handleKeyPress}
+                        className="w-full bg-gray-200 focus:outline-none resize-none placeholder-gray-500 max-h-50 overflow-y-auto"
+                        placeholder="Message LLM..."
                         disabled={loading}
+                        rows="1"
+                        style={{
+                            minHeight: '24px',
+                            maxHeight: '120px'
+                        }}
                     />
-                    <button className="bg-blue-600 rounded-full p-2" disabled={loading || !messageText.trim()}>
-                        <UpArrowIcon className="text-white" />
+                    <button className="bg-blue-600 rounded-full p-2 ml-2 h-10 w-10 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || !messageText.trim()}>
+                        <UpArrowIcon className="text-white w-5 h-5" />
                     </button>
                 </form>
                 <br></br>
