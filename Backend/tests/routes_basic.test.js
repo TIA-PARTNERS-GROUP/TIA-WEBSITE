@@ -1,12 +1,11 @@
-import request from 'supertest';
-import app from '../app.js';
+import { getRequest } from './testUtils.js';
 
 // Test Set 1 - Public Endpoints:
 // Test 1 - Basic
 describe('GET /api', () => {
   it('API is working', async () => {
     // Test against the running server (like Chrome)
-    const res = await request('http://localhost:5000').get('/api');
+    const res = await getRequest().get('/api');
 
     console.log('Full route/URL:', res.request.url);
 

@@ -29,7 +29,7 @@ if (config.env === 'production') {
             timeout: 0
         });
     });
-} else if (config.env === 'development') {
+} else if (config.env === 'development' || config.env === 'test') {
     router.get('/', (req, res) => {
         res.json({ message: 'API is working' });
     });
