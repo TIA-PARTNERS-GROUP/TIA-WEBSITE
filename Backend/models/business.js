@@ -187,7 +187,7 @@ export default (db) => ({
     return rows[0];
   },
 
-  async getPaginated(page = 1, limit = 10, tags = [], searchQuery = '') {
+  async getPaginated(page = 1, limit = 10, categories = [], searchQuery = '') {
     const offset = (page - 1) * limit;
     let query = `
       SELECT 
@@ -206,10 +206,10 @@ export default (db) => ({
       params.push(searchParam, searchParam, searchParam);
     }
 
-    // Add tags filter
-    if (tags.length > 0) {
-      query += ` AND b.business_category_id IN (${tags.map(() => '?').join(',')})`;
-      params.push(...tags);
+    // Add business category filter
+    if (categories.length > 0) {
+      query += ` AND b.business_category_id IN (${categories.map(() => '?').join(',')})`;
+      params.push(...categories);
     }
 
     // Get data and total count using window functions

@@ -29,7 +29,24 @@ const SearchBar = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        navigate(`/connect/${partnerType}/${searchType}?q=${searchText}`);
+        const params = new URLSearchParams();
+    
+        if (searchText) {
+            params.append('q', searchText);
+        }
+        
+        const selectedCategories = selectedFilters['business-category'];
+        if (selectedCategories && selectedCategories.length > 0) {
+            params.append('categories', selectedCategories.join(','));
+        }
+        
+        const connectionStatus = selectedFilters['connection-status'];
+        if (connectionStatus) {
+            const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
+            params.append('status', statusParam);
+        }
+        
+        navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
     };
 
     const toggleFilter = () => {
@@ -45,8 +62,20 @@ const SearchBar = () => {
 
     useEffect(() => {
         const urlQuery = searchParams.get('q') || '';
+        const categoriesParam = searchParams.get('categories') || '';
+        const urlCategories = categoriesParam ? categoriesParam.split(',').map(id => parseInt(id)).filter(id => !isNaN(id)) : [];
+        const urlStatus = searchParams.get('status') || '';
+        
         setSearchText(urlQuery);
-        setQueryEntered(!!urlQuery);
+        setQueryEntered(!!urlQuery || urlCategories.length > 0 || !!urlStatus);
+        
+        setSelectedFilters(prev => ({
+            ...prev,
+            'business-category': urlCategories,
+            'connection-status': urlStatus 
+                ? urlStatus.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                : null
+        }));
     }, [location.search]);
 
     const sortOptions = [
@@ -58,7 +87,12 @@ const SearchBar = () => {
         {
             id: 'business-category',
             title: 'Business Category',
-            options: ['Manufacturing', 'Installation', 'Cybersecurity', 'Software Development'],
+            options: [
+                { id: 1, label: 'Manufacturing' },
+                { id: 2, label: 'Installation' },
+                { id: 3, label: 'Cybersecurity' },
+                { id: 4, label: 'Software Development' }
+            ],
             type: 'checkbox'
         },
         {
@@ -87,25 +121,23 @@ const SearchBar = () => {
         }, {})
     );
 
-    const handleFilterChange = (categoryId, option, isChecked, inputType) => {
+    const handleFilterChange = (categoryId, optionId, isChecked, inputType) => {
         setSelectedFilters(prev => {
             if (inputType === 'radio') {
-                // For radio buttons, set the value directly
                 return {
                     ...prev,
-                    [categoryId]: isChecked ? option : null
+                    [categoryId]: isChecked ? optionId : null
                 };
             } else {
-                // For checkboxes, add/remove from array
                 if (isChecked) {
                     return {
                         ...prev,
-                        [categoryId]: [...prev[categoryId], option]
+                        [categoryId]: [...prev[categoryId], optionId]
                     };
                 } else {
                     return {
                         ...prev,
-                        [categoryId]: prev[categoryId].filter(item => item !== option)
+                        [categoryId]: prev[categoryId].filter(id => id !== optionId)
                     };
                 }
             }
@@ -119,19 +151,39 @@ const SearchBar = () => {
                 return acc;
             }, {})
         );
+        
+        navigate(`/connect/${partnerType}/${searchType}`);
+        setIsFilterOpen(false);
     };
 
     const applyFilters = () => {
-        console.log("Applied filters:", selectedFilters);
-        // Filter here
+        const params = new URLSearchParams();
+        
+        if (searchText) {
+            params.append('q', searchText);
+        }
+        
+        const selectedCategories = selectedFilters['business-category'];
+        if (selectedCategories && selectedCategories.length > 0) {
+            // Send as comma-separated string
+            params.append('categories', selectedCategories.join(','));
+        }
+
+        const connectionStatus = selectedFilters['connection-status'];
+        if (connectionStatus) {
+            const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
+            params.append('status', statusParam);
+        }
+        
         setIsFilterOpen(false);
+        navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
     };
 
     return (
     <div className="w-full">
-        <form onSubmit={handleSubmit} className="text-black sm:text-xs pb-10 pr-10 w-full">
+        <div onSubmit={handleSubmit} className="text-black sm:text-xs pb-10 pr-10 w-full">
             <div className="flex justify-between"> 
-                <div className="flex lg:translate-x-4 2xl:translate-x-10 gap-x-2 border-b-2 border-gray-500 pb-1 w-1/2 items-center">
+                <form onSubmit={handleSubmit} className="flex lg:translate-x-4 2xl:translate-x-10 gap-x-2 border-b-2 border-gray-500 pb-1 w-1/2 items-center">
                     <SearchIcon /> 
                     <input 
                                 type="search" 
@@ -141,7 +193,7 @@ const SearchBar = () => {
                                 placeholder="Search..." 
                                 autoComplete="new-password" 
                             />
-                </div>
+                </form>
                 <div className="flex gap-x-2 relative">
                     <div className="flex relative">
                         <SecondaryButton className="sm:px-1 lg:px-2 py-0 flex gap-x-1 items-center" onClick={toggleSort}>
@@ -174,8 +226,28 @@ const SearchBar = () => {
                     </div>
                 </div>
             </div>  
-        </form>
-        {queryEntered && <p className="pb-8 sm:text-xs 2xl:text-lg">Showing results for: <strong>{searchParams.get('q') || ''}</strong></p>}
+        </div>
+        {queryEntered && (
+            <p className="pb-8 sm:text-xs 2xl:text-lg">
+                Showing results for: 
+                {searchParams.get('q') && <strong> {searchParams.get('q')}</strong>}
+                <br></br>
+                {searchParams.get('categories') && (
+                    <span> <br></br>Business Categories: <strong>
+                        {searchParams.get('categories').split(',').map(id => {
+                            // Map ID back to label for display
+                            const categoryId = parseInt(id);
+                            const category = filterCategories[0].options.find(opt => opt.id === categoryId);
+                            return category ? category.label : `Category ${id}`;
+                        }).join(', ')}
+                    </strong></span>
+                )}
+                <br></br>
+                {searchParams.get('status') && (
+                    <span> Connection Status: <strong>{searchParams.get('status') === "connected" ? "Connected" : "Not Connected"}</strong></span>
+                )}
+            </p>
+        )}
 
         {/* Filter Sidebar */}
             <div className={`fixed inset-0 z-50 ${isFilterOpen ? 'block' : 'hidden'}`}>
@@ -207,30 +279,35 @@ const SearchBar = () => {
                                             <ChevronDownIcon className="w-5 h-5" />
                                         )}
                                     </button>
-                                    
+
                                     {openSections[category.id] && (
                                         <div className="pl-2 space-y-2 mt-2">
-                                            {category.options.map(option => (
-                                                <label key={option} className="flex items-center py-1">
-                                                    <input 
-                                                        type={category.type}
-                                                        name={category.type === 'radio' ? category.id : undefined}
-                                                        className="mr-3 h-4 w-4 text-blue-600 rounded"
-                                                        checked={
-                                                            category.type === 'radio' 
-                                                                ? selectedFilters[category.id] === option
-                                                                : selectedFilters[category.id].includes(option)
-                                                        }
-                                                        onChange={(e) => handleFilterChange(
-                                                            category.id, 
-                                                            option, 
-                                                            e.target.checked,
-                                                            category.type
-                                                        )}
-                                                    />
-                                                    <span>{option}</span>
-                                                </label>
-                                            ))}
+                                            {category.options.map(option => {
+                                                const optionValue = typeof option === 'object' ? option.id : option;
+                                                const optionLabel = typeof option === 'object' ? option.label : option;
+                                                
+                                                return (
+                                                    <label key={optionValue} className="flex items-center py-1">
+                                                        <input 
+                                                            type={category.type}
+                                                            name={category.type === 'radio' ? category.id : undefined}
+                                                            className="mr-3 h-4 w-4 text-blue-600 rounded"
+                                                            checked={
+                                                                category.type === 'radio' 
+                                                                    ? selectedFilters[category.id] === optionValue
+                                                                    : selectedFilters[category.id].includes(optionValue)
+                                                            }
+                                                            onChange={(e) => handleFilterChange(
+                                                                category.id, 
+                                                                optionValue, 
+                                                                e.target.checked,
+                                                                category.type
+                                                            )}
+                                                        />
+                                                        <span>{optionLabel}</span>
+                                                    </label>
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </div>
@@ -241,7 +318,11 @@ const SearchBar = () => {
                             <SecondaryButton className="px-4 py-2" onClick={resetFilters}>
                                 Reset
                             </SecondaryButton>
-                            <PrimaryButton className="px-4 py-2" onClick={applyFilters}>
+                            <PrimaryButton className="px-4 py-2" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    applyFilters();
+                                }}>
                                 Apply
                             </PrimaryButton>
                         </div>

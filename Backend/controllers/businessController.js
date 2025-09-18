@@ -320,12 +320,17 @@ export const queryBusinesses = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search || '';
     
-    // Tags
-    let tags = [];
-    if (req.query.tags) {
-      tags = Array.isArray(req.query.tags) 
-        ? req.query.tags.map(tag => parseInt(tag)) 
-        : [parseInt(req.query.tags)];
+    // Business category
+    let categories = [];
+    if (req.query.categories) {
+    if (Array.isArray(req.query.categories)) {
+        categories = req.query.categories.map(id => parseInt(id));
+    } else {
+        categories = req.query.categories.split(',').map(id => parseInt(id));
+    }
+    
+    // Remove NaN values
+    categories = categories.filter(id => !isNaN(id));
     }
 
     // Validate parameters
@@ -337,7 +342,7 @@ export const queryBusinesses = async (req, res) => {
     }
 
     // Get paginated results
-    const result = await business.getPaginated(page, limit, tags, search);
+    const result = await business.getPaginated(page, limit, categories, search);
 
     return res.status(200).json({
       message: "Success",

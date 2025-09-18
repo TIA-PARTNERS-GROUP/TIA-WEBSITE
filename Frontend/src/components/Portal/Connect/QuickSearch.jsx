@@ -11,6 +11,9 @@ const QuickSearch = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const queryValue = searchParams.get('q') || null;
+    const categoriesParam = searchParams.get('categories') || '';
+    const connectionStatus = searchParams.get('status') || null;
+    const categories = categoriesParam ? categoriesParam.split(',').map(id => parseInt(id)).filter(id => !isNaN(id)) : [];
     const pageFromParams = parseInt(searchParams.get('page')) || 1;
 
     const { startLoading, stopLoading } = useLoading();
@@ -37,7 +40,8 @@ const QuickSearch = () => {
                 business_id: connection.business_id
             }));
 
-            const res = await queryBusinesses(currentPage, itemsPerPage, queryValue); 
+            const categoriesString = categories.length > 0 ? categories.join(',') : null;
+            const res = await queryBusinesses(currentPage, itemsPerPage, queryValue, categoriesString); 
             const newConnectionsData = res.data.data.map(businessRes => {
                 const connection = personalConnections.find(conn => conn.business_id === businessRes.id);
                 return {
@@ -48,11 +52,21 @@ const QuickSearch = () => {
                 }
             });
             
-            const filteredData = newConnectionsData.filter(business => business.businessId !== personalId);
+            let filteredData = newConnectionsData.filter(business => business.businessId !== personalId);
+
+            if (connectionStatus) {
+                const status = connectionStatus.toLowerCase();
+                if (status === 'connected') {
+                    filteredData = filteredData.filter(business => business.connectionId !== null);
+                } else if (status === 'not-connected') {
+                    filteredData = filteredData.filter(business => business.connectionId === null);
+                }
+            }
+
             setConnectionsData(filteredData);
 
-            setTotalPages(res.data.pagination.totalPages);
-            setTotalItems(res.data.pagination.totalItems - 1);
+            setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+            setTotalItems(filteredData.length);
         
         } catch (error) {
             console.error('Error fetching connections:', error);
@@ -62,7 +76,7 @@ const QuickSearch = () => {
     };
 
     fetchConnections(queryValue);
-    }, [queryValue])
+    }, [queryValue, categoriesParam, connectionStatus, currentPage])
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {

@@ -1,11 +1,12 @@
 import api from "./axios";
 
-export function queryBusinesses(page, limit, search = null) {
+export function queryBusinesses(page, limit, search = null, categories = null) {
     return api.get('/business/query', {
         params: {
             page,
             limit,
-            ...(search && { search }) // Only include search if not null
+            ...(search && { search }), // Only include search if not null
+            ...(categories && { categories })
         }
     });
 };
