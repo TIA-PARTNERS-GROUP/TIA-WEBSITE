@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
@@ -20,6 +20,10 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
   const [connectionStatus, setConnectionStatus] = useState(connected);
   const [localConnectionId, setConnectionId] = useState(connectionId ?? null);
 
+  useEffect(() => {
+    setConnectionNum(connectionNum);
+  }, [connectionNum])
+
   const handleConnectSwitch = async () => {
     try {
       if (connectionStatus) {
@@ -30,8 +34,8 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
         const res = await getCurrentBusinessInfo();
         const personalId = res.data.id;
         const pConnection = await addConnection(personalId, businessId);
-        setConnectionId(pConnection.connectionId);
-        setConnectionNum(localConnectionNum + 1);
+        await setConnectionId(pConnection.data.connectionId);
+        await setConnectionNum(localConnectionNum + 1);
       };
       setConnectionStatus(!connectionStatus);
     } catch (error) {
