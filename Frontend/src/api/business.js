@@ -1,6 +1,6 @@
 import api from "./axios";
 
-export function queryBusinesses(page, limit, search = null, categories = null) {
+export function queryBusinesses(page = 1, limit = 10, search = null, categories = null) {
     return api.get('/business/query', {
         params: {
             page,
