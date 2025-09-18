@@ -4,8 +4,9 @@ import { useLoading } from "../../../utils/LoadingContext";
 import { getCurrentBusinessInfo, queryBusinesses } from "../../../api/business";
 import ConnectionsGrid from "../../../components/Portal/Connect/ConnectionsGrid";
 import PaginationNav from "./PaginationNav";
+import PrimaryButton from "../../Button/PrimaryButton";
 
-const SmartConnect = () => {
+const SmartConnect = ({ partnerType }) => {
 
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -68,7 +69,10 @@ const SmartConnect = () => {
 
     return (
         <div className="container mx-auto flex flex-col items-start px-0 py-4 text-left">
-            <h2 className="lg:pl-4 2xl:pl-10 pt-10 sm:text-xl 2xl:text-4xl md:text-2xl font-semibold text-black-800">SmartConnect</h2>
+            <h2 className="lg:pl-4 2xl:pl-10 pt-10 pb-10 sm:text-xl 2xl:text-4xl md:text-2xl font-semibold text-black-800">SmartConnect</h2>
+            <div className="lg:pl-4 2xl:pl-10 py-4 sm:text-xs 2xl:text-lg">
+                <PrimaryButton onClick={() => navigate(`/chat-llm/${partnerType}`)}>Chat with SmartConnect Agent</PrimaryButton>
+            </div>
             <p className="lg:pl-4 2xl:pl-10 py-8 sm:text-xs 2xl:text-lg">Our SmartConnect system has recommended the following connections based on your profile:</p>
             <ConnectionsGrid connectionsData={connectionsData}/>
             <PaginationNav

@@ -55,7 +55,6 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
           </Route>
         <Route>
-          <Route path="/chat-llm" element={<ChatPage />} />
         </Route>
         <Route element={<PortalLayout activePage={activePage} setActivePage={setActivePage} direction={direction} setDirection={setDirection} setActiveTab={setActiveTab}/>}>
           <Route path="/dashboard" element={<DashboardPage />} />
@@ -81,6 +80,9 @@ function App() {
             <Route path="history" element={<History />} />
           </Route>
           <Route path="/tools/business-value-estimator" element={<BusinessValueEstimatorPage />} />
+          <Route path="/chat-llm/alliance" element={<ChatPage chatType="Alliance Partners"/>} />
+          <Route path="/chat-llm/complementary" element={<ChatPage chatType="Complementary Partners"/>} />
+          <Route path="/chat-llm/mastermind" element={<ChatPage chatType="Mastermind Partners"/>} />
         </Route>
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
