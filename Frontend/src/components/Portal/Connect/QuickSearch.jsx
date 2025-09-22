@@ -51,7 +51,8 @@ const QuickSearch = () => {
                     title: businessRes.name,
                     description: businessRes.description,
                     category: businessRes.category_name,
-                    contactName: businessRes.contact_name
+                    contactName: businessRes.contact_name,
+                    contactEmail: businessRes.contact_email
                 }
             });
             
