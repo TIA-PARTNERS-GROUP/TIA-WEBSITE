@@ -74,7 +74,7 @@ const ProfileOutput =({
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-xl sm:px-2 px-8 py-2">
-          <ProfileHeader personalProfile={personalProfile} companyName={companyName} connectionNum={connectionNum} connectionId={connectionId} businessId={businessId} companyCategory={companyCategory}/>
+          <ProfileHeader personalProfile={personalProfile} companyName={companyName} connectionNum={connectionNum} connectionId={connectionId} businessId={businessId} companyCategory={companyCategory} contactName={contactInfo[0]} contactEmail={contactInfo[2]}/>
       </div>
       <div className="bg-white rounded-xl sm:px-4 px-8 py-2">
         <ContactInfo contactInfo={contactInfo}/>
