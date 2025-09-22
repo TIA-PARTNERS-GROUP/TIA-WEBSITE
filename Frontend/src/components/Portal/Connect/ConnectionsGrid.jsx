@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getCurrentBusinessInfo, addConnection, removeConnection, getOtherBusinessInfo } from "../../../api/business";
+import { getCurrentBusinessInfo, removeConnection, getOtherBusinessInfo } from "../../../api/business";
 import { addNotification, getCurrentUserPendingConnections } from "../../../api/notification";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
@@ -23,6 +23,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
     const [currentBusiness, setCurrentBusiness] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [pendingBusinessIds, setPendingBusinessIds] = useState([]);
+    const [emailTemplate, setEmailTemplate] = useState('');
 
     useEffect(() => {
         const fetchCurrentBusiness = async () => {
@@ -31,9 +32,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                 setCurrentBusiness(res.data);
                 
                 const pendingRes = await getCurrentUserPendingConnections();
-                console.log("Pending:", pendingRes.data.pendingConnections);
 
-                // Map out just the receiver business IDs
                 const ids = pendingRes.data.pendingConnections.map(pc => pc.receiver_business_id);
                 setPendingBusinessIds(ids);
             } catch (error) {
@@ -45,6 +44,10 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
 
     const handleConnectClick = (business) => {
         setSelectedBusiness(business);
+
+        const template = `Hi ${business.contactName},\n\nMy business, ${currentBusiness.businessName}, would like to connect with your business, ${business.title}. Looking forward to collaborating!\n\nBest regards,\n${currentBusiness.contactName || ''}`;
+        
+        setEmailTemplate(template);
         setShowConnectionPopup(true);
     };
 
@@ -60,7 +63,6 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
         try {
             // Get the receiving business's user ID (operator)
             const receivingBusinessUserId = selectedBusiness.businessId;
-            console.log(receivingBusinessUserId);
 
             // Send notification instead of directly connecting
             const message = "connect";
@@ -202,15 +204,26 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-96 max-w-sm mx-auto">
                         <h3 className="text-lg font-semibold mb-4">Request Connection</h3>
-                        
-                        <div className="mb-4">
-                            <p className="text-sm text-gray-600 mb-2">From:</p>
-                            <p className="font-medium">{currentBusiness?.businessName}</p>
+                        <div className="flex gap-x-10">
+                            <div className="mb-4">
+                                <p className="text-sm text-gray-600 mb-2">From:</p>
+                                <p className="font-medium">{currentBusiness?.businessName}</p>
+                            </div>
+                            
+                            <div className="mb-6">
+                                <p className="text-sm text-gray-600 mb-2">To:</p>
+                                <p className="font-medium">{selectedBusiness?.title}</p>
+                            </div>
                         </div>
-                        
+
                         <div className="mb-6">
-                            <p className="text-sm text-gray-600 mb-2">To:</p>
-                            <p className="font-medium">{selectedBusiness?.title}</p>
+                        <p className="text-sm text-gray-600 mb-2">Email Template:</p>
+                        <textarea
+                            className="w-full border border-gray-300 rounded-lg p-2 text-sm resize-none"
+                            rows={5}
+                            value={emailTemplate}
+                            onChange={(e) => setEmailTemplate(e.target.value)}
+                        />
                         </div>
 
                         <p className="text-sm text-gray-500 mb-6">

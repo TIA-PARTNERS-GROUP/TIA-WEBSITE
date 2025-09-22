@@ -50,7 +50,8 @@ const QuickSearch = () => {
                     businessId: businessRes.id,
                     title: businessRes.name,
                     description: businessRes.description,
-                    category: businessRes.category_name
+                    category: businessRes.category_name,
+                    contactName: businessRes.contact_name
                 }
             });
             
