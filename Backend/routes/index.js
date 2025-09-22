@@ -3,6 +3,7 @@ import authRoutes from './authRoutes.js';
 import userRoutes from './userRoutes.js';
 import businessRoutes from './businessRoutes.js'
 import chatBotRoutes from './chatBotRoutes.js'
+import notificationRoutes from './notificationRoutes.js'
 import config from '../config/config.js';
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router.use('/users', userRoutes);
 router.use('/business', businessRoutes);
 // router.use('/chat', chatRoutes);
 router.use('/chatbot', chatBotRoutes);
+router.use('/notifications', notificationRoutes);
 // router.use('/connect', connectRoutes);
 // router.use('/manage', manageRoutes);
 // router.use('/projects', projectRoutes);
