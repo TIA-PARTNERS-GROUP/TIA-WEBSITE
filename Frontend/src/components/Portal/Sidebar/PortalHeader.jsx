@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../../../utils/LoadingContext.jsx';
-import { getCurrentUserNotifications, removeNotification } from '../../../api/notification.js';
+import { addNotification, getCurrentUserNotifications, removeNotification } from '../../../api/notification.js';
 import PrimaryButton from '../../Button/PrimaryButton.jsx';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
@@ -40,7 +40,30 @@ const PortalHeader = ( {module} ) => {
     }, []);
   
   function toggleDropdown() {
-    setDropdownOpen(!dropdownOpen);
+    setDropdownOpen(prev => {
+    const newState = !prev;
+
+    // If closing dropdown, remove 'accept' notifications
+    if (!newState) {
+      notifications.forEach(async (notif) => {
+        if (notif.message === "accept") {
+          try {
+            // Call your API to remove it from server
+            await removeNotification(notif.id);  // or removeConnection if relevant
+          } catch (error) {
+            console.error('Error removing notification:', error);
+          }
+        }
+      });
+
+      // Remove locally
+      setNotifications(prevNotifications =>
+        prevNotifications.filter(n => n.message !== "accept")
+      );
+    }
+
+    return newState;
+  });
   }
 
   function handleNotificationClick(link, description) {
@@ -53,10 +76,11 @@ const PortalHeader = ( {module} ) => {
   const handleAcceptConnection = async (notificationId, senderId, receiverId, senderBusinessName) => {
     try {
       console.log(`Accepting connection from ${senderBusinessName}, notification ID: ${notificationId}`);
-
+      const message = "accept";
       console.log(senderId, receiverId);
       await addConnection(senderId, receiverId);
       await removeNotification(notificationId);
+      await addNotification(senderId, message);
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
     } catch (error) {
       console.error('Error accepting connection:', error);
@@ -65,7 +89,6 @@ const PortalHeader = ( {module} ) => {
 
   const handleDeclineConnection = async (notificationId) => {
     try {
-      console.log(`Declining connection, notification ID: ${notificationId}`);
       await removeNotification(notificationId);
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
     } catch (error) {
@@ -85,12 +108,16 @@ const PortalHeader = ( {module} ) => {
   };
 
   const getNotificationDisplayText = (notification) => {
-    if (notification.sender_business_name) {
-      return `${notification.sender_business_name} wants to connect with you`;
-    } else if (notification.sender_name) {
-      return `${notification.sender_name} wants to connect with you`;
+    const senderName = notification.sender_business_name || notification.sender_name || "Someone";
+
+    switch (notification.message) {
+      case "connect":
+        return `${senderName} wants to connect with you`;
+      case "accept":
+        return `${senderName} accepted your connection request!`;
+      default:
+        return notification.message || "New notification";
     }
-    return notification.message || "New connection request";
   };
 
 
@@ -142,20 +169,24 @@ const PortalHeader = ( {module} ) => {
                             <p className="font-medium text-gray-900 mb-2">
                               {getNotificationDisplayText(notification)}
                             </p>
-                            <div className="flex gap-2">
-                              <PrimaryButton
-                                onClick={() => handleNotificationAction(notification.id, notification.sender_business_id, notification.receiver_business_id, 'accept')}
-                                className="text-xs px-3 py-1.5 flex-1"
-                              >
-                                Accept
-                              </PrimaryButton>
-                              <SecondaryButton
-                                onClick={() => handleNotificationAction(notification.id, 'decline')}
-                                className="text-xs px-3 py-1.5 flex-1"
-                              >
-                                Decline
-                              </SecondaryButton>
-                            </div>
+
+                            {notification.message === "connect" && (
+                              <div className="flex gap-2">
+                                <PrimaryButton
+                                  onClick={() => handleNotificationAction(notification.id, notification.sender_business_id, notification.receiver_business_id, 'accept')}
+                                  className="text-xs px-3 py-1.5 flex-1"
+                                >
+                                  Accept
+                                </PrimaryButton>
+                                <SecondaryButton
+                                  onClick={() => handleNotificationAction(notification.id, 'decline')}
+                                  className="text-xs px-3 py-1.5 flex-1"
+                                >
+                                  Decline
+                                </SecondaryButton>
+                              </div>
+                            )}
+
                             {notification.time_sent && (
                               <p className="text-xs text-gray-500 mt-2">
                                 {new Date(notification.time_sent).toLocaleString()}
