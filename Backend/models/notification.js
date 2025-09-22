@@ -4,32 +4,78 @@ export default (db) => ({
       const [rows] = await db.query(`
         SELECT 
           n.id,
-          n.sender_user_id as sender_business_id,
-          n.receiver_user_id as receiver_business_id, 
+          n.sender_user_id,
+          sb.id AS sender_business_id,
+          CONCAT(su.first_name, ' ', su.last_name) AS sender_name,
+          sb.name AS sender_business_name,
+          
+          n.receiver_user_id,
+          rb.id AS receiver_business_id,
+          CONCAT(ru.first_name, ' ', ru.last_name) AS receiver_name,
+          rb.name AS receiver_business_name,
+          
           n.message,
           n.time_sent,
-          n.opened,
-          b.name as sender_business_name,
-          b.contact_name as sender_contact_name,
-          b.contact_email as sender_contact_email
+          n.opened
         FROM notifications n
-        JOIN businesses b ON n.sender_user_id = b.id
+        JOIN users su ON n.sender_user_id = su.id
+        LEFT JOIN businesses sb ON sb.operator_user_id = su.id
+        
+        JOIN users ru ON n.receiver_user_id = ru.id
+        LEFT JOIN businesses rb ON rb.operator_user_id = ru.id
+        
         WHERE n.receiver_user_id = ? AND n.opened = 0
         ORDER BY n.time_sent DESC
       `, [receiverUserId]);
-      
+
       return rows;
     } catch (error) {
       console.error('Database error in getMyNotifications:', error);
-      
-      // Fallback to basic query if join fails
+
       const [rows] = await db.query(`
         SELECT n.*
         FROM notifications n
         WHERE n.receiver_user_id = ? AND n.opened = 0
         ORDER BY n.time_sent DESC
       `, [receiverUserId]);
-      
+
+      return rows;
+    }
+  },
+
+  async getPendingConnections(senderUserId) {
+    try {
+      const [rows] = await db.query(`
+        SELECT 
+          n.id AS notification_id,
+          n.receiver_user_id,
+          rb.id AS receiver_business_id
+        FROM notifications n
+        JOIN users su ON n.sender_user_id = su.id
+        LEFT JOIN businesses rb ON rb.operator_user_id = n.receiver_user_id
+        WHERE n.sender_user_id = ?
+          AND LOWER(TRIM(n.message)) = 'connect'
+          AND n.opened = 0
+        ORDER BY n.time_sent DESC
+      `, [senderUserId]);
+
+      return rows;
+    } catch (error) {
+      console.error('Database error in getPendingConnections:', error);
+
+      // Fallback query
+      const [rows] = await db.query(`
+        SELECT 
+          n.id AS notification_id,
+          n.receiver_user_id,
+          NULL AS receiver_business_id
+        FROM notifications n
+        WHERE n.sender_user_id = ?
+          AND LOWER(TRIM(n.message)) = 'connect'
+          AND n.opened = 0
+        ORDER BY n.time_sent DESC
+      `, [senderUserId]);
+
       return rows;
     }
   },

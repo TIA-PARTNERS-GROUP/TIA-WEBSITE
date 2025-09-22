@@ -4,9 +4,13 @@ export function getCurrentUserNotifications() {
     return api.get('/notifications/mynotifications');
 };
 
+export function getCurrentUserPendingConnections() {
+    return api.get('/notifications/pendingconnections');
+};
+
 export function addNotification(receiverUserId, message) {
     return api.post('/notifications/addnotification',
-        { receiver_user_id: receiverUserId, message: message }
+        { receiver_business_id: receiverUserId, message: message }
     );
 };
 

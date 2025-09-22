@@ -5,16 +5,9 @@ import userModel from '../models/user.js';
 export const getMyNotifications = async (req, res) => {
   try {
     const notification = notificationModel(db);
-    const user = userModel(db);
+    const userId = req.user.id;
     
-    // Get user's business ID
-    const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
-    if (!businessResult) {
-      return res.status(404).json({ message: "No business found for user" });
-    }
-    
-    const businessId = businessResult.id;
-    const notifications = await notification.getMyNotifications(businessId);
+    const notifications = await notification.getMyNotifications(userId);
     
     return res.status(200).json({
       message: "Success",
@@ -26,21 +19,40 @@ export const getMyNotifications = async (req, res) => {
   }
 };
 
+export const getPendingConnections = async (req, res) => {
+  try {
+    const notification = notificationModel(db);
+
+    const senderUserId = req.user.id;
+    const pendingConnections = await notification.getPendingConnections(senderUserId);
+
+    return res.status(200).json({
+      message: "Success",
+      pendingConnections: pendingConnections
+    });
+  } catch (error) {
+    console.error('Error in getPendingConnections:', error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const addNotification = async (req, res) => {
   try {
     const notification = notificationModel(db);
     const user = userModel(db);
-    const { receiver_user_id, message } = req.body;
+    const { receiver_business_id, message } = req.body;
     const senderUserId = req.user.id;
 
-    if (!receiver_user_id || !message) {
+    if (!receiver_business_id || !message) {
       return res.status(400).json({ message: "Receiver user ID and message are required" });
     }
 
-    const receiverUser = await user.findById(receiver_user_id);
+    // Verify receiver user exists
+    const receiverUser = await user.fetchOwnerFromBusinessId(receiver_business_id);
     if (!receiverUser) {
       return res.status(404).json({ message: "Receiver user not found" });
     }
+    const receiver_user_id = receiverUser.operator_user_id;
 
     const notificationId = await notification.addNotification(
       senderUserId, 
@@ -68,6 +80,7 @@ export const removeNotification = async (req, res) => {
       return res.status(400).json({ message: "Notification ID is required" });
     }
 
+    // Verify the notification exists and user has permission
     const notificationData = await notification.getNotificationById(id);
     if (!notificationData) {
       return res.status(404).json({ message: "Notification not found" });

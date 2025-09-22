@@ -118,5 +118,19 @@ export default (db) => ({
     }
 
     return rows[0];
+  },
+
+  async fetchOwnerFromBusinessId(businessId) {
+    const [rows] = await db.query(`
+      SELECT operator_user_id
+      FROM businesses
+      WHERE id = ?
+    `, [businessId]);
+
+    if (rows.length === 0) {
+      return null; // no business with that ID
+    }
+
+    return rows[0];
   }
 });

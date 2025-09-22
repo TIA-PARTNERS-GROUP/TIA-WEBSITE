@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getCurrentBusinessInfo, addConnection, removeConnection, getOtherBusinessInfo } from "../../../api/business";
+import { addNotification, getCurrentUserPendingConnections } from "../../../api/notification";
 
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
@@ -17,6 +18,72 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
     }, [connectionsData]);
 
     const [finalConnectionsData, setFinalConnectionsData] = useState(connectionsData);
+    const [showConnectionPopup, setShowConnectionPopup] = useState(false);
+    const [selectedBusiness, setSelectedBusiness] = useState(null);
+    const [currentBusiness, setCurrentBusiness] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [pendingBusinessIds, setPendingBusinessIds] = useState([]);
+
+    useEffect(() => {
+        const fetchCurrentBusiness = async () => {
+            try {
+                const res = await getCurrentBusinessInfo();
+                setCurrentBusiness(res.data);
+                
+                const pendingRes = await getCurrentUserPendingConnections();
+                console.log("Pending:", pendingRes.data.pendingConnections);
+
+                // Map out just the receiver business IDs
+                const ids = pendingRes.data.pendingConnections.map(pc => pc.receiver_business_id);
+                setPendingBusinessIds(ids);
+            } catch (error) {
+                console.error('Failed to fetch current business info:', error);
+            }
+        };
+        fetchCurrentBusiness();
+    }, []);
+
+    const handleConnectClick = (business) => {
+        setSelectedBusiness(business);
+        setShowConnectionPopup(true);
+    };
+
+    const handleCancelConnection = () => {
+        setShowConnectionPopup(false);
+        setSelectedBusiness(null);
+    };
+
+    const handleRequestConnection = async () => {
+        if (!selectedBusiness || !currentBusiness) return;
+
+        setIsLoading(true);
+        try {
+            // Get the receiving business's user ID (operator)
+            const receivingBusinessUserId = selectedBusiness.businessId;
+            console.log(receivingBusinessUserId);
+
+            // Send notification instead of directly connecting
+            const message = "connect";
+            
+            await addNotification(receivingBusinessUserId, message);
+            
+            // Update UI to show pending status
+            setPendingBusinessIds(prev => [...prev, selectedBusiness.businessId]);
+            setFinalConnectionsData(prev => prev.map(item => 
+                item.businessId === selectedBusiness.businessId 
+                    ? { ...item, status: 'pending' }
+                    : item
+            ));
+            
+            setShowConnectionPopup(false);
+            setSelectedBusiness(null);
+            
+        } catch (error) {
+            console.error('Failed to send connection request:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleConnectSwitch = async (index) => {
         if (connectionModule) {
@@ -44,14 +111,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                     ));
                 }
                 else {
-                    const res = await getCurrentBusinessInfo();
-                    const personalId = res.data.id;
-                    const pConnection = await addConnection(personalId, finalConnectionsData[index].businessId);
-                    setFinalConnectionsData(prev => prev.map((item, i) => 
-                        i === index 
-                            ? { ...item, connectionId: pConnection.data.connectionId}
-                            : item
-                    ));
+                    handleConnectClick(finalConnectionsData[index]);
                 };
             } catch (error) {
                 console.error(`Connection operation ${finalConnectionsData[index].connectionId ? 'remove' : 'add'} failed:`, error);
@@ -86,6 +146,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
   }
 
     return (
+        <>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full mx-auto">
             {finalConnectionsData.map((company, index) => (
                 <div key={`connection-${index}`} className="flex flex-col items-center">
@@ -102,10 +163,25 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                             <p className="text-center text-xs font-normal px-6 pt-4 pb-8">{company.description}</p>
                             <div className="flex flex-col items-center gap-y-2 mb-4">
                                 <PrimaryButton 
-                                    className={`text-xs ${company.connectionId ? "bg-rose-500 hover:bg-rose-600" : "bg-blue-600"}`} 
-                                    onClick={() => handleConnectSwitch(index)}
+                                    className={`text-xs ${
+                                        company.connectionId 
+                                            ? "bg-rose-500 hover:bg-rose-600" 
+                                            : pendingBusinessIds.includes(company.businessId)
+                                                ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed" 
+                                                : "bg-blue-600 hover:bg-blue-700"
+                                    }`} 
+                                    onClick={() => {
+                                        if (!pendingBusinessIds.includes(company.businessId)) {
+                                            handleConnectSwitch(index);
+                                        }
+                                    }}
+                                    disabled={pendingBusinessIds.includes(company.businessId)}
                                 >
-                                    {company.connectionId ? "Disconnect" : "Connect"}
+                                    {company.connectionId 
+                                        ? "Disconnect" 
+                                        : pendingBusinessIds.includes(company.businessId) 
+                                            ? "Pending..." 
+                                            : "Connect"}
                                 </PrimaryButton>
                                 <SecondaryButton 
                                     className="text-xs bg-white"
@@ -116,8 +192,51 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                         </div>
                     </div>
                 </div>
+
+                
             ))}
         </div>
+
+        {/* Connection Request Popup */}
+            {showConnectionPopup && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-96 max-w-sm mx-auto">
+                        <h3 className="text-lg font-semibold mb-4">Request Connection</h3>
+                        
+                        <div className="mb-4">
+                            <p className="text-sm text-gray-600 mb-2">From:</p>
+                            <p className="font-medium">{currentBusiness?.businessName}</p>
+                        </div>
+                        
+                        <div className="mb-6">
+                            <p className="text-sm text-gray-600 mb-2">To:</p>
+                            <p className="font-medium">{selectedBusiness?.title}</p>
+                        </div>
+
+                        <p className="text-sm text-gray-500 mb-6">
+                            A connection request will be sent. The business will need to accept your request before you are connected.
+                        </p>
+
+                        <div className="flex gap-3 justify-end">
+                            <SecondaryButton 
+                                onClick={handleCancelConnection}
+                                disabled={isLoading}
+                                className="px-4 py-2"
+                            >
+                                Cancel
+                            </SecondaryButton>
+                            <PrimaryButton 
+                                onClick={handleRequestConnection}
+                                disabled={isLoading}
+                                className="px-4 py-2"
+                            >
+                                {isLoading ? "Sending..." : "Request Connection"}
+                            </PrimaryButton>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

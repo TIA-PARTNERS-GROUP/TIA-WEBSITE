@@ -1,6 +1,7 @@
 import Router from 'express';
 import { 
   getMyNotifications, 
+  getPendingConnections,
   addNotification, 
   removeNotification 
 } from '../controllers/notificationController.js';
@@ -64,6 +65,52 @@ const router = Router();
  *         description: Internal server error
  */
 router.get('/mynotifications', verifyToken, getMyNotifications);
+
+/**
+ * @swagger
+ * /notifications/pendingconnections:
+ *   get:
+ *     summary: Get pending connection requests sent by current user
+ *     description: Returns a list of pending connection requests where the current user's business is the sender and message contains "connect"
+ *     tags:
+ *       - Notifications
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved pending connections
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 pendingConnections:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       notification_id:
+ *                         type: integer
+ *                         description: ID of the notification
+ *                       receiving_user_id:
+ *                         type: integer
+ *                         description: ID of the user receiving the notification
+ *                       receiver_business_id:
+ *                         type: integer
+ *                         description: ID of the receiver's business 
+ *       401:
+ *         description: Authorization header missing or invalid
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business found for user
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/pendingconnections', verifyToken, getPendingConnections);
 
 /**
  * @swagger
