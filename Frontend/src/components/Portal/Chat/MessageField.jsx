@@ -32,23 +32,17 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             if (!initialMessageSent && user_id) {
                 setInitialMessageSent(true);
                 setLoading(true);
-                
-                const initialMessage = {
-                    message: 
-                        `Please begin this interaction by introducing your name as the TIA SmartConnect and saying you are here to assist with finding ${chatType}.
-                         Respond without an affirmation.`,
-                    chat_type: getConnectionType(),
-                    region: "au",
-                    lat: -27.4705,
-                    lng: 153.026
-                };
 
                 try {
                     // Send the initial message
                     const response = await sendChatbotMessage({ 
                         user_id, 
                         name, 
-                        message: JSON.stringify(initialMessage) 
+                        message: `Hello!`,
+                        chat_type: getConnectionType(),
+                        region: "au",
+                        lat: -27.4705,
+                        lng: 153.026
                     });
 
                     // Process the bot's response and display it
