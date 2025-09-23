@@ -9,9 +9,73 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     const [localMessageData, setLocalMessageData] = useState(messageData);
     const [messageText, setMessageText] = useState('');
     const [loading, setLoading] = useState(false);
+    const [initialMessageSent, setInitialMessageSent] = useState(false);
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
     const textareaRef = useRef(null);
+
+    const getConnectionType = () => {
+        switch (chatType) {
+            case "Alliance Partners":
+                return "connect:alliance";
+            case "Complementary Partners":
+                return "connect:complementary";
+            case "Mastermind Partners":
+                return "connect:mastermind";
+            default:
+                return "default";
+        }
+    }
+
+    useEffect(() => {
+        const sendInitialMessage = async () => {
+            if (!initialMessageSent && user_id) {
+                setInitialMessageSent(true);
+                setLoading(true);
+                
+                const initialMessage = {
+                    message: 
+                        `Please begin this interaction by introducing your name as the TIA SmartConnect and saying you are here to assist with finding ${chatType}.
+                         Respond without an affirmation.`,
+                    chat_type: getConnectionType(),
+                    region: "au",
+                    lat: -27.4705,
+                    lng: 153.026
+                };
+
+                try {
+                    // Send the initial message
+                    const response = await sendChatbotMessage({ 
+                        user_id, 
+                        name, 
+                        message: JSON.stringify(initialMessage) 
+                    });
+
+                    // Process the bot's response and display it
+                    let botText = "No response";
+                    if (typeof response === "string") {
+                        botText = response;
+                    } else if (response && typeof response === "object") {
+                        botText = response.text || response.message || response.error || response.detail || JSON.stringify(response);
+                    }
+
+                    // Add the bot's response as the first message
+                    setLocalMessageData(prev => [...prev, { author: "bot", text: botText }]);
+                } catch (error) {
+                    console.error('Error sending initial message:', error);
+                    // Display error message from bot
+                    setLocalMessageData(prev => [...prev, { 
+                        author: "bot", 
+                        text: `Sorry, something went wrong while initializing the chat. ${error.message}` 
+                    }]);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        sendInitialMessage();
+    }, [initialMessageSent, user_id, chatType]);
 
     const handleMessageChange = (event) => {
         setMessageText(event.target.value);
@@ -59,6 +123,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
 
         try {
             const response = await sendChatbotMessage({ user_id, name, message: messageText });
+            console.log(response);
 
             let botText = "No response";
             if (typeof response === "string") {

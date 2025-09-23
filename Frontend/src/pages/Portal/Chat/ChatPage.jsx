@@ -4,9 +4,7 @@ import MessageField from "../../../components/Portal/Chat/MessageField";
 import { getCurrentUserInfo } from "../../../api/user";
 
 // Message data, including author type and associated text, placeholder for now until persistence back end solution
-let messageData = [
-    {author: "agent", text: "Hello how can I help you today?"},
-]
+let messageData = [];
 
 const ChatPage = ({ chatType }) => {
 
