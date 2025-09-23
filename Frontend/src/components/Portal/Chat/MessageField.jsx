@@ -116,7 +116,15 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
 
         try {
-            const response = await sendChatbotMessage({ user_id, name, message: messageText });
+            const response = await sendChatbotMessage({
+                user_id, 
+                name, 
+                message: messageText, 
+                chat_type: getConnectionType(),
+                region: "au",
+                lat: -27.4705,
+                lng: 153.026
+            });
             console.log(response);
 
             let botText = "No response";
