@@ -1,8 +1,9 @@
-import ReactMarkdown from "react-markdown";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import UpArrowIcon from "../../Icons/UpArrowIcon";
+import { useGeolocated } from "react-geolocated";
 import { sendChatbotMessage } from "../../../api/chatbot";
+import ReactMarkdown from "react-markdown";
+import UpArrowIcon from "../../Icons/UpArrowIcon";
 
 const MessageField = ({ messageData, user_id, name, chatType }) => {
 
@@ -14,6 +15,26 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
     const textareaRef = useRef(null);
+
+    // Geolocation using react-geolocate, default to QUT if no geolocation
+    const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
+        positionOptions: {
+            enableHighAccuracy: true,
+        },
+        userDecisionTimeout: 10000,
+    });
+
+    useEffect(() => {
+        if (!isGeolocationAvailable) {
+            console.log("Geolocation not available in this browser");
+        }
+        if (!isGeolocationEnabled) {
+            console.log("User denied location access or browser blocked it");
+        }
+    }, [isGeolocationAvailable, isGeolocationEnabled]);
+
+    const userLat = coords?.latitude || -27.4705; 
+    const userLng = coords?.longitude || 153.026;
 
     const getConnectionType = () => {
         switch (chatType) {
@@ -42,8 +63,8 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                         message: `Hello!`,
                         chat_type: getConnectionType(),
                         region: "au",
-                        lat: -27.4705,
-                        lng: 153.026
+                        lat: userLat,
+                        lng: userLng
                     });
 
                     // Process the bot's response and display it
@@ -123,8 +144,8 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 message: messageText, 
                 chat_type: getConnectionType(),
                 region: "au",
-                lat: -27.4705,
-                lng: 153.026
+                lat: userLat,
+                lng: userLng
             });
             console.log(response);
 
