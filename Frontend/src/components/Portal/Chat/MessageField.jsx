@@ -53,11 +53,29 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
     }
 
+    const getBotResponseText = (response) => {
+        if (typeof response === "string") {
+            return response.trim() 
+                ? response 
+                : "Sorry, the chatbot returned an empty response. Please try again.";
+        } else if (response && typeof response === "object") {
+            if (response.error || response.detail) {
+                return `Sorry, the chatbot is currently unavailable. Please try again later. Error: ${response.error || response.detail}`;
+            }
+            if ((response.text && response.text.trim()) || (response.message && response.message.trim())) {
+                return response.text || response.message;
+            }
+            return "Sorry, the chatbot returned an empty response. Please try again.";
+        }
+        return "Sorry, no response received from the chatbot. Please try again.";
+    };
+
     useEffect(() => {
         const sendInitialMessage = async () => {
             if (!initialMessageSent && user_id) {
                 setInitialMessageSent(true);
                 setLoading(true);
+
 
                 try {
                     // Send the initial message
@@ -72,12 +90,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                     });
 
                     // Process the bot's response and display it
-                    let botText = "No response";
-                    if (typeof response === "string") {
-                        botText = response;
-                    } else if (response && typeof response === "object") {
-                        botText = response.text || response.message || response.error || response.detail || JSON.stringify(response);
-                    }
+                    const botText = getBotResponseText(response);
 
                     // Add the bot's response as the first message
                     setLocalMessageData(prev => [...prev, { author: "bot", text: botText }]);
@@ -153,14 +166,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             });
             console.log(response);
 
-            let botText = "No response";
-            if (typeof response === "string") {
-                botText = response;
-            } else if (response && typeof response === "object") {
-                botText = response.text || response.message || response.error || response.detail || JSON.stringify(response);
-                botText = `Sorry, something went wrong. ${botText.data}`;
-
-            }
+            const botText = getBotResponseText(response);
 
             setLocalMessageData(prev => [...prev, { author: "bot", text: botText }]);
         } catch (error) {
@@ -197,7 +203,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         {localMessageData.map((message, index) => (
             <li
                 key={index}
-                className={`flex rounded-3xl py-3 px-4 ${message.author === "user" ? "self-end bg-blue-600 text-white" : "self-start bg-white text-gray-800 border max-w-[90%] w-full"}`}
+                className={`flex rounded-3xl py-3 px-4 ${message.author === "user" ? "self-end bg-blue-600 text-white" : "self-start bg-white text-gray-800 border max-w-[70%] break-words inline-block"}`}
             >
                 <div className={message.author === "user" ? "max-w-max" : "w-full"}>
                     <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
@@ -209,7 +215,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                                         <pre {...props} className="whitespace-pre-wrap bg-gray-50 p-3 rounded w-full my-6" />
                                     ),
                                     p: ({node, ...props}) => (
-                                        <p {...props} className="mb-1 leading-6" />
+                                        <p {...props} className="mb-0 leading-6" />
                                     ),
                                     br: ({node, ...props}) => (
                                         <br {...props} style={{ lineHeight: '2' }} />
