@@ -33,6 +33,11 @@ const BusinessValueEstimatorPage = React.lazy(() => import("./pages/Portal/Tools
 const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
 const RegisterPage = React.lazy(() => import("./pages/RegisterPage.jsx"));
 
+// 放在其它 React.lazy 旁边
+const FirstTimeView = React.lazy(() => import("./pages/Portal/Dashboard/FirstTimeView.jsx"));
+const OnboardingPage = React.lazy(() => import("./pages/Portal/Dashboard/OnboardingPage.jsx"));
+
+
 function App() {
 
   const location = useLocation();
@@ -57,6 +62,9 @@ function App() {
         <Route>
         </Route>
         <Route element={<PortalLayout activePage={activePage} setActivePage={setActivePage} direction={direction} setDirection={setDirection} setActiveTab={setActiveTab}/>}>
+          <Route path="/firsttime" element={<FirstTimeView />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/manage" element={<ManagePage />}> 
             <Route path=":manageType" element={<ManageContent activeTab={activeTab} setActiveTab={setActiveTab} tabDirection={tabDirection} setTabDirection={setTabDirection}/>}>
