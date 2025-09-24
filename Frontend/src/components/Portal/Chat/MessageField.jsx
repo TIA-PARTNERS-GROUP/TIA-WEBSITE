@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import UpArrowIcon from "../../Icons/UpArrowIcon";
@@ -166,18 +167,37 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             <div className="sticky top-0 z-10 bg-gray-100 w-full py-4 ">
                 <h1 className="text-lg font-bold text-center text-gray-800">{chatType}</h1>
             </div>
-            <div className="flex flex-col justify-center items-center gap-y-10 h-screen pt-4 pb-24">
-                <ul ref={messagesContainerRef} className="flex flex-col w-[40%] gap-y-14 overflow-y-auto px-8">
-                    {localMessageData.map((message, index) => (
-                        <li
-                            key={index}
-                            className={`flex rounded-3xl py-2 px-4 ${message.author === "user" ? "self-end bg-blue-600" : "self-start bg-white"}`}
-                        >
-                            {typeof message.text === "object"
-                                ? JSON.stringify(message.text)
-                                : message.text}
-                        </li>
-                    ))}
+<div className="flex flex-col justify-center items-center gap-y-10 h-screen pt-4 pb-24">
+    <ul ref={messagesContainerRef} className="flex flex-col w-[80%] max-w-4xl gap-y-4 overflow-y-auto px-4">
+        {localMessageData.map((message, index) => (
+            <li
+                key={index}
+                className={`flex rounded-3xl py-3 px-4 ${message.author === "user" ? "self-end bg-blue-600 text-white" : "self-start bg-white text-gray-800 border max-w-[90%] w-full"}`}
+            >
+                <div className={message.author === "user" ? "max-w-max" : "w-full"}>
+                    <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
+                        {typeof message.text === "object" 
+                            ? JSON.stringify(message.text)
+                            : <ReactMarkdown
+                                components={{
+                                    pre: ({node, ...props}) => (
+                                        <pre {...props} className="whitespace-pre-wrap bg-gray-50 p-3 rounded w-full my-6" />
+                                    ),
+                                    p: ({node, ...props}) => (
+                                        <p {...props} className="mb-1 leading-6" />
+                                    ),
+                                    br: ({node, ...props}) => (
+                                        <br {...props} style={{ lineHeight: '2' }} />
+                                    )
+                                }}
+                            >
+                                {message.text}
+                            </ReactMarkdown>
+                        }
+                    </div>
+                </div>
+            </li>
+        ))}
                     {loading && (
                         <li className="self-start bg-white flex rounded-full py-2 px-4 opacity-60">
                             Bot is typing...
