@@ -44,6 +44,10 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 return "connect:complementary";
             case "Mastermind Partners":
                 return "connect:mastermind";
+            case "Vision":
+                return "profiler:VisionAgent";
+            case "Ladder To Exit":
+                return "profiler:LadderAgent";
             default:
                 return "default";
         }

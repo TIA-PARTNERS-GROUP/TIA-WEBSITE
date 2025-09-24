@@ -83,6 +83,8 @@ function App() {
           <Route path="/chat-llm/alliance" element={<ChatPage chatType="Alliance Partners"/>} />
           <Route path="/chat-llm/complementary" element={<ChatPage chatType="Complementary Partners"/>} />
           <Route path="/chat-llm/mastermind" element={<ChatPage chatType="Mastermind Partners"/>} />
+          <Route path="/chat-llm/vision" element={<ChatPage chatType="Vision"/>} />
+          <Route path="/chat-llm/ladder-to-exit" element={<ChatPage chatType="Ladder To Exit"/>} />
         </Route>
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
