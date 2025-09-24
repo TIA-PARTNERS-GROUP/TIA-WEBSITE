@@ -23,6 +23,7 @@ const handleSessionReset = async (user_id, name) => {
   return 'Your session has been reset. You can start a new conversation.';
 };
 
+// TODO: ADD RESET SESSION FOR NEW TYPES
 export const sendMessage = async (req, res) => {
   try {
     const user_id = req.user.id;
