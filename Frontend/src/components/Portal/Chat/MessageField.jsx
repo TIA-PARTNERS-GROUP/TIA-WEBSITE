@@ -24,6 +24,21 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         userDecisionTimeout: 10000,
     });
 
+    const resetChatbot = async () => {
+        const res = await resetChatbot;
+        setLocalMessageData([]);
+        setInitialMessageSent(false);
+    };
+
+    useEffect(() => {
+        const lastChatType = sessionStorage.getItem("lastChatType");
+
+        if (lastChatType !== chatType) {
+            resetChatbot();
+            sessionStorage.setItem("lastChatType", chatType);
+        }
+    }, [chatType]);
+
     useEffect(() => {
         if (!isGeolocationAvailable) {
             console.log("Geolocation not available in this browser");
