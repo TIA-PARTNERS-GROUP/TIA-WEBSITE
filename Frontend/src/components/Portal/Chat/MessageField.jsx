@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGeolocated } from "react-geolocated";
-import { sendChatbotMessage } from "../../../api/chatbot";
+import { resetChatbot, sendChatbotMessage } from "../../../api/chatbot";
 import ReactMarkdown from "react-markdown";
 import UpArrowIcon from "../../Icons/UpArrowIcon";
 
@@ -23,6 +23,21 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         },
         userDecisionTimeout: 10000,
     });
+
+    const handleResetChatbot = async () => {
+        const res = await resetChatbot();
+        console.log(res);
+        setLocalMessageData([]);
+    };
+
+    useEffect(() => {
+        const lastChatType = sessionStorage.getItem("lastChatType");
+
+        if (lastChatType !== chatType) {
+            handleResetChatbot();
+            sessionStorage.setItem("lastChatType", chatType);
+        }
+    }, [chatType]);
 
     useEffect(() => {
         if (!isGeolocationAvailable) {
