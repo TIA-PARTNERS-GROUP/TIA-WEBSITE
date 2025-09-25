@@ -13,7 +13,7 @@ export const sendChatbotMessage = async ({ user_id, name, message, chat_type, re
 
 export const resetChatbot = async () => {
     try {
-        const res = await api.get('/chatbot/reset');
+        const res = await api.post('/chatbot/reset');
         return res.data;
     } catch (error) {
         console.error('Chatbot reset failed:', error);
