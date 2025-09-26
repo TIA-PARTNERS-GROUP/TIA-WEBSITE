@@ -5,7 +5,7 @@ import { getCurrentUserInfo } from "../../../api/user";
 import { useLoading } from "../../../utils/LoadingContext";
 import ProfileIcon from "../../Icons/ProfileIcon";
 
-const ProfileTab = () => {
+const ProfileTab = ({mock = false}) => {
 
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ const ProfileTab = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      if (mock) return;
       startLoading();
       
       try {

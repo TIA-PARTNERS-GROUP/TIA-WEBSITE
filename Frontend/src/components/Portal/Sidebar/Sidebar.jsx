@@ -36,7 +36,7 @@ const routeHierarchy = {
 
   const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection, setActiveTab}) => {
     const location = useLocation();
-    const splitPath = location.pathname.split('/')[1];
+    let splitPath = location.pathname.split('/')[1];
   
     // ✅ 新增：追踪用户是否已选择目标
     const [selectedGoal, setSelectedGoal] = useState(

@@ -39,7 +39,7 @@ const HeroHeading = () => {
         {/* Action Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
           {/* Join Now → /login */}
-          <Link to="/login">
+          <Link to="/register">
             <PrimaryButton className="px-6 py-2 text-sm">
               <span>Join Now</span>
             </PrimaryButton>

@@ -10,7 +10,7 @@ import axios from '../../../api/axios.js';
 import { addConnection } from '../../../api/business.js';
 
 
-const PortalHeader = ( {module} ) => {
+const PortalHeader = ( {module, mock = false} ) => {
   
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const PortalHeader = ( {module} ) => {
 
   useEffect(() => {
       const fetchUserNotifications = async () => {
+        if (mock) return;
         startLoading();
         
         try {

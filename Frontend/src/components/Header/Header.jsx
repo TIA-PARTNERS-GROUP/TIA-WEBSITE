@@ -6,6 +6,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import GhostButton from "../Button/GhostButton";
 import PrimaryButton from "../Button/PrimaryButton";
 import LoginIcon from "../Icons/LoginIcon";
+import RegisterIcon from "../Icons/RegisterIcon";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,19 +71,18 @@ const Header = () => {
 
           {/* CTA Buttons - now separated by justify-between */}
           <div className="hidden md:flex items-center space-x-3">
-          <Link to="/login">
+          <Link to="/register">
           <GhostButton className="px-5 py-2 text-sm flex items-center gap-2">
-            <span>Login</span>
-            <LoginIcon fillColor="currentColor" width="20" height="20" />
+            <span>Register</span>
+            <RegisterIcon fillColor="currentColor" width="20" height="20" />
           </GhostButton>
         </Link>
-
-            <PrimaryButton
-              onClick={() => (window.location.href = "/dashboard")}
-              className="px-6 py-2 text-sm"
-            >
-              <span>Get Started</span>
-            </PrimaryButton>
+          <Link to="/login">
+          <PrimaryButton className="px-5 py-2 text-sm flex items-center gap-2">
+            <span>Login</span>
+            <LoginIcon fillColor="currentColor" width="20" height="20" />
+          </PrimaryButton>
+        </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
