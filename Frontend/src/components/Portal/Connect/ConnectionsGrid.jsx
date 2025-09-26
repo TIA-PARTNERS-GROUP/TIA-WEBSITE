@@ -4,15 +4,35 @@ import { useNavigate } from "react-router-dom";
 import { getCurrentBusinessInfo, removeConnection, getOtherBusinessInfo } from "../../../api/business";
 import { addNotification, getCurrentUserPendingConnections } from "../../../api/notification";
 
+import ProfileView from "../Manage/ProfileView";
 import ConnectionPopup from "./ConnectionPopup";
 import Banner from "../../../assets/images/manage-profile-placeholder.jpg";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
+import CloseIcon from "../../Icons/CloseIcon";
 
 const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
 
     const navigate = useNavigate();
+    const [showProfilePopup, setShowProfilePopup] = useState(false);
+    const [profileData, setProfileData] = useState(null);
+
+    const handleCloseProfile = () => {
+        setShowProfilePopup(false);
+        setProfileData(null);
+        fetchPendingConnections();
+    }
+
+    const fetchPendingConnections = async () => {
+        try {
+            const pendingRes = await getCurrentUserPendingConnections();
+            const ids = pendingRes.data.pendingConnections.map(pc => pc.receiver_business_id);
+            setPendingBusinessIds(ids);
+        } catch (error) {
+            console.error('Failed to fetch pending connections:', error);
+        }
+    };
 
     useEffect(() => {
         setFinalConnectionsData(connectionsData || []);
@@ -31,11 +51,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
             try {
                 const res = await getCurrentBusinessInfo();
                 setCurrentBusiness(res.data);
-                
-                const pendingRes = await getCurrentUserPendingConnections();
-
-                const ids = pendingRes.data.pendingConnections.map(pc => pc.receiver_business_id);
-                setPendingBusinessIds(ids);
+                await fetchPendingConnections();
             } catch (error) {
                 console.error('Failed to fetch current business info:', error);
             }
@@ -124,9 +140,10 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
 
     const handleViewProfile = async (connectionId, businessId) => {
         const businessRes = await getOtherBusinessInfo(businessId);
-        window.scrollTo(0, 0);
-        navigate(`/manage/connections/profile-view`, {
-            state: { 
+        
+        // Set profile data and show popup instead of navigating
+        setProfileData({
+            personalProfile: false,
             connectionId: connectionId,
             businessId: businessId,
             companyName: businessRes.data.businessName, 
@@ -136,8 +153,8 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
             clientData: businessRes.data.clients || [],
             connectionNum: businessRes.data.connections.length || 0,
             companyCategory: businessRes.data.businessCategory
-            },
-        })
+        });
+        setShowProfilePopup(true);
     }
 
     function formatString(str) {
@@ -199,6 +216,40 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                 
             ))}
         </div>
+
+        {/* Profile Popup */}
+            {showProfilePopup && profileData && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+                    <div className="bg-gray-100 rounded-xl w-full max-w-6xl h-[90vh] overflow-hidden flex flex-col">
+                        {/* Header with close button */}
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h2 className="text-xl font-semibold">{profileData.companyName}'s Profile</h2>
+                            <button 
+                                onClick={handleCloseProfile}
+                                className="p-2 hover:bg-gray-100 rounded-full"
+                            >
+                                <CloseIcon className="w-6 h-6" />
+                            </button>
+                        </div>
+                        
+                        {/* Profile content */}
+                        <div className="flex-1 overflow-auto">
+                            <ProfileView 
+                                personalProfile={false} 
+                                connectionId={profileData.connectionId}
+                                businessId={profileData.businessId}
+                                companyName={profileData.companyName} 
+                                companyDescription={profileData.companyDescription} 
+                                whatwedoData={profileData.whatwedoData}
+                                clientData={profileData.clientData}
+                                contactInfo={profileData.contactInfo} 
+                                connectionNum={profileData.connectionNum}
+                                companyCategory={profileData.companyCategory}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
         {showConnectionPopup && (
             <ConnectionPopup

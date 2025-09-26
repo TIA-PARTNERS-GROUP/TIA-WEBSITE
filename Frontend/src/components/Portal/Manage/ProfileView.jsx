@@ -1,22 +1,33 @@
 import Profile from "./ProfileOutput";
 import { useLocation } from "react-router-dom";
 
-const ProfileView = () => {
+const ProfileView = ({ 
+  personalProfile, 
+  connectionId, 
+  businessId, 
+  companyName, 
+  companyDescription, 
+  whatwedoData, 
+  clientData, 
+  contactInfo, 
+  connectionNum, 
+  companyCategory 
+}) => {
 
   const location = useLocation();
 
   return (
     <Profile 
-      personalProfile={false} 
-      connectionId={location.state?.connectionId}
-      businessId={location.state?.businessId}
-      companyName={location.state?.companyName} 
-      companyDescription={location.state?.companyDescription} 
-      whatwedoData={location.state?.whatwedoData}
-      clientData={location.state?.clientData}
-      contactInfo={location.state?.contactInfo} 
-      connectionNum={location.state?.connectionNum}
-      companyCategory={location.state?.companyCategory}
+      personalProfile={personalProfile}
+      connectionId={connectionId}
+      businessId={businessId}
+      companyName={companyName}
+      companyDescription={companyDescription}
+      whatwedoData={whatwedoData}
+      clientData={clientData}
+      contactInfo={contactInfo}
+      connectionNum={connectionNum}
+      companyCategory={companyCategory}
     />
   );
 };

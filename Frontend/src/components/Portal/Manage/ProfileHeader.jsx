@@ -48,6 +48,15 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
     fetchPending();
   }, []);
 
+  useEffect(() => {
+    if (businessId && pendingBusinessIds.length > 0) {
+      setIsPending(pendingBusinessIds.includes(businessId));
+    } else {
+      setIsPending(false);
+    }
+  }, [pendingBusinessIds, businessId]);
+
+
   const handleConnectSwitch = async () => {
     if (connectionStatus) {
       
