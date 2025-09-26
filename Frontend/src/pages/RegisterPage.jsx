@@ -14,10 +14,9 @@ const RegisterPage = () => {
   const [category, setCategory] = useState("");
   const [phone, setPhone] = useState("");
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const { startLoading, stopLoading } = useLoading();
-  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,7 +28,6 @@ const RegisterPage = () => {
         const categoriesData = await getCategoriesList();
         setCategories(categoriesData.data.categories);
       } catch (err) {
-        setError("Failed to load categories");
         console.error("Error fetching categories:", err);
       } finally {
         stopLoading();

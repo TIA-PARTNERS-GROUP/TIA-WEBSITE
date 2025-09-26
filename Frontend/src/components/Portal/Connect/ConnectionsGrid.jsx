@@ -141,12 +141,12 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
     }
 
     function formatString(str) {
-    if (!str) {return null};
-    return str
-        .split('-') 
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
-        .join(' '); 
-  }
+        if (!str) {return null};
+        return str
+            .split('-') 
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+            .join(' '); 
+    }
 
     return (
         <>

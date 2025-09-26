@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
+import { useLoading } from "../../../utils/LoadingContext";
 import SearchIcon from "../../Icons/SearchIcon";
 import SecondaryButton from "../../Button/SecondaryButton";
 import PlusIcon from "../../Icons/PlusIcon";
@@ -8,6 +9,7 @@ import CloseIcon from "../../Icons/CloseIcon";
 import ChevronDownIcon from "../../Icons/ChevronDownIcon";
 import ChevronUpIcon from "../../Icons/ChevronUpIcon";
 import PrimaryButton from "../../Button/PrimaryButton";
+import { getCategoriesList } from "../../../api/categories";
 
 const SearchBar = () => {
     const navigate = useNavigate();
@@ -15,13 +17,33 @@ const SearchBar = () => {
 
     const location = useLocation();
     const [searchParams] = useSearchParams();
-
+    const { startLoading, stopLoading } = useLoading();
     const [queryEntered, setQueryEntered] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [openSections, setOpenSections] = useState({});
     const [isSortOpen, setIsSortOpen] = useState(false);
     const [selectedSort, setSelectedSort] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+          try {
+            setLoading(true);
+            startLoading();
+            const categoriesData = await getCategoriesList();
+            setCategories(categoriesData.data.categories);
+          } catch (err) {
+            console.error("Error fetching categories:", err);
+          } finally {
+            stopLoading();
+            setLoading(false);
+          }
+        };
+    
+        fetchCategories();
+      }, []);
 
     const handleSearchTextChange = (event) => {
         setSearchText(event.target.value);
@@ -89,12 +111,13 @@ const SearchBar = () => {
         {
             id: 'business-category',
             title: 'Business Category',
-            options: [
-                { id: 1, label: 'Manufacturing' },
-                { id: 2, label: 'Installation' },
-                { id: 3, label: 'Software Development' },
-                { id: 4, label: 'Cybersecurity' }
-            ],
+            options: loading 
+                ? [{ id: 'loading', label: 'Loading categories...' }] : ''
+                    ? [{ id: 'error', label: 'Failed to load categories' }]
+                    : categories.map(cat => ({ 
+                        id: cat.id, 
+                        label: formatString(cat.name || cat.title || `Category ${cat.id}`)
+                    })),
             type: 'checkbox'
         },
         {
@@ -143,6 +166,9 @@ const SearchBar = () => {
     );
 
     const handleFilterChange = (categoryId, optionId, isChecked, inputType) => {
+
+        if (loading) return;
+
         setSelectedFilters(prev => {
             if (inputType === 'radio') {
                 return {
@@ -202,6 +228,20 @@ const SearchBar = () => {
         navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
     };
 
+    const getCategoryLabelById = (id) => {
+        const category = categories.find(cat => cat.id === id);
+        return formatString(category ? (category.name || category.title || `Category ${id}`) : `Category ${id}`);
+    };
+
+    function formatString(str) {
+        if (!str) {return null};
+        return str
+            .split('-') 
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+            .join(' '); 
+    }
+
+
     return (
     <div className="w-full">
         <div onSubmit={handleSubmit} className="text-black sm:text-xs pb-10 pr-10 w-full">
@@ -245,6 +285,9 @@ const SearchBar = () => {
                         <SecondaryButton className="sm:px-1 lg:px-2 py-0 flex gap-x-1 items-center" onClick={toggleFilter}>
                             FILTER
                             <FilterIcon className="sm:w-3 sm:h-3 w-5 h-5"/>
+                            {loading && (
+                                <span className="ml-1 text-xs">Loading...</span>
+                            )}
                         </SecondaryButton>    
                     </div>
                 </div>
@@ -258,10 +301,8 @@ const SearchBar = () => {
                 {searchParams.get('categories') && (
                     <span> <br></br>Business Categories: <strong>
                         {searchParams.get('categories').split(',').map(id => {
-                            // Map ID back to label for display
                             const categoryId = parseInt(id);
-                            const category = filterCategories[0].options.find(opt => opt.id === categoryId);
-                            return category ? category.label : `Category ${id}`;
+                            return getCategoryLabelById(categoryId);
                         }).join(', ')}
                     </strong></span>
                 )}
@@ -288,6 +329,12 @@ const SearchBar = () => {
                             </button>
                         </div>
                         
+                        {loading ? (
+                            <div className="flex justify-center items-center py-8">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                <span className="ml-2">Loading categories...</span>
+                            </div>
+                        ) : (
                         <div className="space-y-4">
                             {filterCategories.map(category => (
                                 <div key={category.id} className="border-b border-gray-200 pb-4">
@@ -336,6 +383,7 @@ const SearchBar = () => {
                                 </div>
                             ))}
                         </div>
+                        )}
                         
                         <div className="mt-8 flex space-x-4">
                             <SecondaryButton className="px-4 py-2" onClick={resetFilters}>
