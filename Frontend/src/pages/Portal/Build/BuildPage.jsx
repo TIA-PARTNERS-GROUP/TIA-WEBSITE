@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import PortalHeader from "../../../components/Portal/Sidebar/PortalHeader";
 import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
+import PrimaryButton from "../../../components/Button/PrimaryButton";
 
 const BuildPage = () => {
+
+  const navigate = useNavigate();
+
   return (
     <main className="font-poppins relative min-h-screen px-10 bg-gray-100 w-full pt-4 space-y-4">
       <div className="bg-white rounded-xl p-8">
@@ -9,7 +14,12 @@ const BuildPage = () => {
         <ProfileTab />
       </div>
       <div className="bg-white rounded-xl p-8">
-        <h1 className="pt-2 text-2xl @md:text-3xl font-semibold text-black-800 pb-4">Coming Soon!</h1>
+        <h1 className="pt-2 text-2xl @md:text-3xl font-semibold text-black-800 pb-4">Tools</h1>
+        <div className="flex flex-col gap-4 items-start">
+          <PrimaryButton onClick={() => navigate(`/tools/business-value-estimator`)}>Business Value Estimator</PrimaryButton>
+          <PrimaryButton onClick={() => navigate(`/chat-llm/vision`)}>Vision</PrimaryButton>
+          <PrimaryButton onClick={() => navigate(`/chat-llm/ladder-to-exit`)}>Ladder To Exit</PrimaryButton>
+        </div>
       </div>
     </main>
   );

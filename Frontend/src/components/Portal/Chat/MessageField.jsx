@@ -145,6 +145,12 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             case "Mastermind Partners":
                 navigate("/connect/mastermind/smartconnect");
                 break;
+            case "Vision":
+                navigate("/build");
+                break;
+            case "Ladder To Exit":
+                navigate("/build");
+                break;
             default:
                 navigate("/connect/alliance/smartconnect");
         }

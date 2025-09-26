@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useMemo, useState } from "react";
 import { BsInfoCircleFill } from "react-icons/bs";
 
@@ -52,6 +53,7 @@ function Tooltip({ content, children }) {
       >
         {children}
         {isVisible && (
+          
           <div
             className="absolute z-50 px-4 py-3 text-base font-semibold text-white bg-gray-900 rounded-lg shadow-2xl max-w-sm border border-gray-700"
             style={{
@@ -147,6 +149,9 @@ function Progress({ step, total }) {
 }
 
 const BusinessValueEstimator = () => {
+
+  const navigate = useNavigate();
+
   // Step state: 1 = overview, 2 = calculator, 3 = result
   const [step, setStep] = useState(1);
 
@@ -207,203 +212,214 @@ const BusinessValueEstimator = () => {
 
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-10">
-      <Progress step={step} total={3} />
+    <div>
+      <div className="sticky z-20">
+          <button 
+              onClick={() => (navigate('/build'))}
+              className="absolute top-4 right-4 hover:font-medium pr-8"
+              aria-label="Go back"
+          >
+              ← Back
+          </button>
+      </div>
+      <main className="max-w-3xl mx-auto px-4 py-10">
+        <Progress step={step} total={3} />
 
-      {step === 1 && (
-        <section className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h1 className="text-3xl font-bold mb-4 text-blue-700">Business Value Estimator</h1>
-            <p className="mb-3 text-gray-700">
-              Many owners consider future exit value and saleability. The best time
-              to plan is before starting; the next best time is now. Decide on a
-              target exit value, understand today's value, and work to close the gap.
-            </p>
-            <p className="text-gray-600">
-              This tool gives a quick estimate (not a formal valuation). With
-              current financials handy, it should take ~10 minutes. Re-run every
-              6-12 months to track progress.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <button className="px-6 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition" onClick={next}>
-                Start
-              </button>
+        {step === 1 && (
+          <section className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-3xl font-bold mb-4 text-blue-700">Business Value Estimator</h1>
+              <p className="mb-3 text-gray-700">
+                Many owners consider future exit value and saleability. The best time
+                to plan is before starting; the next best time is now. Decide on a
+                target exit value, understand today's value, and work to close the gap.
+              </p>
+              <p className="text-gray-600">
+                This tool gives a quick estimate (not a formal valuation). With
+                current financials handy, it should take ~10 minutes. Re-run every
+                6-12 months to track progress.
+              </p>
+              <div className="mt-6 flex gap-3">
+                <button className="px-6 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition" onClick={next}>
+                  Start
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
-            <img
-              alt="Calculator"
-              src="https://tools.tiapartners.com.au/wp-content/uploads/2022/06/bve-new-calc-scaled.jpg"
-              className="rounded-2xl shadow max-h-72 object-cover border border-blue-100"
-            />
-          </div>
-        </section>
-      )}
-
-      {step === 2 && (
-        <section>
-          <div className="bg-white rounded-2xl shadow-lg p-0 mb-8 border border-gray-100">
-            <div className="bg-blue-50 rounded-t-2xl px-6 py-3 border-b border-blue-100">
-              <h2 className="text-blue-700 font-bold text-lg tracking-wide">Business Value Calculator</h2>
-            </div>
-            <div className="p-6">
-              <NumberInput
-                label="Average Net Profit (3 Yr)"
-                value={avgProfit3y}
-                onChange={setAvgProfit3y}
-                tooltip="The Net Profit figure will come from your accounting system and ideally should be the average of the last three years of trading."
+            <div className="flex justify-center">
+              <img
+                alt="Calculator"
+                src="https://tools.tiapartners.com.au/wp-content/uploads/2022/06/bve-new-calc-scaled.jpg"
+                className="rounded-2xl shadow max-h-72 object-cover border border-blue-100"
               />
+            </div>
+          </section>
+        )}
 
-              <div className="mt-6 mb-2">
-                <div className="w-full flex flex-col">
-                  <div className="flex justify-end w-full mb-1">
-                    <Tooltip content={
-                      "When a business owner is planning to exit a business, there are various benefits that he or she may be getting from the business. Since the owner is leaving, these benefits will go back into the business to increase the profitability. These are called 'Add Backs'."
-                    }>
-                      <BsInfoCircleFill className="text-gray-400 text-lg cursor-pointer" />
-                    </Tooltip>
-                  </div>
-                  <div className="bg-blue-50 rounded-xl p-4 flex items-center border border-blue-100 w-full">
-                    <span className="font-bold text-blue-700 uppercase text-sm tracking-wide">Add backs</span>
+        {step === 2 && (
+          <section>
+            <div className="bg-white rounded-2xl shadow-lg p-0 mb-8 border border-gray-100">
+              <div className="bg-blue-50 rounded-t-2xl px-6 py-3 border-b border-blue-100">
+                <h2 className="text-blue-700 font-bold text-lg tracking-wide">Business Value Calculator</h2>
+              </div>
+              <div className="p-6">
+                <NumberInput
+                  label="Average Net Profit (3 Yr)"
+                  value={avgProfit3y}
+                  onChange={setAvgProfit3y}
+                  tooltip="The Net Profit figure will come from your accounting system and ideally should be the average of the last three years of trading."
+                />
+
+                <div className="mt-6 mb-2">
+                  <div className="w-full flex flex-col">
+                    <div className="flex justify-end w-full mb-1">
+                      <Tooltip content={
+                        "When a business owner is planning to exit a business, there are various benefits that he or she may be getting from the business. Since the owner is leaving, these benefits will go back into the business to increase the profitability. These are called 'Add Backs'."
+                      }>
+                        <BsInfoCircleFill className="text-gray-400 text-lg cursor-pointer" />
+                      </Tooltip>
+                    </div>
+                    <div className="bg-blue-50 rounded-xl p-4 flex items-center border border-blue-100 w-full">
+                      <span className="font-bold text-blue-700 uppercase text-sm tracking-wide">Add backs</span>
+                    </div>
                   </div>
                 </div>
+
+                <NumberInput
+                  label="Owner's Salary / Drawings"
+                  value={ownerSalary}
+                  onChange={setOwnerSalary}
+                  tooltip="If the owner is drawing a salary, but not working full time in the business, a portion of that salary would be considered an add back. The best way to calculate this, is to estimate the number of hours a week the owner is working in the business, subtract it from 35 and divide the result by 35 (for working hours) and multiply it by the owners drawings."
+                />
+                <NumberInput
+                  label="Owner's Travel"
+                  value={ownerTravel}
+                  onChange={setOwnerTravel}
+                  tooltip="If the owner is having non-business related travel reimbursements."
+                />
+                <NumberInput
+                  label="Other Owner Benefits"
+                  value={ownerBenefits}
+                  onChange={setOwnerBenefits}
+                  tooltip="Are there any other costs or benefits that the company is paying for the owner that would not be there if the owner left the business?"
+                />
+
+                <div className="mt-6 p-4 rounded-xl bg-blue-50 flex justify-between items-center">
+                  <span className="font-semibold text-blue-700">Total Add Backs</span>
+                  <span className="text-xl font-bold text-blue-700">{currency.format(totalAddBacks)}</span>
+                </div>
+
+                <div className="my-8 border-t border-gray-100" />
+
+                <NumberInput
+                  label="SDE Multiplier"
+                  value={sdeMultiplier}
+                  onChange={setSdeMultiplier}
+                  tooltip="Seller's Discretionary Earnings (SDE) multiple appropriate for your business and industry."
+                />
+                
+                <div className="mt-6 p-4 rounded-xl bg-blue-50 flex justify-between items-center">
+                  <span className="font-bold text-blue-700">Current Value before Assets</span>
+                  <span className="text-xl font-bold text-blue-700">{currency.format(currentValueBeforeAssets)}</span>
+                </div>
+
+                <div className="my-8 border-t border-gray-100" />
+
+                <NumberInput
+                  label="Current Business Assets"
+                  value={assets}
+                  onChange={setAssets}
+                  tooltip="This information comes straight from your Balance Sheet."
+                />
+                <NumberInput
+                  label="Current Business Liabilities"
+                  value={liabilities}
+                  onChange={setLiabilities}
+                  tooltip="This information comes straight from your Balance Sheet."
+                />
               </div>
-
-              <NumberInput
-                label="Owner's Salary / Drawings"
-                value={ownerSalary}
-                onChange={setOwnerSalary}
-                tooltip="If the owner is drawing a salary, but not working full time in the business, a portion of that salary would be considered an add back. The best way to calculate this, is to estimate the number of hours a week the owner is working in the business, subtract it from 35 and divide the result by 35 (for working hours) and multiply it by the owners drawings."
-              />
-              <NumberInput
-                label="Owner's Travel"
-                value={ownerTravel}
-                onChange={setOwnerTravel}
-                tooltip="If the owner is having non-business related travel reimbursements."
-              />
-              <NumberInput
-                label="Other Owner Benefits"
-                value={ownerBenefits}
-                onChange={setOwnerBenefits}
-                tooltip="Are there any other costs or benefits that the company is paying for the owner that would not be there if the owner left the business?"
-              />
-
-              <div className="mt-6 p-4 rounded-xl bg-blue-50 flex justify-between items-center">
-                <span className="font-semibold text-blue-700">Total Add Backs</span>
-                <span className="text-xl font-bold text-blue-700">{currency.format(totalAddBacks)}</span>
-              </div>
-
-              <div className="my-8 border-t border-gray-100" />
-
-              <NumberInput
-                label="SDE Multiplier"
-                value={sdeMultiplier}
-                onChange={setSdeMultiplier}
-                tooltip="Seller's Discretionary Earnings (SDE) multiple appropriate for your business and industry."
-              />
-              
-              <div className="mt-6 p-4 rounded-xl bg-blue-50 flex justify-between items-center">
-                <span className="font-bold text-blue-700">Current Value before Assets</span>
-                <span className="text-xl font-bold text-blue-700">{currency.format(currentValueBeforeAssets)}</span>
-              </div>
-
-              <div className="my-8 border-t border-gray-100" />
-
-              <NumberInput
-                label="Current Business Assets"
-                value={assets}
-                onChange={setAssets}
-                tooltip="This information comes straight from your Balance Sheet."
-              />
-              <NumberInput
-                label="Current Business Liabilities"
-                value={liabilities}
-                onChange={setLiabilities}
-                tooltip="This information comes straight from your Balance Sheet."
-              />
             </div>
-          </div>
 
-          <div className="flex items-center justify-between mt-8">
-            <button className="px-6 py-2 rounded-full border border-blue-200 bg-white text-blue-700 font-semibold shadow hover:bg-blue-50 transition" onClick={back}>
-              ← Back
-            </button>
-            <button className="px-6 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition" onClick={next}>
-              Next →
-            </button>
-          </div>
-        </section>
-      )}
-
-      {step === 3 && !showSummary && (
-        <section>
-          <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100 mb-6 text-center">
-            <h2 className="text-2xl font-semibold mb-2">Business Value Estimator</h2>
-            <img
-              alt="By Dycom Group"
-              src="https://tools.tiapartners.com.au/wp-content/uploads/2022/06/by-dycom-group.png"
-              className="h-10 mx-auto mb-3"
-            />
-            <p className="text-blue-700">
-              Enter your name and email to save a copy of your estimate.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 bg-white rounded-2xl shadow p-6">
-            <label className="block">
-              <span className="font-medium">Name</span>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Insert name"
-                className="mt-1 w-full rounded-lg border px-3 py-2"
-              />
-            </label>
-            <label className="block">
-              <span className="font-medium">Email Address</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Insert email address"
-                className="mt-1 w-full rounded-lg border px-3 py-2"
-              />
-            </label>
-
-            <div className="md:col-span-2 flex items-center justify-between mt-2">
-              <button className="px-4 py-2 rounded-lg border" onClick={back}>
-                Back
+            <div className="flex items-center justify-between mt-8">
+              <button className="px-6 py-2 rounded-full border border-blue-200 bg-white text-blue-700 font-semibold shadow hover:bg-blue-50 transition" onClick={back}>
+                ← Back
               </button>
-              <button
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white"
-                onClick={() => {
-                  // No backend here; just demo action
-                  setShowSummary(true);
-                }}
-              >
-                Save / Email Estimate
+              <button className="px-6 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition" onClick={next}>
+                Next →
               </button>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
-      {showSummary && (
-        <section className="flex flex-col items-center justify-center min-h-[300px] py-12">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 text-center">Total Business Value Estimate</h2>
-          <div className="bg-blue-600 text-white text-3xl font-bold rounded-full px-10 py-4 mb-6 shadow-lg">
-            {currency.format(totalBusinessValue)}
-          </div>
-          <button
-            className="mt-2 px-6 py-2 rounded-full bg-gray-100 text-blue-700 font-semibold shadow hover:bg-blue-50 transition"
-            onClick={restartEstimator}
-          >
-            Restart
-          </button>
-        </section>
-      )}
-    </main>
+        {step === 3 && !showSummary && (
+          <section>
+            <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100 mb-6 text-center">
+              <h2 className="text-2xl font-semibold mb-2">Business Value Estimator</h2>
+              <img
+                alt="By Dycom Group"
+                src="https://tools.tiapartners.com.au/wp-content/uploads/2022/06/by-dycom-group.png"
+                className="h-10 mx-auto mb-3"
+              />
+              <p className="text-blue-700">
+                Enter your name and email to save a copy of your estimate.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 bg-white rounded-2xl shadow p-6">
+              <label className="block">
+                <span className="font-medium">Name</span>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Insert name"
+                  className="mt-1 w-full rounded-lg border px-3 py-2"
+                />
+              </label>
+              <label className="block">
+                <span className="font-medium">Email Address</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Insert email address"
+                  className="mt-1 w-full rounded-lg border px-3 py-2"
+                />
+              </label>
+
+              <div className="md:col-span-2 flex items-center justify-between mt-2">
+                <button className="px-4 py-2 rounded-lg border" onClick={back}>
+                  Back
+                </button>
+                <button
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                  onClick={() => {
+                    // No backend here; just demo action
+                    setShowSummary(true);
+                  }}
+                >
+                  Save / Email Estimate
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {showSummary && (
+          <section className="flex flex-col items-center justify-center min-h-[300px] py-12">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 text-center">Total Business Value Estimate</h2>
+            <div className="bg-blue-600 text-white text-3xl font-bold rounded-full px-10 py-4 mb-6 shadow-lg">
+              {currency.format(totalBusinessValue)}
+            </div>
+            <button
+              className="mt-2 px-6 py-2 rounded-full bg-gray-100 text-blue-700 font-semibold shadow hover:bg-blue-50 transition"
+              onClick={restartEstimator}
+            >
+              Restart
+            </button>
+          </section>
+        )}
+      </main>
+    </div>
   );
 };
 
