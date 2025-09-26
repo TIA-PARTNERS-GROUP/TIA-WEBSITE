@@ -25,11 +25,11 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { name: "Benefits", path: "#benefits" },
-    { name: "Membership", path: "#membership" },
-    { name: "Our Partners", path: "#our-partners" },
-    { name: "Features", path: "#features" },
-    { name: "How It Works", path: "#how-it-works" },
+    { name: "How It Works", path: "/how-it-works" },
+    { name: "TIA Benefits", path: "/benefits" },
+    { name: "About TIA", path: "/about"},
+    { name: "Membership", path: "/membership" },
+    { name: "Contact Us", path: "/contact"}
   ];
 
   return (
@@ -58,13 +58,13 @@ const Header = () => {
             {/* Desktop Menu - now part of the same flex group as TIA */}
             <nav className="hidden md:flex space-x-6 text-sm font-semibold text-gray-700">
               {navLinks.map((link, idx) => (
-                <a
+                <Link
                   key={idx}
-                  href={link.path}
+                  to={link.path}
                   className="hover:text-blue-600 transition"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>

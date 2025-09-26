@@ -10,6 +10,12 @@ import PortalLayout from "./Layouts/PortalLayout.jsx";
 const HomePage = React.lazy(() => import("./pages/LandingPage.jsx"));
 const ChatPage = React.lazy(() => import("./pages/Portal/Chat/ChatPage.jsx"));
 
+const HowItWorksPage = React.lazy(() => import("./pages/HowItWorksPage.jsx"));
+const BenefitsPage = React.lazy(() => import("./pages/BenefitsPage.jsx"));
+const AboutPage = React.lazy(() => import("./pages/AboutPage.jsx"));
+const MembershipPage = React.lazy(() => import("./pages/MembershipPage.jsx"));
+const ContactPage = React.lazy(() => import("./pages/ContactPage.jsx"));
+
 const DashboardPage = React.lazy(() => import("./pages/Portal/Dashboard/DashboardPage.jsx"));
 const ManagePage = React.lazy(() => import("./pages/Portal/Manage/ManagePage.jsx"));
 const ManageContent = React.lazy(() => import("./pages/Portal/Manage/ManageContent.jsx"));
@@ -58,6 +64,11 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+            <Route path="/benefits" element={<BenefitsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/membership" element={<MembershipPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Route>
         <Route>
         </Route>
