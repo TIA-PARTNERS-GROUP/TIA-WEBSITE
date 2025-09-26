@@ -37,3 +37,5 @@ VALUES (1, 2, 1, 1, CURRENT_TIME());
 INSERT INTO business_connections (initiating_business_id, receiving_business_id, connection_type_id, active, date_initiated)
 VALUES (3, 1, 1, 1, CURRENT_TIME());
 
+INSERT INTO daily_activities (id, name, description)
+VALUES (1, "Connection", "Make a connection with another business");
