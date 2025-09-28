@@ -29,6 +29,7 @@ export const getMyProfile = async (req, res) => {
             contactEmail: bi.contact_email,
             businessCategory: bi.category, 
             businessDescription: bi.description,
+            businessValue: bi.value,
             connections : connections,
             services: services,
             clients: clients

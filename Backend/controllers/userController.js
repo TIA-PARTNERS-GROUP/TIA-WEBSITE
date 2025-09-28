@@ -24,7 +24,6 @@ export const checkUserExists = async (req, res) => {
     }
 };
 
-
 export const getUserDetails = async (req, res) => {
     try {
         const user = userModel(db);

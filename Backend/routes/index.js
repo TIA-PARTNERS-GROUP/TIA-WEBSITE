@@ -3,6 +3,7 @@ import authRoutes from './authRoutes.js';
 import userRoutes from './userRoutes.js';
 import businessRoutes from './businessRoutes.js'
 import chatBotRoutes from './chatBotRoutes.js'
+import taskRoutes from './taskRoutes.js'
 import notificationRoutes from './notificationRoutes.js'
 import categoryRoutes from './categoryRoutes.js'
 import config from '../config/config.js';
@@ -15,6 +16,7 @@ router.use('/users', userRoutes);
 router.use('/business', businessRoutes);
 // router.use('/chat', chatRoutes);
 router.use('/chatbot', chatBotRoutes);
+router.use('/tasks', taskRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/category', categoryRoutes)
 // router.use('/connect', connectRoutes);

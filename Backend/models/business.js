@@ -6,7 +6,7 @@ export default (db) => ({
 
   async infoFromId(id) {
     const [rows] = await db.query(`
-      SELECT b.id, b.name, b.contact_name, b.contact_phone_no, b.contact_email, bc.name as category, b.description
+      SELECT b.id, b.name, b.contact_name, b.contact_phone_no, b.contact_email, bc.name as category, b.description, b.value
       FROM businesses b
       LEFT JOIN business_categories bc ON b.business_category_id = bc.id
       WHERE b.id = ?
@@ -73,6 +73,7 @@ export default (db) => ({
       description: null,
       address: null,
       city: null,
+      businessValue: null,
       businessType: null,
       businessCategory: null,
       businessPhase: null,
@@ -113,6 +114,10 @@ export default (db) => ({
     if (params.businessCategory !== null) {
       setClauses.push("business_category_id = COALESCE(?, business_category_id)");
       queryParams.push(params.businessCategory);
+    }
+    if (params.businessValue !== null) {
+      setClauses.push("value = COALESCE(?, value)");
+      queryParams.push(params.value);
     }
     
     
