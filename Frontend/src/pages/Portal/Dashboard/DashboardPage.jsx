@@ -1,51 +1,179 @@
+// src/pages/Portal/Dashboard/DashboardPage.jsx
+import { useEffect, useMemo, useState } from "react";
+import { loadDashboardConfig } from "../../../utils/dashboardConfig";
+
 import PortalHeader from "../../../components/Portal/Sidebar/PortalHeader";
 import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
 import FocusTab from "../../../components/Portal/Dashboard/FocusTab";
-import GoalTracker from "../../../components/Portal/Dashboard/GoalTracker";
 import NextAction from "../../../components/Portal/Dashboard/NextAction";
+
+// 留着即可（本文件没直接用，但 map 里的 daily 组件会用到）
 import DailyActivities from "../../../components/Portal/Dashboard/DailyActivities";
 
-// Sample Data for Daily Activities Progress Bars
-const barData = [
-  { progress: "60", description: "Alliance Partners connected"},
-  { progress: "100", description: "Complimentary Partners connected"},
-  { progress: "80", description: "MasterMind Panels"}
-]
+// ===== 3 个域的映射 =====
+import {
+  CASHFLOW_KEYS,
+  renderDailyActivities as renderCashflowDaily,
+  cashflowExtras,
+} from "./widgets/cashflowMap";
+import {
+  RESOURCES_KEYS,
+  renderResourcesDaily,
+  resourcesExtras,
+} from "./widgets/resourcesMap";
+import {
+  GROWTH_KEYS,
+  renderGrowthDaily,
+  growthExtras,
+} from "./widgets/businessGrowthMap";
+// =======================
 
-const goalData = [
-  { progress: 22, description: "Goals Completed this Quarter"},
-  { progress: 50, description: "Tech Briefings Attended"},
-  { progress: 60, description: "Networking Events Attended"}
-]
+const GRID = "grid grid-cols-3 sm:gap-2 lg:gap-3 xl:gap-4 2xl:gap-5 pb-4";
 
-const initialActionData = [
-  { description: "Finish setting up profile", input: false},
-  { description: "Post your first Blog", input: false}
-]
-
-const DashboardPage = () => {
+/** 轻量版：只展示 “Goals Completed this Quarter” */
+function GoalsCompletedCard({ percent = 22 }) {
   return (
-    <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4"> 
-      <div className="bg-white rounded-xl p-8">
-        <PortalHeader module={"Dashboard"}/>
-        <ProfileTab />
+    <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
+      <h3 className="font-semibold mb-3">Goals Completed this Quarter</h3>
+      <div className="flex flex-col gap-2">
+        <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div
+            className="bg-indigo-600 h-2.5 rounded-full"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+        <span className="text-sm text-gray-600">{percent}% complete</span>
       </div>
+    </div>
+  );
+}
+
+export default function DashboardPage({ mock = false }) {
+  // 读本地配置（Onboarding 保存）
+  const cfg = useMemo(() => {
+    if (mock) {
+      return {
+        lastGoal: "cashflow",
+        selections: {
+          cashflow: { revenue: true, expenses: true },
+          resources: {},
+          "business-growth": {},
+        },
+      };
+    }
+    return loadDashboardConfig() || {};
+  }, [mock]);
+
+  // 当前目标：localStorage > cfg.lastGoal > 'cashflow'
+  const [goal, setGoal] = useState(() => {
+    if (mock) return "cashflow";
+    const v =
+      (typeof window !== "undefined" &&
+        localStorage.getItem("tia:selectedGoal")) ||
+      cfg.lastGoal ||
+      "cashflow";
+    return String(v).toLowerCase();
+  });
+
+  // 监听 FocusTab 的目标切换事件
+  useEffect(() => {
+    if (mock) return;
+    const handler = (e) => {
+      const v =
+        e?.detail ||
+        (typeof window !== "undefined" &&
+          localStorage.getItem("tia:selectedGoal")) ||
+        "cashflow";
+      setGoal(String(v).toLowerCase());
+    };
+    window.addEventListener("tia:selectedGoalChanged", handler);
+    return () => window.removeEventListener("tia:selectedGoalChanged", handler);
+  }, [mock]);
+
+  // 当前目标下的勾选配置（可能为空对象）
+  const selections = (cfg.selections && cfg.selections[goal]) || {};
+
+  // 是否“至少配置过一项”（任意域任意 key）
+  const hasAnySelection = useMemo(() => {
+    const all = cfg.selections || {};
+    return Object.values(all).some((obj) =>
+      Object.values(obj || {}).some(Boolean)
+    );
+  }, [cfg.selections]);
+
+  // —— 组装要渲染的卡片 —— //
+  const cards = useMemo(() => {
+    const out = [];
+
+    // 1) 仅当用户至少配置过一项时，显示：GoalsCompleted + NextAction
+    if (hasAnySelection) {
+      out.push(<GoalsCompletedCard key="goalsQuarter" percent={22} />);
+      out.push(
+        <div key="next" className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
+          <NextAction
+            initialActionData={[
+              { description: "Finish setting up profile", input: false },
+              { description: "Post your first Blog", input: false },
+            ]}
+          />
+        </div>
+      );
+    }
+
+    // 2) 根据当前 goal，拼 Daily（聚合伙伴项） + 其它 extras
+    if (goal === "cashflow") {
+      const chosen = CASHFLOW_KEYS.filter((k) => !!selections[k]);
+      const daily = renderCashflowDaily(chosen);
+      if (daily) out.push(daily);
+      out.push(...cashflowExtras(chosen));
+      return out;
+    }
+
+    if (goal === "resources" || goal === "build-team") {
+      const chosen = RESOURCES_KEYS.filter((k) => !!selections[k]);
+      const daily = renderResourcesDaily(chosen);
+      if (daily) out.push(daily);
+      out.push(...resourcesExtras(chosen));
+      return out;
+    }
+
+    if (goal === "business-growth" || goal === "businessgrowth") {
+      const chosen = GROWTH_KEYS.filter((k) => !!selections[k]);
+      const daily = renderGrowthDaily(chosen);
+      if (daily) out.push(daily);
+      out.push(...growthExtras(chosen));
+      return out;
+    }
+
+    // 兜底：只展示已追加的公共卡（或空）
+    return out;
+  }, [goal, selections, hasAnySelection]);
+
+  // —— 渲染 —— //
+  return (
+    <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4">
+      <div className="bg-white rounded-xl p-8">
+        <PortalHeader mock={mock} module={"Dashboard"} />
+        <ProfileTab mock={mock} />
+      </div>
+
       <div className="bg-white rounded-xl p-8">
         <FocusTab />
       </div>
-      <div className="grid grid-cols-3 sm:gap-2 lg:gap-3 xl:gap-4 2xl:gap-5 pb-4">
-        <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
-          <DailyActivities overallProgress = {80} barData = {barData} />
-        </div>
-        <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
-          <NextAction initialActionData = {initialActionData}/>
-        </div>
-        <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
-          <GoalTracker goalData = {goalData}/>
-        </div>
+
+      <div className={GRID}>
+        {cards.length > 0 ? (
+          cards.map((node, i) => <div key={i}>{node}</div>)
+        ) : (
+          <>
+            <div className="bg-white rounded-xl p-8 h-full">Nothing selected yet.</div>
+            <div className="bg-white rounded-xl p-8 h-full">
+              Go to “Configure workspace” in the left sidebar.
+            </div>
+            <div className="bg-white rounded-xl p-8 h-full" />
+          </>
+        )}
       </div>
     </main>
   );
-};
-
-export default DashboardPage;
+}

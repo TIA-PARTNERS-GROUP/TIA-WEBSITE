@@ -43,10 +43,9 @@ export const getUserProfile = async (req, res) => {
     const business = businessModel(db);
     const { id } = req.params;
 
-    const businessResult = { id: id }
-
-    if (businessResult == null) {
-        return res.status(404).json({message: "No business exists for user"});
+    const businessResult = await business.infoFromId(id);
+    if (!businessResult) {
+        return res.status(404).json({ message: "No business exists for user" });
     }
 
     const businessId = businessResult.id;
@@ -317,28 +316,30 @@ export const queryBusinesses = async (req, res) => {
     const business = businessModel(db);
     
     // Query parameters
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const rawPage = req.query.page;
+    const limit = parseInt(req.query.limit, 10) || 10;
     const search = req.query.search || '';
     
-    // Tags
-    let tags = [];
-    if (req.query.tags) {
-      tags = Array.isArray(req.query.tags) 
-        ? req.query.tags.map(tag => parseInt(tag)) 
-        : [parseInt(req.query.tags)];
+    // Parse and validate page: must be a positive integer (reject strings and floats)
+    const page = parseInt(rawPage, 10);
+    if (isNaN(page) || page < 1 || parseInt(rawPage) !== parseFloat(rawPage)) {
+      return res.status(400).json({ message: "Page must be a positive integer" });
     }
-
-    // Validate parameters
-    if (page < 1) {
-      return res.status(400).json({ message: "Page must be at least 1" });
-    }
-    if (limit < 1 || limit > 100) {
-      return res.status(400).json({ message: "Limit must be between 1 and 100" });
+    
+    // Business category
+    let categories = [];
+    if (req.query.categories) {
+      if (Array.isArray(req.query.categories)) {
+        categories = req.query.categories.map(id => parseInt(id));
+      } else {
+        categories = req.query.categories.split(',').map(id => parseInt(id));
+      }
+      
+      categories = categories.filter(id => !isNaN(id));
     }
 
     // Get paginated results
-    const result = await business.getPaginated(page, limit, tags, search);
+    const result = await business.getPaginated(page, limit, categories, search);
 
     return res.status(200).json({
       message: "Success",

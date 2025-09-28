@@ -10,6 +10,12 @@ import PortalLayout from "./Layouts/PortalLayout.jsx";
 const HomePage = React.lazy(() => import("./pages/LandingPage.jsx"));
 const ChatPage = React.lazy(() => import("./pages/Portal/Chat/ChatPage.jsx"));
 
+const HowItWorksPage = React.lazy(() => import("./pages/HowItWorksPage.jsx"));
+const BenefitsPage = React.lazy(() => import("./pages/BenefitsPage.jsx"));
+const AboutPage = React.lazy(() => import("./pages/AboutPage.jsx"));
+const MembershipPage = React.lazy(() => import("./pages/MembershipPage.jsx"));
+const ContactPage = React.lazy(() => import("./pages/ContactPage.jsx"));
+
 const DashboardPage = React.lazy(() => import("./pages/Portal/Dashboard/DashboardPage.jsx"));
 const ManagePage = React.lazy(() => import("./pages/Portal/Manage/ManagePage.jsx"));
 const ManageContent = React.lazy(() => import("./pages/Portal/Manage/ManageContent.jsx"));
@@ -33,6 +39,11 @@ const BusinessValueEstimatorPage = React.lazy(() => import("./pages/Portal/Tools
 const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
 const RegisterPage = React.lazy(() => import("./pages/RegisterPage.jsx"));
 
+// 放在其它 React.lazy 旁边
+const FirstTimeView = React.lazy(() => import("./pages/Portal/Dashboard/FirstTimeView.jsx"));
+const OnboardingPage = React.lazy(() => import("./pages/Portal/Dashboard/OnboardingPage.jsx"));
+
+
 function App() {
 
   const location = useLocation();
@@ -53,11 +64,18 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+            <Route path="/benefits" element={<BenefitsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/membership" element={<MembershipPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Route>
         <Route>
-          <Route path="/chat-llm" element={<ChatPage />} />
         </Route>
         <Route element={<PortalLayout activePage={activePage} setActivePage={setActivePage} direction={direction} setDirection={setDirection} setActiveTab={setActiveTab}/>}>
+          <Route path="/firsttime" element={<FirstTimeView />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/manage" element={<ManagePage />}> 
             <Route path=":manageType" element={<ManageContent activeTab={activeTab} setActiveTab={setActiveTab} tabDirection={tabDirection} setTabDirection={setTabDirection}/>}>
@@ -81,6 +99,11 @@ function App() {
             <Route path="history" element={<History />} />
           </Route>
           <Route path="/tools/business-value-estimator" element={<BusinessValueEstimatorPage />} />
+          <Route path="/chat-llm/alliance" element={<ChatPage chatType="Alliance Partners"/>} />
+          <Route path="/chat-llm/complementary" element={<ChatPage chatType="Complementary Partners"/>} />
+          <Route path="/chat-llm/mastermind" element={<ChatPage chatType="Mastermind Partners"/>} />
+          <Route path="/chat-llm/vision" element={<ChatPage chatType="Vision"/>} />
+          <Route path="/chat-llm/ladder-to-exit" element={<ChatPage chatType="Ladder To Exit"/>} />
         </Route>
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>

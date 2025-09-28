@@ -1,39 +1,30 @@
-import request from 'supertest';
+import { getRequest, getUserData, registerUser } from './testUtils.js';
 
 let validToken = '';
 let refreshToken = '';
-const userData = {
-  email: `test${Date.now()}@example.com`,  // Use unique email to avoid duplicates
-  password: 'password123',
-  firstName: 'John',
-  lastName: 'Doe'
-};
 
 // Test Set 2 - Auth Endpoints:
 // Test 1 - Register (Signup)
 describe('POST /api/auth/signup', () => {
   it('should register a new user successfully', async () => {
-    const res = await request('http://localhost:5000')
-      .post('/api/auth/signup')
-      .send(userData);
+    const res = await registerUser();
 
     console.log('Full route/URL:', res.request.url);
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('id');
-    expect(res.body.email).toBe(userData.email);
+    expect(res.body.email).toBe(getUserData().email);
   });
 
-  // BUG: Expects duplicate users
   it('should return 409 for duplicate email', async () => {
     const duplicateUserData = {
-      email: userData.email,  // Use the outer userData
+      email: getUserData().email,
       password: 'password123',
       firstName: 'Jane',
       lastName: 'Doe'
     };
 
-    const res = await request('http://localhost:5000')
+    const res = await getRequest()
       .post('/api/auth/signup')
       .send(duplicateUserData);
 
@@ -41,7 +32,6 @@ describe('POST /api/auth/signup', () => {
 
     expect(res.statusCode).toBe(409);
     expect(res.body.message).toBe('Email already in use');
-    // Remove email check for 409, as it's not typically returned
   });
 });
 
@@ -49,19 +39,19 @@ describe('POST /api/auth/signup', () => {
 describe('POST /api/auth/login', () => {
   it('should login a user successfully', async () => {
     const loginData = {
-      email: userData.email,
-      password: userData.password,
+      email: getUserData().email,
+      password: getUserData().password,
     };
 
-    const res = await request('http://localhost:5000')
+    const res = await getRequest()
       .post('/api/auth/login')
       .send(loginData);
 
     console.log('Full route/URL:', res.request.url);
 
     if (res.statusCode === 200) {
-      validToken = res.body.token;  // Store the real token
-      // Extract refresh token from cookies
+      validToken = res.body.token;
+
       const cookies = res.headers['set-cookie'];
       if (cookies) {
         const refreshCookie = cookies.find(cookie => cookie.startsWith('refreshToken='));
@@ -82,7 +72,7 @@ describe('POST /api/auth/login', () => {
       password: 'wrongpassword'
     };
 
-    const res = await request('http://localhost:5000')
+    const res = await getRequest()
       .post('/api/auth/login')
       .send(loginData);
 
@@ -96,7 +86,7 @@ describe('POST /api/auth/login', () => {
 // Test 3 - Token Refresh
 describe('POST /api/auth/refresh', () => {
   it('should refresh the token successfully', async () => {
-    const res = await request('http://localhost:5000')
+    const res = await getRequest()
       .post('/api/auth/refresh')
       .set('Cookie', `refreshToken=${refreshToken}`);
 
@@ -111,7 +101,7 @@ describe('POST /api/auth/refresh', () => {
 // Test 4 - Logout
 describe('POST /api/auth/logout', () => {
   it('should logout the user successfully', async () => {
-    const res = await request('http://localhost:5000')
+    const res = await getRequest()
       .post('/api/auth/logout')
       .set('Cookie', `refreshToken=${refreshToken}`);
 

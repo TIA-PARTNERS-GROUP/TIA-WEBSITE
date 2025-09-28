@@ -17,5 +17,16 @@ export default (db) => ({
   async checkAdkSessionExists(userId) {
     const sessionId = await this.getAdkSessionId(userId);
     return sessionId !== null;  // Return true if exists
+  },
+
+  // TODO REMOVE SESSIONS FROM ADK DATASET
+  async resetUserSession(userId) {
+    try {
+      const updated = await this.setAdkSessionId(userId, null);
+      return updated;
+    } catch (error) {
+      console.error('Error resetting user session:', error);
+      throw error; 
+    }
   }
 });

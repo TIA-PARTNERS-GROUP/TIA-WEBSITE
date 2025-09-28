@@ -26,7 +26,7 @@ export default (db) => ({
     return rows[0];
   },
 
-  async registerUser(firstName, lastName, email, password_hash) {
+  async registerUser(firstName, lastName, email, password_hash, company, category, phone, description) {
     const [result] = await db.query(
       'INSERT INTO users (first_name, last_name) VALUES (?, ?)',
       [firstName, lastName]
@@ -38,9 +38,17 @@ export default (db) => ({
     );
     
     await db.query(
-      'INSERT INTO businesses (operator_user_id, name, contact_name) VALUES (?, ?, ?)',
-      [result.insertId, `${firstName} ${lastName}'s Business`, `${firstName} ${lastName}`]
-    )
+    'INSERT INTO businesses (operator_user_id, name, contact_name, contact_email, business_category_id, contact_phone_no, description) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [
+      result.insertId, 
+      company || `${firstName} ${lastName}'s Business`, 
+      `${firstName} ${lastName}`,
+      email,
+      category,
+      phone,
+      description
+    ]
+  );
     return result.insertId;
   },
 
@@ -115,6 +123,20 @@ export default (db) => ({
 
     if (rows.length > 1 ) {
       throw new Error("Multiple businesses returned!"); // If we ever move to multiple businesses per account, this will have to change
+    }
+
+    return rows[0];
+  },
+
+  async fetchOwnerFromBusinessId(businessId) {
+    const [rows] = await db.query(`
+      SELECT operator_user_id
+      FROM businesses
+      WHERE id = ?
+    `, [businessId]);
+
+    if (rows.length === 0) {
+      return null; // no business with that ID
     }
 
     return rows[0];

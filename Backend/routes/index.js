@@ -4,6 +4,8 @@ import userRoutes from './userRoutes.js';
 import businessRoutes from './businessRoutes.js'
 import chatBotRoutes from './chatBotRoutes.js'
 import taskRoutes from './taskRoutes.js'
+import notificationRoutes from './notificationRoutes.js'
+import categoryRoutes from './categoryRoutes.js'
 import config from '../config/config.js';
 
 const router = express.Router();
@@ -15,6 +17,8 @@ router.use('/business', businessRoutes);
 // router.use('/chat', chatRoutes);
 router.use('/chatbot', chatBotRoutes);
 router.use('/tasks', taskRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/category', categoryRoutes)
 // router.use('/connect', connectRoutes);
 // router.use('/manage', manageRoutes);
 // router.use('/projects', projectRoutes);
@@ -31,7 +35,7 @@ if (config.env === 'production') {
             timeout: 0
         });
     });
-} else if (config.env === 'development') {
+} else if (config.env === 'development' || config.env === 'test') {
     router.get('/', (req, res) => {
         res.json({ message: 'API is working' });
     });

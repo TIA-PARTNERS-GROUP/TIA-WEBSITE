@@ -57,7 +57,7 @@ const SearchContent = ({ activeTab, setActiveTab, tabDirection, setTabDirection 
             <></>
           )}
           {searchType === "smartconnect" ? (
-            <SmartConnect />
+            <SmartConnect partnerType = {partnerType} />
           ) : (
             <></>
           )}

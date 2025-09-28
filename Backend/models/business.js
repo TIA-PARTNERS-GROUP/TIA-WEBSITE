@@ -88,39 +88,55 @@ export default (db) => ({
       }
     }
 
-    await db.query(`
+    const setClauses = [];
+    const queryParams = [];
+    
+    if (params.name !== null) {
+      setClauses.push("name = COALESCE(?, name)");
+      queryParams.push(params.name);
+    }
+    if (params.contactName !== null) {
+      setClauses.push("contact_name = COALESCE(?, contact_name)");
+      queryParams.push(params.contactName);
+    }
+    if (params.contactPhoneNo !== null) {
+      setClauses.push("contact_phone_no = COALESCE(?, contact_phone_no)");
+      queryParams.push(params.contactPhoneNo);
+    }
+    if (params.contactEmail !== null) {
+      setClauses.push("contact_email = COALESCE(?, contact_email)");
+      queryParams.push(params.contactEmail);
+    }
+    if (params.description !== null) {
+      setClauses.push("description = COALESCE(?, description)");
+      queryParams.push(params.description);
+    }
+    if (params.businessCategory !== null) {
+      setClauses.push("business_category_id = COALESCE(?, business_category_id)");
+      queryParams.push(params.businessCategory);
+    }
+    if (params.businessValue !== null) {
+      setClauses.push("value = COALESCE(?, value)");
+      queryParams.push(params.value);
+    }
+    
+    
+    if (setClauses.length === 0) {
+      throw new Error("No valid fields to update");
+    }
+    
+    queryParams.push(id);
+    
+    const query = `
       UPDATE businesses
-      SET
-        name = COALESCE(?, name),
-        tagline = COALESCE(?, tagline),
-        website = COALESCE(?, website),
-        contact_name = COALESCE(?, contact_name),
-        contact_phone_no = COALESCE(?, contact_phone_no),
-        contact_email = COALESCE(?, contact_email),
-        description = COALESCE(?, description),
-        address = COALESCE(?, address),
-        city = COALESCE(?, city),
-        value = COALESCE(?, value),
-        business_type_id = COALESCE(?, business_type_id),
-        business_category_id = COALESCE(?, business_category_id),
-        business_phase = COALESCE(?, business_phase)
+      SET ${setClauses.join(', ')}
       WHERE id = ?
-      `, [
-          params.name,
-          params.tagline,
-          params.website,
-          params.contactName,
-          params.contactPhoneNo,
-          params.contactEmail,
-          params.description,
-          params.address,
-          params.city,
-          params.businessValue,
-          params.businessType,
-          params.businessCategory,
-          params.businessPhase,
-          id
-        ])
+    `;
+    
+    console.log("Final query:", query);
+    console.log("Query params:", queryParams);
+    
+    await db.query(query, queryParams);
   },
 
   async addClient(id, clientDescription) {
@@ -190,7 +206,7 @@ export default (db) => ({
     return rows[0];
   },
 
-  async getPaginated(page = 1, limit = 10, tags = [], searchQuery = '') {
+  async getPaginated(page = 1, limit = 10, categories = [], searchQuery = '') {
     const offset = (page - 1) * limit;
     let query = `
       SELECT 
@@ -209,10 +225,10 @@ export default (db) => ({
       params.push(searchParam, searchParam, searchParam);
     }
 
-    // Add tags filter
-    if (tags.length > 0) {
-      query += ` AND b.business_category_id IN (${tags.map(() => '?').join(',')})`;
-      params.push(...tags);
+    // Add business category filter
+    if (categories.length > 0) {
+      query += ` AND b.business_category_id IN (${categories.map(() => '?').join(',')})`;
+      params.push(...categories);
     }
 
     // Get data and total count using window functions

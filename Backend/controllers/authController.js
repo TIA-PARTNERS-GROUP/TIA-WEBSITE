@@ -9,7 +9,7 @@ import argon2 from 'argon2';
 export const signup = async (req, res) => {
   try {
     const user = userModel(db)
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, company, category, phone, description} = req.body;
 
     // Duplicate email check should also be done before a registration can be submitted
     const existingUser = await user.findByLoginEmail(email);
@@ -20,13 +20,17 @@ export const signup = async (req, res) => {
     }
 
     let hash = await argon2.hash(password);
-    let userId = await user.registerUser(firstName, lastName, email, hash);
+    let userId = await user.registerUser(firstName, lastName, email, hash, company, category, phone, description);
 
     return res.status(201).json({
       id: userId,
       email: email,
       firstName: firstName,
-      lastName: lastName
+      lastName: lastName,
+      companyName: company,
+      businessCategory: category,
+      contactPhone: phone,
+      description: description
     });
   } catch (err) {
     console.error('Signup error:', err);

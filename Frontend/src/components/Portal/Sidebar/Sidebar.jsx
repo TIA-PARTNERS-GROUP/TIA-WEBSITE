@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import DashboardIcon from "../../../components/Icons/DashboardIcon";
 import ConnectIcon from "../../../components/Icons/ConnectIcon";
@@ -9,6 +10,8 @@ import NetworkIcon from "../../../components/Icons/NetworkIcon";
 import TradeIcon from "../../../components/Icons/TradeIcon";
 import ManageIcon from "../../../components/Icons/ManegIcon";
 
+// ✅ 读取“是否已完成配置”，用于控制底部按钮显示
+import { loadDashboardConfig } from "../../../utils/dashboardConfig";
 
 // Track sidebar paths, icons and labels for mapping NavItems below
 const sidebarItems = [
@@ -31,20 +34,37 @@ const routeHierarchy = {
     'trade': 7
   };
 
-const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection, setActiveTab}) => {
-
-  const location = useLocation();
-  const splitPath = location.pathname.split('/')[1];
-
-  const handleModuleClick = (match) => {
-    const prevPath = routeHierarchy[activePage];
-    const currentPath = routeHierarchy[match];
-
-    setDirection(currentPath > prevPath ? "down" : "up"); // Determine trnasition direction from hierarchy
-    setActivePage(match);
-    setActiveTab('profile');
-    window.scrollTo(0, 0);
-  }
+  const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection, setActiveTab}) => {
+    const location = useLocation();
+    let splitPath = location.pathname.split('/')[1];
+  
+    // ✅ 新增：追踪用户是否已选择目标
+    const [selectedGoal, setSelectedGoal] = useState(
+      () => localStorage.getItem("tia:selectedGoal")
+    );
+  
+    useEffect(() => {
+      const handler = () => {
+        setSelectedGoal(localStorage.getItem("tia:selectedGoal"));
+      };
+      window.addEventListener("tia:selectedGoalChanged", handler);
+      return () => window.removeEventListener("tia:selectedGoalChanged", handler);
+    }, []);
+  
+    // ✅ 你原来的配置状态（保留）
+    const cfg = loadDashboardConfig();
+    const showConfigure = true; // 想一直显示就 true，不然就判断 cfg
+  
+    const handleModuleClick = (match) => {
+      const prevPath = routeHierarchy[activePage];
+      const currentPath = routeHierarchy[match];
+  
+      setDirection(currentPath > prevPath ? "down" : "up");
+      setActivePage(match);
+      setActiveTab('profile');
+      window.scrollTo(0, 0);
+    };
+  
 
   const NavItem = ({ path, icon, label, match, isActive }) => (
     <Link to={path} onClick={() => handleModuleClick(match)} className={`font-bold flex items-center p-4 @md:p-2 space-x-2 @md:space-x-3 rounded-md cursor-pointer sm:text-xs xl:text-sm 2xl:text-lg @md:text-base ${
@@ -83,8 +103,42 @@ const Sidebar = ({ initialLoad = false, activePage, setActivePage, setDirection,
               />
           ))}
         </ul>
-      </nav>
-    </motion.div>
+
+        </nav>
+{/* 底部 Configure 按钮（是否显示仍可用 showConfigure） */}
+{showConfigure && (
+  <div className="pt-4 mt-2 border-t border-white/10">
+    {selectedGoal ? (
+      // ✅ 已选目标 → 可跳转
+      <Link
+        to={`/onboarding?goal=${encodeURIComponent(selectedGoal)}`}
+        className="block w-full text-left font-semibold sm:text-xs xl:text-sm 2xl:text-lg @md:text-base
+                   px-4 py-2.5 rounded-md bg-indigo-600 hover:bg-indigo-700 transition"
+        onClick={() => {
+          setActiveTab?.("profile");
+          setActivePage?.("dashboard");
+          window.scrollTo(0, 0);
+        }}
+      >
+        Configure workspace
+      </Link>
+    ) : (
+      // ⛔ 未选目标 → 灰掉禁用
+      <button
+        type="button"
+        disabled
+        aria-disabled="true"
+        className="block w-full text-left font-semibold sm:text-xs xl:text-sm 2xl:text-lg @md:text-base
+                   px-4 py-2.5 rounded-md bg-gray-400/50 text-white/70 cursor-not-allowed"
+        title="Please select Cashflow / Build Team / Business Growth first"
+      >
+        Configure workspace
+      </button>
+    )}
+  </div>
+)}
+</motion.div>
+
   )
 };
 

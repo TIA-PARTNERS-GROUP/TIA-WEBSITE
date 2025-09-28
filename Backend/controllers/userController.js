@@ -27,7 +27,7 @@ export const checkUserExists = async (req, res) => {
 export const getUserDetails = async (req, res) => {
     try {
         const user = userModel(db);
-        const {id} = req.user.id;
+        const {id} = req.params;
 
         const userInfo = await user.infoFromId(id);
 

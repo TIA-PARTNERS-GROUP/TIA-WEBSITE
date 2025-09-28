@@ -1,11 +1,12 @@
 import api from "./axios";
 
-export function queryBusinesses(page, limit, search = null) {
+export function queryBusinesses(page = 1, limit = 10, search = null, categories = null) {
     return api.get('/business/query', {
         params: {
             page,
             limit,
-            ...(search && { search }) // Only include search if not null
+            ...(search && { search }), // Only include search if not null
+            ...(categories && { categories })
         }
     });
 };
@@ -14,9 +15,9 @@ export function getCurrentBusinessInfo() {
     return api.get('/business/myinfo');
 };
 
-export function updateCurrentBusinessProfile(companyName, contactName, contactPhone, contactEmail, companyDescription) {
+export function updateCurrentBusinessProfile(companyName, contactName, contactPhone, contactEmail, companyDescription, categoryId) {
     return api.patch('/business/update',
-        { name: companyName, contactName: contactName, contactPhoneNo: contactPhone, contactEmail: contactEmail, description: companyDescription}
+        { name: companyName, contactName: contactName, contactPhoneNo: contactPhone, contactEmail: contactEmail, description: companyDescription, businessCategory: categoryId}
     );
 };
 
