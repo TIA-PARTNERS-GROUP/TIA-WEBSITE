@@ -197,6 +197,7 @@ CREATE TABLE `businesses` (
   `description` text,
   `address` varchar(100) DEFAULT NULL,
   `city` varchar(60) DEFAULT NULL,
+  `value` int unsigned DEFAULT NULL,
   `business_type_id` int unsigned DEFAULT NULL,
   `business_category_id` int unsigned DEFAULT NULL,
   `business_phase` int unsigned DEFAULT NULL,
