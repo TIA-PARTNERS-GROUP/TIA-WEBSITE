@@ -6,6 +6,7 @@ const RECORD_TEST = process.env.ADK_RECORD_TEST || false;
 // TODO: ADD Region, lat, long -> location_data
 export async function sendToAdkAgent({ user_id, session_id, name, chat_type, message, region, lat, lng }) {
   try {
+    console.log('Sending to ADK agent:', { user_id, session_id, name, chat_type, message, region, lat, lng });
     const requestData = {
       user_id,
       name,

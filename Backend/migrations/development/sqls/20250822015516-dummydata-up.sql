@@ -39,3 +39,8 @@ VALUES (3, 1, 1, 1, CURRENT_TIME());
 
 INSERT INTO daily_activities (id, name, description)
 VALUES (1, "Connection", "Make a connection with another business");
+
+INSERT INTO business_categories (id, name)
+VALUES (1, "AI Services"),
+       (2, "Software Development"),
+       (3, "Sales and Marketing");
