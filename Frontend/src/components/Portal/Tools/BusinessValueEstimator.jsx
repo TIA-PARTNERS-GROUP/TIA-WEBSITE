@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useMemo, useState } from "react";
 import { BsInfoCircleFill } from "react-icons/bs";
+import { getCurrentBusinessInfo, updateCurrentBusinessProfile } from "../../../api/business";
 
 const currency = new Intl.NumberFormat("en-AU", {
   style: "currency",
@@ -169,7 +170,6 @@ const BusinessValueEstimator = () => {
   const [email, setEmail] = useState("");
 
   // Show summary after submit
-  // TODO IMPLEMENT BACKEND
   const [showSummary, setShowSummary] = useState(false);
 
   // Reset all fields to initial state
@@ -210,6 +210,12 @@ const BusinessValueEstimator = () => {
     setStep((s) => Math.max(1, s - 1));
   }
 
+  const handleSummary = async () => {
+    const businessDetails = await getCurrentBusinessInfo();
+
+    await updateCurrentBusinessProfile(businessDetails.data.businessName, businessDetails.data.contactName, businessDetails.data.contactPhone, businessDetails.data.contactEmail, businessDetails.data.businessDescription, businessDetails.data.businessCategoryId, totalBusinessValue);
+    setShowSummary(true);
+  }
 
   return (
     <div>
@@ -393,8 +399,7 @@ const BusinessValueEstimator = () => {
                 <button
                   className="px-4 py-2 rounded-lg bg-blue-600 text-white"
                   onClick={() => {
-                    // No backend here; just demo action
-                    setShowSummary(true);
+                    handleSummary()
                   }}
                 >
                   Save / Email Estimate

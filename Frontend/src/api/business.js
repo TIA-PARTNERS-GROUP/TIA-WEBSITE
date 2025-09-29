@@ -15,9 +15,16 @@ export function getCurrentBusinessInfo() {
     return api.get('/business/myinfo');
 };
 
-export function updateCurrentBusinessProfile(companyName, contactName, contactPhone, contactEmail, companyDescription, categoryId) {
+export function updateCurrentBusinessProfile(companyName, contactName, contactPhone, contactEmail, companyDescription, categoryId, businessValue) {
     return api.patch('/business/update',
-        { name: companyName, contactName: contactName, contactPhoneNo: contactPhone, contactEmail: contactEmail, description: companyDescription, businessCategory: categoryId}
+        { 
+            name: companyName, 
+            contactName: contactName, 
+            contactPhoneNo: contactPhone, 
+            contactEmail: contactEmail, 
+            description: companyDescription, 
+            businessCategory: categoryId, 
+            ...(businessValue !== null && { businessValue: businessValue })}
     );
 };
 
