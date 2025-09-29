@@ -7,14 +7,14 @@ import { LoadingProvider } from "./utils/LoadingContext.jsx";
 import MainLayout from "./Layouts/MainLayout.jsx";
 import PortalLayout from "./Layouts/PortalLayout.jsx";
 
-const HomePage = React.lazy(() => import("./pages/LandingPage.jsx"));
+const HomePage = React.lazy(() => import("./pages/Landing/LandingPage.jsx"));
 const ChatPage = React.lazy(() => import("./pages/Portal/Chat/ChatPage.jsx"));
 
-const HowItWorksPage = React.lazy(() => import("./pages/HowItWorksPage.jsx"));
-const BenefitsPage = React.lazy(() => import("./pages/BenefitsPage.jsx"));
-const AboutPage = React.lazy(() => import("./pages/AboutPage.jsx"));
-const MembershipPage = React.lazy(() => import("./pages/MembershipPage.jsx"));
-const ContactPage = React.lazy(() => import("./pages/ContactPage.jsx"));
+const HowItWorksPage = React.lazy(() => import("./pages/Landing/HowItWorksPage.jsx"));
+const BenefitsPage = React.lazy(() => import("./pages/Landing/BenefitsPage.jsx"));
+const AboutPage = React.lazy(() => import("./pages/Landing/AboutPage.jsx"));
+const MembershipPage = React.lazy(() => import("./pages/Landing/MembershipPage.jsx"));
+const ContactPage = React.lazy(() => import("./pages/Landing/ContactPage.jsx"));
 
 const DashboardPage = React.lazy(() => import("./pages/Portal/Dashboard/DashboardPage.jsx"));
 const ManagePage = React.lazy(() => import("./pages/Portal/Manage/ManagePage.jsx"));
@@ -36,8 +36,8 @@ const History = React.lazy(() => import("./pages/Portal/Trade/History.jsx"));
 
 const BusinessValueEstimatorPage = React.lazy(() => import("./pages/Portal/Tools/BusinessValueEstimatorPage.jsx"));
 
-const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
-const RegisterPage = React.lazy(() => import("./pages/RegisterPage.jsx"));
+const LoginPage = React.lazy(() => import("./pages/Landing/LoginPage.jsx"));
+const RegisterPage = React.lazy(() => import("./pages/Landing/RegisterPage.jsx"));
 
 // 放在其它 React.lazy 旁边
 const FirstTimeView = React.lazy(() => import("./pages/Portal/Dashboard/FirstTimeView.jsx"));

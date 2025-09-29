@@ -1,9 +1,9 @@
-import HeaderComponent from "../components/Header/Header";
-import HeroAnimationComponent from "../components/Hero/HeroAnimation";
-import HeroHeadingComponent from "../components/Hero/HeroHeading";
-import HeroFeatures from "../components/Hero/HeroFeatures";
-import DashboardPage from "./Portal/Dashboard/DashboardPage";
-import Sidebar from "../components/Portal/Sidebar/Sidebar";
+import HeaderComponent from "../../components/Header/Header";
+import HeroAnimationComponent from "../../components/Hero/HeroAnimation";
+import HeroHeadingComponent from "../../components/Hero/HeroHeading";
+import HeroFeatures from "../../components/Hero/HeroFeatures";
+import DashboardPage from "../Portal/Dashboard/DashboardPage";
+import Sidebar from "../../components/Portal/Sidebar/Sidebar";
 
 const LandingPage = () => {
   return (

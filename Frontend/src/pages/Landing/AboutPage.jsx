@@ -1,6 +1,6 @@
-import HeaderComponent from "../components/Header/Header";
-import FooterComponent from "../components/Footer/Footer";
-import PrimaryButton from "../components/Button/PrimaryButton";
+import HeaderComponent from "../../components/Header/Header";
+import FooterComponent from "../../components/Footer/Footer";
+import PrimaryButton from "../../components/Button/PrimaryButton";
 
 const AboutPage = () => {
   return (

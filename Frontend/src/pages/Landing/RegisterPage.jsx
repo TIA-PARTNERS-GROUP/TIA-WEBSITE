@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import config from '../config.js';
+import config from '../../config.js';
 import { useNavigate } from "react-router-dom";
-import { useLoading } from "../utils/LoadingContext.jsx";
-import { getCategoriesList } from "../api/categories.js";
+import { useLoading } from "../../utils/LoadingContext.jsx";
+import { getCategoriesList } from "../../api/categories.js";
 
 
 const RegisterPage = () => {
