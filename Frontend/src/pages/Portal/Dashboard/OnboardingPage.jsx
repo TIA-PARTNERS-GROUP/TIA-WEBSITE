@@ -7,7 +7,7 @@ import {
   nextDestination,
 } from "../../../utils/dashboardConfig";
 
-// —— 3 个目标的分组 & 选项定义（按你的 Figma）——
+// —— Grouping of 3 Targets & Option Definitions——
 const FORM_DEFS = {
   "cashflow": {
     chip: "Cashflow",
@@ -94,7 +94,7 @@ const FORM_DEFS = {
   },
 };
 
-// 可选：全局显示用，不影响本页逻辑
+// Optional: For global display purposes; does not affect the logic of this page.
 const ALL_WIDGETS = [
   { key: "cashflow",        label: "Cashflow" },
   { key: "resources",       label: "Resources" },
@@ -113,19 +113,19 @@ export default function OnboardingPage() {
   const goal = useGoal();
   const def = useMemo(() => FORM_DEFS[goal] ?? FORM_DEFS["cashflow"], [goal]);
 
-  // ✅ 初始化：只在首次 / goal 变化时，从本地配置读取对应 goal 的 selections
+  // Initialisation: Only when the goal changes for the first time, read the corresponding selections for that goal from the local configuration.
   const [selections, setSelections] = useState(() => {
     const cfg = loadDashboardConfig();
     return cfg?.selections?.[goal] || {};
   });
 
-  // ✅ 只在 goal 改变时才重置（避免无限循环）
+  // Reset only when the goal changes (to prevent infinite loops)
   useEffect(() => {
     const cfg = loadDashboardConfig();
     setSelections(cfg?.selections?.[goal] || {});
   }, [goal]);
 
-  // 你的“全局小部件”选择（保留现有逻辑）
+  // Global Widget Selection (Retain existing logic)
   const [widgets, setWidgets] = useState(() => {
     const cfg = loadDashboardConfig();
     return cfg.widgets?.length ? cfg.widgets : ["cashflow"];
@@ -151,7 +151,7 @@ export default function OnboardingPage() {
       widgets,
       selections: {
         ...(cfg?.selections || {}),
-        [goal]: selections, // 只覆盖当前 goal 的选择
+        [goal]: selections, // Selection covering only the current goal
       },
     };
     saveDashboardConfig(next);
@@ -161,7 +161,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-      {/* 顶部条 */}
+      {/* Top bar */}
       <div className="bg-white rounded-xl px-6 py-4 flex items-center justify-between shadow-sm">
         <span className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 text-indigo-700 px-3 py-1 text-xs font-semibold">
           {def.chip}
@@ -170,9 +170,9 @@ export default function OnboardingPage() {
         <div className="w-8 h-8" />
       </div>
 
-      {/* 主体：左表单 + 右说明&按钮 */}
+      {/* Main content: Left form + Right instructions & buttons */}
       <div className="bg-white rounded-xl p-6 grid grid-cols-12 gap-6 shadow-sm">
-        {/* 左侧：分组勾选 */}
+        {/* Left: Group selection */}
         <div className="col-span-12 lg:col-span-8">
           <div className="border rounded-xl p-6 space-y-8">
             {def.groups.map((g) => (
@@ -202,7 +202,7 @@ export default function OnboardingPage() {
           </div>
         </div>
 
-        {/* 右侧：说明 + 按钮 */}
+        {/* Right-hand side: Description + Button */}
         <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
           <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm text-gray-700">
             <div className="font-semibold mb-2">{def.note}</div>
@@ -231,8 +231,7 @@ export default function OnboardingPage() {
         </div>
       </div>
 
-      {/* （可选）如果你想让用户同时选择全局模块，可以把 ALL_WIDGETS 渲染出来，用 toggleWidget 控制 */}
-      {/* 留白：此处保留你的原先模块选择区… */}
+      
     </div>
   );
 }

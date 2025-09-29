@@ -10,7 +10,7 @@ import NetworkIcon from "../../../components/Icons/NetworkIcon";
 import TradeIcon from "../../../components/Icons/TradeIcon";
 import ManageIcon from "../../../components/Icons/ManegIcon";
 
-// ✅ 读取“是否已完成配置”，用于控制底部按钮显示
+// Read ‘Configuration Complete Status’ to control the display of the bottom button
 import { loadDashboardConfig } from "../../../utils/dashboardConfig";
 
 // Track sidebar paths, icons and labels for mapping NavItems below
@@ -38,7 +38,7 @@ const routeHierarchy = {
     const location = useLocation();
     let splitPath = location.pathname.split('/')[1];
   
-    // ✅ 新增：追踪用户是否已选择目标
+    // New: Track whether the user has selected the target
     const [selectedGoal, setSelectedGoal] = useState(
       () => localStorage.getItem("tia:selectedGoal")
     );
@@ -51,9 +51,9 @@ const routeHierarchy = {
       return () => window.removeEventListener("tia:selectedGoalChanged", handler);
     }, []);
   
-    // ✅ 你原来的配置状态（保留）
+    // original configuration settings (retained)
     const cfg = loadDashboardConfig();
-    const showConfigure = true; // 想一直显示就 true，不然就判断 cfg
+    const showConfigure = true; // To display permanently, set to true; otherwise, check cfg.
   
     const handleModuleClick = (match) => {
       const prevPath = routeHierarchy[activePage];
@@ -105,11 +105,11 @@ const routeHierarchy = {
         </ul>
 
         </nav>
-{/* 底部 Configure 按钮（是否显示仍可用 showConfigure） */}
+{/* Configure button at the bottom (whether to display “showConfigure” remains available） */}
 {showConfigure && (
   <div className="pt-4 mt-2 border-t border-white/10">
     {selectedGoal ? (
-      // ✅ 已选目标 → 可跳转
+      // Selected target → Jumpable
       <Link
         to={`/onboarding?goal=${encodeURIComponent(selectedGoal)}`}
         className="block w-full text-left font-semibold sm:text-xs xl:text-sm 2xl:text-lg @md:text-base
@@ -123,7 +123,7 @@ const routeHierarchy = {
         Configure workspace
       </Link>
     ) : (
-      // ⛔ 未选目标 → 灰掉禁用
+      // No target selected → Greyed out and disabled
       <button
         type="button"
         disabled

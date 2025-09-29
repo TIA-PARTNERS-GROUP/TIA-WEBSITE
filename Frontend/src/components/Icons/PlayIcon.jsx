@@ -14,9 +14,9 @@ export default function PlayIcon({ fillColor = "#000000", width = 24, height = 2
       strokeLinejoin="round"
       {...props}
     >
-      {/* 外圆 */}
+      {/* cylindrical*/}
       <circle cx="12" cy="12" r="10" />
-      {/* 三角形（播放箭头） */}
+      {/* Triangle (play arrow) */}
       <polygon points="10 8 16 12 10 16 10 8" fill={fillColor} />
     </svg>
   );

@@ -13,7 +13,7 @@ export default function FirstTimeView() {
       </div>
 
       <div className="bg-white rounded-xl p-8">
-        <FocusTab /> {/* 不依赖登录也能渲染 */}
+        <FocusTab /> {/* Render without requiring login  */}
       </div>
 
 

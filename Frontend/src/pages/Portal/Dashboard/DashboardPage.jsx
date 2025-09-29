@@ -7,10 +7,10 @@ import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
 import FocusTab from "../../../components/Portal/Dashboard/FocusTab";
 import NextAction from "../../../components/Portal/Dashboard/NextAction";
 
-// 留着即可（本文件没直接用，但 map 里的 daily 组件会用到）
+
 import DailyActivities from "../../../components/Portal/Dashboard/DailyActivities";
 
-// ===== 3 个域的映射 =====
+// ===== Mapping of 3 Domains =====
 import {
   CASHFLOW_KEYS,
   renderDailyActivities as renderCashflowDaily,
@@ -30,7 +30,7 @@ import {
 
 const GRID = "grid grid-cols-3 sm:gap-2 lg:gap-3 xl:gap-4 2xl:gap-5 pb-4";
 
-/** 轻量版：只展示 “Goals Completed this Quarter” */
+/** Display only ‘Goals achieved this quarter’ */
 function GoalsCompletedCard({ percent = 22 }) {
   return (
     <div className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
@@ -48,25 +48,12 @@ function GoalsCompletedCard({ percent = 22 }) {
   );
 }
 
-export default function DashboardPage({ mock = false }) {
-  // 读本地配置（Onboarding 保存）
-  const cfg = useMemo(() => {
-    if (mock) {
-      return {
-        lastGoal: "cashflow",
-        selections: {
-          cashflow: { revenue: true, expenses: true },
-          resources: {},
-          "business-growth": {},
-        },
-      };
-    }
-    return loadDashboardConfig() || {};
-  }, [mock]);
+export default function DashboardPage() {
+  // Read local configuration (Onboarding saved)
+  const cfg = useMemo(() => loadDashboardConfig() || {}, []);
 
-  // 当前目标：localStorage > cfg.lastGoal > 'cashflow'
+  // Current objective: localStorage > cfg.lastGoal > 'cashflow'
   const [goal, setGoal] = useState(() => {
-    if (mock) return "cashflow";
     const v =
       (typeof window !== "undefined" &&
         localStorage.getItem("tia:selectedGoal")) ||
@@ -75,9 +62,8 @@ export default function DashboardPage({ mock = false }) {
     return String(v).toLowerCase();
   });
 
-  // 监听 FocusTab 的目标切换事件
+  // Monitor target switching events on the FocusTab
   useEffect(() => {
-    if (mock) return;
     const handler = (e) => {
       const v =
         e?.detail ||
@@ -88,12 +74,12 @@ export default function DashboardPage({ mock = false }) {
     };
     window.addEventListener("tia:selectedGoalChanged", handler);
     return () => window.removeEventListener("tia:selectedGoalChanged", handler);
-  }, [mock]);
+  }, []);
 
-  // 当前目标下的勾选配置（可能为空对象）
+  // Checked configuration for the current target (may be an empty object)
   const selections = (cfg.selections && cfg.selections[goal]) || {};
 
-  // 是否“至少配置过一项”（任意域任意 key）
+  // Has at least one item been configured (in any domain and for any key)?
   const hasAnySelection = useMemo(() => {
     const all = cfg.selections || {};
     return Object.values(all).some((obj) =>
@@ -101,11 +87,11 @@ export default function DashboardPage({ mock = false }) {
     );
   }, [cfg.selections]);
 
-  // —— 组装要渲染的卡片 —— //
+  // —— Assemble the cards to be rendered —— //
   const cards = useMemo(() => {
     const out = [];
 
-    // 1) 仅当用户至少配置过一项时，显示：GoalsCompleted + NextAction
+    // 1) Display only when the user has configured at least one item: GoalsCompleted + NextAction
     if (hasAnySelection) {
       out.push(<GoalsCompletedCard key="goalsQuarter" percent={22} />);
       out.push(
@@ -120,7 +106,7 @@ export default function DashboardPage({ mock = false }) {
       );
     }
 
-    // 2) 根据当前 goal，拼 Daily（聚合伙伴项） + 其它 extras
+    // 2) Based on the current goal, combine Daily (aggregated partner items) with other extras.
     if (goal === "cashflow") {
       const chosen = CASHFLOW_KEYS.filter((k) => !!selections[k]);
       const daily = renderCashflowDaily(chosen);
@@ -145,16 +131,16 @@ export default function DashboardPage({ mock = false }) {
       return out;
     }
 
-    // 兜底：只展示已追加的公共卡（或空）
+    // Bottom line: Only display public cards that have been added (or none).
     return out;
   }, [goal, selections, hasAnySelection]);
 
-  // —— 渲染 —— //
+  // —— Rendering —— //
   return (
     <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4">
       <div className="bg-white rounded-xl p-8">
-        <PortalHeader mock={mock} module={"Dashboard"} />
-        <ProfileTab mock={mock} />
+        <PortalHeader module={"Dashboard"} />
+        <ProfileTab />
       </div>
 
       <div className="bg-white rounded-xl p-8">
