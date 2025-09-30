@@ -48,12 +48,25 @@ function GoalsCompletedCard({ percent = 22 }) {
   );
 }
 
-export default function DashboardPage() {
+export default function DashboardPage({mock = false}) {
   // Read local configuration (Onboarding saved)
-  const cfg = useMemo(() => loadDashboardConfig() || {}, []);
+  const cfg = useMemo(() => {
+    if (mock) {
+      return {
+        lastGoal: "cashflow",
+        selections: {
+          cashflow: { revenue: true, expenses: true },
+          resources: {},
+          "business-growth": {},
+        },
+      };
+    }
+    return loadDashboardConfig() || {};
+  }, [mock]);
 
   // Current objective: localStorage > cfg.lastGoal > 'cashflow'
   const [goal, setGoal] = useState(() => {
+    if (mock) return "cashflow";
     const v =
       (typeof window !== "undefined" &&
         localStorage.getItem("tia:selectedGoal")) ||
@@ -64,6 +77,7 @@ export default function DashboardPage() {
 
   // Monitor target switching events on the FocusTab
   useEffect(() => {
+    if (mock) return;
     const handler = (e) => {
       const v =
         e?.detail ||
@@ -74,7 +88,7 @@ export default function DashboardPage() {
     };
     window.addEventListener("tia:selectedGoalChanged", handler);
     return () => window.removeEventListener("tia:selectedGoalChanged", handler);
-  }, []);
+  }, [mock]);
 
   // Checked configuration for the current target (may be an empty object)
   const selections = (cfg.selections && cfg.selections[goal]) || {};
@@ -139,8 +153,8 @@ export default function DashboardPage() {
   return (
     <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4">
       <div className="bg-white rounded-xl p-8">
-        <PortalHeader module={"Dashboard"} />
-        <ProfileTab />
+        <PortalHeader mock={mock} module={"Dashboard"} />
+        <ProfileTab mock={mock}/>
       </div>
 
       <div className="bg-white rounded-xl p-8">
