@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import SlantedBackground from "../../components/Hero/SlantedBackground";
 
 const benefits = [
@@ -51,27 +52,47 @@ const BenefitsPage = () => {
       </section>
 
       <div className="max-w-7xl mx-auto pb-24">
-      <p className="text-center text-gray-700 pt-10 mb-12">
-        The key benefits you can enjoy through partnering include:
-      </p>
+        <p className="text-center text-gray-700 pt-10 mb-12">
+          The key benefits you can enjoy through partnering include:
+        </p>
 
-      <div className="grid md:grid-cols-3 gap-10">
-        {benefits.map((benefit, idx) => (
-          <div key={idx} className="border bg-white shadow-md rounded-2xl p-6">
-            <h3 className="text-indigo-600 text-xl font-semibold mb-4">{benefit.title}</h3>
-            <ul className="list-disc list-inside space-y-3 text-gray-700">
-              {benefit.points.map((point, pIdx) => (
-                <li key={pIdx} className="flex items-start">
-                  <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+        <motion.div 
+          className="grid md:grid-cols-3 gap-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.2
+              }
+            }
+          }}
+        >
+          {benefits.map((benefit, idx) => (
+            <motion.div 
+              key={idx} 
+              className="border bg-white shadow-md rounded-2xl p-6"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <h3 className="text-indigo-600 text-xl font-semibold mb-4">{benefit.title}</h3>
+              <ul className="list-disc list-inside space-y-3 text-gray-700">
+                {benefit.points.map((point, pIdx) => (
+                  <li key={pIdx} className="flex items-start">
+                    <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import PrimaryButton from "../../components/Button/PrimaryButton";
 import CheckIcon from "../../components/Icons/CheckIcon";
 import SlantedBackground from "../../components/Hero/SlantedBackground";
@@ -22,10 +23,29 @@ const MembershipPlansPage = () => {
 
       {/* Membership Plans */}
       <section className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end max-w-7xl mx-auto">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end max-w-7xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.2
+              }
+            }
+          }}
+        >
           
           {/* Free Plan - Shorter */}
-          <div className="bg-white border rounded-lg shadow-lg p-8 flex flex-col justify-between">
+          <motion.div 
+            className="bg-white border rounded-lg shadow-lg p-8 flex flex-col justify-between"  
+            variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div>
               <div className="text-center mb-6">
                 <h4 className="text-2xl font-semibold text-gray-800">Free</h4>
@@ -60,10 +80,17 @@ const MembershipPlansPage = () => {
                 </a>
               </PrimaryButton>
             </div>
-          </div>
+          </motion.div>
 
           {/* Connect Plan - Taller (Featured) */}
-          <div className="bg-white border-2 border-blue-500 rounded-lg shadow-xl p-8 flex flex-col justify-between transform -translate-y-4">
+          <motion.div 
+            className="bg-white border-2 border-blue-500 rounded-lg shadow-xl p-8 flex flex-col justify-between transform -translate-y-4"
+            variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div>
               <div className="text-center mb-6">
                 <div className="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold mb-2">
@@ -109,10 +136,17 @@ const MembershipPlansPage = () => {
                 </a>
               </PrimaryButton>
             </div>
-          </div>
+          </motion.div>
 
           {/* Collaborate Plan - Shorter */}
-          <div className="bg-white border rounded-lg shadow-lg p-8 flex flex-col justify-between">
+          <motion.div 
+            className="bg-white border rounded-lg shadow-lg p-8 flex flex-col justify-between"
+            variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div>
               <div className="text-center mb-6">
                 <h4 className="text-2xl font-semibold text-gray-800">Collaborate</h4>
@@ -151,8 +185,8 @@ const MembershipPlansPage = () => {
                 </a>
               </PrimaryButton>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
     </div>
   );

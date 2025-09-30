@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -14,7 +15,17 @@ const ContactPage = () => {
   };
 
   return (
-    <section className="max-w-2xl mx-auto py-16 px-4">
+    <motion.section 
+      className="max-w-2xl mx-auto py-16 px-4"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 }
+              }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <h1 className="text-3xl font-bold mb-6">Contact Us</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -60,7 +71,7 @@ const ContactPage = () => {
           Send Message
         </button>
       </form>
-    </section>
+    </motion.section>
   );
 };
 
