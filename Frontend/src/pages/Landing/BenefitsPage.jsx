@@ -1,3 +1,5 @@
+import SlantedBackground from "../../components/Hero/SlantedBackground";
+
 const benefits = [
   {
     title: "Market Your Business",
@@ -37,26 +39,7 @@ const benefits = [
 const BenefitsPage = () => {
   return (
     <section className="mx-auto px-4">
-      {/* Slanted, Fading Blue Background */}
-      <div
-        className="absolute left-0 w-full h-full -z-10 transform rotate-12 origin-top-left" // Added transform and origin back
-        style={{
-          // Adjust 'top' to move it down the page
-          top: "40%", // Example: moves the background div down by 20% of its parent's height
-
-          // Use a very light blue and a high angle for the gradient
-          // The angle here for the gradient refers to the direction of the fade,
-          // while 'rotate-6' creates the overall slant of the div.
-          background: "linear-gradient(150deg, #E0F2FE 0%, transparent 60%)",
-
-          // You might need to increase height/width to ensure it covers the area
-          // especially after rotation and if moved down.
-          height: "120%", // Increase height to prevent cut-off at bottom
-          width: "150%", // Increase width to prevent cut-off at right
-          // Also adjust left/top if the larger size shifts it too much
-          // left: '-10%',
-        }}
-      ></div>
+      <SlantedBackground top="40%" rotate="12"/>
       <section className="py-12 text-center bg-gray-50">
         <h3 className="text-4xl font-bold">TIA Benefits</h3>
         <div className="py-8">
