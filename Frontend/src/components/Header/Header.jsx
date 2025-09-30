@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 // --- Your Custom Button and Icon Components ---
@@ -11,6 +11,8 @@ import RegisterIcon from "../Icons/RegisterIcon";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+
+  const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -61,7 +63,9 @@ const Header = () => {
                 <Link
                   key={idx}
                   to={link.path}
-                  className="hover:text-blue-600 transition"
+                  className={`hover:text-blue-600 transition ${
+                    location.pathname === link.path ? "text-blue-600" : "text-gray-700"
+                  }`}
                 >
                   {link.name}
                 </Link>

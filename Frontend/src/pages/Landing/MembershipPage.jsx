@@ -1,9 +1,11 @@
-import HeaderComponent from "../../components/Header/Header";
-import FooterComponent from "../../components/Footer/Footer";
+import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/Button/PrimaryButton";
 import CheckIcon from "../../components/Icons/CheckIcon";
 
 const MembershipPlansPage = () => {
+
+  const navigate = useNavigate();
+
   return (
     <div className="relative overflow-hidden">
 
@@ -70,7 +72,7 @@ const MembershipPlansPage = () => {
               </ul>
             </div>
             <div className="mt-6 text-center">
-              <PrimaryButton className="w-full">
+              <PrimaryButton className="w-full" onClick={() => (navigate("/register"))}>
                 <a className="inline-block text-white rounded-lg w-full">
                   Sign Up
                 </a>
@@ -119,7 +121,7 @@ const MembershipPlansPage = () => {
               </ul>
             </div>
             <div className="mt-6 text-center">
-              <PrimaryButton className="w-full bg-blue-600 hover:bg-blue-700">
+              <PrimaryButton className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => (navigate("/register"))}>
                 <a className="inline-block text-white rounded-lg w-full">
                   Sign Up
                 </a>
@@ -161,7 +163,7 @@ const MembershipPlansPage = () => {
               </ul>
             </div>
             <div className="mt-6 text-center">
-              <PrimaryButton className="w-full">
+              <PrimaryButton className="w-full" onClick={() => (navigate("/register"))}>
                 <a className="inline-block text-white rounded-lg w-full">
                   Sign Up
                 </a>
