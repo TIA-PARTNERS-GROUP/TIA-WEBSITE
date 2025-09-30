@@ -39,7 +39,7 @@ const BusinessValueEstimatorPage = React.lazy(() => import("./pages/Portal/Tools
 const LoginPage = React.lazy(() => import("./pages/Landing/LoginPage.jsx"));
 const RegisterPage = React.lazy(() => import("./pages/Landing/RegisterPage.jsx"));
 
-// 放在其它 React.lazy 旁边
+
 const FirstTimeView = React.lazy(() => import("./pages/Portal/Dashboard/FirstTimeView.jsx"));
 const OnboardingPage = React.lazy(() => import("./pages/Portal/Dashboard/OnboardingPage.jsx"));
 

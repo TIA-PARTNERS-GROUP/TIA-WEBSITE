@@ -1,6 +1,6 @@
 import DailyActivities from "../../../../components/Portal/Dashboard/DailyActivities";
 
-// 与 Onboarding 的 business-growth 定义一致
+// Consistent with the business-growth definition of Onboarding
 export const GROWTH_KEYS = [
   "connect_complementary",
   "connect_mastermind",
@@ -11,10 +11,10 @@ export const GROWTH_KEYS = [
   "net_network_events",
 ];
 
-// 伙伴类（聚合到一张 Daily Activities）
+// Partner Category (Aggregated into a single Daily Activities)
 export const PARTNER_KEYS_GROWTH = ["connect_complementary", "connect_mastermind"];
 
-// 伙伴项聚合成一张 Daily Activities（带步进器 + CONNECT）
+// Partner items aggregated into a Daily Activities dashboard (with step counter + CONNECT)
 export function renderGrowthDaily(chosenKeys) {
   const picks = PARTNER_KEYS_GROWTH.filter((k) => chosenKeys.includes(k));
   if (picks.length === 0) return null;
@@ -56,7 +56,7 @@ export function renderGrowthDaily(chosenKeys) {
   );
 }
 
-// 非伙伴项：按选择追加
+// Non-partner items: Add as selected
 export function growthExtras(chosenKeys) {
   const out = [];
 

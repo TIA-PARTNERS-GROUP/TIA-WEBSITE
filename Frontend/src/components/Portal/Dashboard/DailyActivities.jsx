@@ -7,9 +7,9 @@ import CircularProgressBar from "../../Button/CircularProgressBar";
  * barData: Array<{
  *   progress: number | string,
  *   description: string,
- *   quarterlyGoal?: number,                 // 显示步进器就传数字（例如 6）
+ *   quarterlyGoal?: number,                 // To display the stepper, pass a number (e.g., 6)
  *   onQuarterlyGoalChange?: (n:number)=>void,
- *   actionLabel?: string,                   // 显示按钮就传文案（如 "CONNECT" / "ATTEND"）
+ *   actionLabel?: string,                   // Display button text (e.g., “CONNECT” / “ATTEND”)
  *   onActionClick?: () => void
  * }>
  */
@@ -47,9 +47,9 @@ const DailyActivities = ({ overallProgress = 0, barData = [] }) => (
 function ActivityItem({
   progress = 0,
   description = "",
-  quarterlyGoal, // number? 传了就显示步进器
+  quarterlyGoal, // number? Once transmitted, the stepper motor will display.
   onQuarterlyGoalChange,
-  actionLabel, // string? 传了就显示按钮
+  actionLabel, // string? After transmission, the button will appear.
   onActionClick,
 }) {
   const [goal, setGoal] = useState(
@@ -76,7 +76,7 @@ function ActivityItem({
         {description}
       </motion.p>
 
-      {/* Quarterly Goal 步进器 */}
+      {/* Quarterly Goal Stepper */}
       {typeof goal === "number" && (
         <div className="mt-1 inline-flex items-center gap-1 rounded-md border border-gray-300 px-2 py-1 text-xs shadow-sm bg-white">
           <button
@@ -99,7 +99,7 @@ function ActivityItem({
         </div>
       )}
 
-      {/* 操作按钮（如 CONNECT/ATTEND） */}
+      {/* Operation button（like CONNECT/ATTEND） */}
       {actionLabel && (
         <button
           type="button"

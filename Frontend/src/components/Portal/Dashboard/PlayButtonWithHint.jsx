@@ -10,19 +10,19 @@ export default function PlayButtonWithHint() {
       onMouseEnter={() => setShowHint(true)}
       onMouseLeave={() => setShowHint(false)}
     >
-      {/* 播放按钮 */}
+      {/* Play button */}
       <button
         type="button"
         className="p-2 rounded-full bg-white shadow hover:shadow-lg transition"
         onClick={() => {
-          // TODO: 这里以后加视频播放逻辑
+          // TODO: Video playback logic will be added here later.
           console.log("Play video");
         }}
       >
         <PlayIcon fillColor="#4F46E5" width={24} height={24} />
       </button>
 
-      {/* 悬浮提示浮窗 */}
+      {/* Floating Tooltip Window */}
       {showHint && (
         <div className="absolute z-50 top-full mt-2 left-1/2 -translate-x-1/2 w-64
                         bg-gray-800 text-white text-sm rounded-lg shadow-lg p-3">

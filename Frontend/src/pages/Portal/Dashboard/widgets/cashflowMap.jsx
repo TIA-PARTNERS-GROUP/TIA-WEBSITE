@@ -11,14 +11,14 @@ export const CASHFLOW_KEYS = [
   "net_events",
 ];
 
-// 伙伴类 key
+// Partner Class Key
 export const PARTNER_KEYS = [
   "connect_complementary",
   "connect_alliance",
   "connect_mastermind",
 ];
 
-// 把“已选择的伙伴项”聚合成一张 Daily Activities 卡
+// Aggregate the “selected partner items” into a single Daily Activities card
 export function renderDailyActivities(selectedKeys) {
   const picks = PARTNER_KEYS.filter((k) => selectedKeys.includes(k));
   if (picks.length === 0) return null;
@@ -64,7 +64,7 @@ export function renderDailyActivities(selectedKeys) {
     });
   }
 
-  // overall 取三项平均
+   // overall take the average of three items
   const overall =
     bars.length > 0
       ? Math.round(
@@ -80,7 +80,7 @@ export function renderDailyActivities(selectedKeys) {
   );
 }
 
-// 非伙伴项：按选择追加对应卡片
+// Non-partner items: Add corresponding cards based on selection
 export function cashflowExtras(selectedKeys) {
   const out = [];
 

@@ -3,7 +3,7 @@ import GoalTracker from "../../../../components/Portal/Dashboard/GoalTracker";
 import NextAction from "../../../../components/Portal/Dashboard/NextAction";
 import DailyActivities from "../../../../components/Portal/Dashboard/DailyActivities";
 
-// 与 OnboardingPage 的 resources 定义一致的 key
+// A key consistent with the resources definition in OnboardingPage
 export const RESOURCES_KEYS = [
   "connect_alliance",
   "connect_mastermind",
@@ -12,10 +12,10 @@ export const RESOURCES_KEYS = [
   "net_events_attended",
 ];
 
-// 哪些算“伙伴类”，聚合到同一张 Daily Activities
+// Which activities are considered “partner activities” and aggregated into the same Daily Activities?
 export const RES_PARTNER_KEYS = ["connect_alliance", "connect_mastermind"];
 
-// 伙伴项聚合成一张 Daily Activities（带步进器 + CONNECT）
+//  Partner items aggregated into a Daily Activities dashboard (with step counter + CONNECT)
 export function renderResourcesDaily(chosenKeys) {
   const picks = RES_PARTNER_KEYS.filter((k) => chosenKeys.includes(k));
   if (picks.length === 0) return null;
@@ -57,7 +57,7 @@ export function renderResourcesDaily(chosenKeys) {
   );
 }
 
-// 非伙伴项：按选择追加（保留占位 + 合理按钮）
+// Non-partner items: Add as selected (keep placeholder + appropriate button)
 export function resourcesExtras(chosenKeys) {
   const out = [];
 

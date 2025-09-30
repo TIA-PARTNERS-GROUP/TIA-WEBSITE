@@ -33,9 +33,9 @@ function FeatureCard({ icon, title, selected, onClick }) {
         "flex flex-col items-center justify-center p-4 @md:p-6 rounded-lg shadow-md transition outline-none",
         "focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
         selected
-          ? // ✅ 被点击后：保持渐变高亮
+          ? // After being clicked: Maintain gradient highlight
             "text-white bg-gradient-to-r from-violet-600 to-blue-500"
-          : // ⬇️ 未选中：白底+边框；允许轻微 hover 阴影，但不改变颜色
+          : // Unselected: White background + border; allows slight hover shadow but does not change color
             "text-gray-900 bg-white border border-gray-200 hover:shadow"
       ].join(" ")}
     >
@@ -48,7 +48,7 @@ function FeatureCard({ icon, title, selected, onClick }) {
 export default function FocusTab() {
   const [selected, setSelected] = useState(null);
 
-  // 首次挂载：从 localStorage 取；没有就默认 'cashflow'，并广播
+  // First mount: Retrieve from localStorage; if absent, default to ‘cashflow’ and broadcast.
   useEffect(() => {
     let v = localStorage.getItem("tia:selectedGoal");
     if (!v) {
@@ -66,7 +66,7 @@ export default function FocusTab() {
   ];
 
   const handlePick = (key) => {
-    if (key === selected) return;             // 同一项不重复广播
+    if (key === selected) return;               // Avoid broadcasting the same item repeatedly
     setSelected(key);
     localStorage.setItem("tia:selectedGoal", key);
     window.dispatchEvent(new CustomEvent("tia:selectedGoalChanged", { detail: key }));

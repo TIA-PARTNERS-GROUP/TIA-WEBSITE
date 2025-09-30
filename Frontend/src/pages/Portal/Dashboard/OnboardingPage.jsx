@@ -166,7 +166,7 @@ export default function OnboardingPage() {
         <span className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 text-indigo-700 px-3 py-1 text-xs font-semibold">
           {def.chip}
         </span>
-        <div className="text-gray-800 font-medium">Configure Your Dashboard</div>
+        <div className="text-gray-800 font-medium">Configure Your Workspace</div>
         <div className="w-8 h-8" />
       </div>
 
