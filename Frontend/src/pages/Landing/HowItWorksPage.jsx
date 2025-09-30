@@ -1,3 +1,5 @@
+import React from "react";
+import { motion } from "framer-motion";
 import manageImage from "../../assets/images/manage-showcase.png";
 import searchImage from "../../assets/images/search-showcase.png";
 import connectImage from "../../assets/images/connect-showcase.png";
@@ -63,24 +65,38 @@ const HowItWorksPage = () => {
           The 4 Steps to a Successful Partnership.
         </p>
         {/* Pipeline Circles */}
-        <div className="flex justify-center items-center py-8">
-          <div className="flex items-center">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-center">
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-indigo-600 font-semibold text-lg mb-2 relative z-10 border-4 shadow-lg">
-                    <step.icon className="w-8 h-8" /> {/* Render the icon component */}
-                  </div>
-                  <span className="text-sm font-bold text-indigo-800">{step.title}</span>
-                </div>
-                
-                {index < steps.length - 1 && (
-                  <div className="w-24 h-1 bg-indigo-900 mx-4 relative -top-4"></div>
-                )}
-              </div>
-            ))}
+<div className="flex justify-center items-center py-8">
+  <div className="flex items-center">
+    {steps.map((step, index) => (
+      <React.Fragment key={index}>
+        {/* Circle and Text */}
+        <motion.div 
+          className="flex flex-col items-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: "easeIn", delay: index * 0.25 }}
+        >
+          <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-indigo-600 font-semibold text-lg mb-2 relative z-10 border-4 shadow-lg">
+            <step.icon className="w-8 h-8" />
           </div>
-        </div>
+          <span className="text-sm font-bold text-indigo-800">{step.title}</span>
+        </motion.div>
+        
+        {/* Connector Line (except after last item) */}
+        {index < steps.length - 1 && (
+          <motion.div 
+            className="w-24 h-1 bg-indigo-900 mx-4 relative -top-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: "easeIn", delay: (index * 0.25) + 0.1 }}
+          />
+        )}
+      </React.Fragment>
+    ))}
+  </div>
+</div>
       </section>
 
 
@@ -94,17 +110,29 @@ const HowItWorksPage = () => {
 
           >
             {/* Text Section */}
-            <div className="md:w-1/2 flex justify-center">
+            <motion.div 
+              className="md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: idx % 2 === 1 ? 50 : -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.65 }}
+              transition={{ duration: 0.5, ease: "easeIn"}}
+            >
               <div className="max-w-2xl w-full text-left"> {/* Added container for centering */}
                 <h2 className="text-4xl font-semibold">{step.title}</h2>
                 <p className="mt-8 text-gray-600 leading-relaxed">
                   {step.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Image Section */}
-            <div className="md:w-1/2 flex justify-center">
+            <motion.div 
+              className="md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: idx % 2 === 1 ? -50 : 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.65 }}
+              transition={{ duration: 0.5, ease: "easeIn"}}
+            >
               <div className="relative h-[40rem] w-full rounded-2xl shadow overflow-hidden">
                 <img 
                   src={step.image} 
@@ -113,7 +141,7 @@ const HowItWorksPage = () => {
                   style={step.imageStyle}
                 />
               </div>
-            </div>
+            </motion.div>
           </div>
         ))}
       </div>

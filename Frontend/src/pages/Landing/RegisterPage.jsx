@@ -91,7 +91,7 @@ const RegisterPage = () => {
 
       {/* Form */}
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", width: "280px", marginTop: "20px" }}>
-        <input type="text" placeholder="First name" style={inputStyle} onChange={(e) => setFirstname(e.target.value)} require/>
+        <input type="text" placeholder="First name" style={inputStyle} onChange={(e) => setFirstname(e.target.value)} required/>
         <input type="text" placeholder="Last name" style={inputStyle} onChange={(e) => setLastname(e.target.value)} required/>
         <input type="email" placeholder="Email" style={inputStyle} onChange={(e) => setEmail(e.target.value)} required/>
         <input type="password" placeholder="Password" style={inputStyle} onChange={(e) => setPassword(e.target.value)} required/>
