@@ -4,6 +4,7 @@ import { useGeolocated } from "react-geolocated";
 import { resetChatbot, sendChatbotMessage } from "../../../api/chatbot";
 import ReactMarkdown from "react-markdown";
 import UpArrowIcon from "../../Icons/UpArrowIcon";
+import { addBlog } from "../../../api/blogs";
 
 const MessageField = ({ messageData, user_id, name, chatType }) => {
 
@@ -15,6 +16,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
     const textareaRef = useRef(null);
+    const [currentBlogData, setCurrentBlogData] = useState(null);
 
     // Geolocation using react-geolocate, default to QUT if no geolocation
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
@@ -83,6 +85,21 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             return "Sorry, the chatbot returned an empty response. Please try again.";
         }
         return "Sorry, no response received from the chatbot. Please try again.";
+    };
+
+    const handlePublish = async (blogData) => {
+        console.log('Publishing blog post:', blogData);
+        const title = blogData.title;
+        const date = new Date().toISOString();
+        const content = blogData.content;
+        const publishingStatus = 'published';
+        
+        try {
+            await addBlog(title, date, content, publishingStatus);
+            navigate("/manage/blogs/table-view");
+        } catch (error) {
+            console.error('Error publishing blog:', error);
+        }
     };
 
     useEffect(() => {
@@ -205,6 +222,120 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
     };
 
+    const parseBlogResponse = (text) => {
+        if (typeof text !== 'string') return null;
+
+        // Detect if this looks like blog content
+        text = text.replace(/^#+\s*content(?:\s*batch\s*\d+)?/gim, '').trim();
+
+        const isBlogContent =
+            /blog post headline/i.test(text);
+
+        if (!isBlogContent) return null;
+
+        let titleMatch, contentMatch;
+
+        // Pattern 1: **Blog Post Headline**
+        titleMatch = text.match(/\*\*Blog Post Headline\*\*[\s\S]*?\n(.+?)\n/i);
+        contentMatch = text.match(/\*\*Blog Post\*\*[\s\S]*?(.*?)(?=\*\*Social Media Caption\*\*|---|$)/is);
+
+        // Pattern 2: ### Blog Post Headline
+        if (!titleMatch) {
+            titleMatch = text.match(/### Blog Post Headline[\s\S]*?\n(.+?)\n/i);
+            contentMatch = text.match(/### Blog Post[\s\S]*?(.*?)(?=### Social Media Caption|---|$)/is);
+        }
+
+        if (titleMatch && contentMatch) {
+            return {
+            title: titleMatch[1].trim().replace(/^["'`*]+|["'`*]+$/g, ""),
+            content: contentMatch[1].trim(),
+            rawText: text,
+            };
+        }
+
+        return null;
+        };
+
+    const renderContent = (text) => {
+        if (typeof text !== 'string') return text;
+        const blogData = parseBlogResponse(text);
+
+        if (!blogData) {
+            return <div className="whitespace-pre-wrap leading-5">{text}</div>;
+        }
+
+    
+        return (
+            <div>
+                <ReactMarkdown
+                    components={{
+                        pre: ({node, ...props}) => (
+                        <pre {...props} className="whitespace-pre-wrap bg-gray-50 p-3 rounded w-full my-6 font-mono text-sm" />
+                        ),
+                        p: ({node, ...props}) => (
+                        <p {...props} className="mt-2 mb-4 leading-6 [&_br]:hidden whitespace-pre-wrap" />
+                        ),
+                        h3: ({node, ...props}) => (
+                        <h3 {...props} className="text-lg font-bold mt-4 mb-3" />
+                        ),
+                        ul: ({node, ...props}) => (
+                        <ul {...props} className="my-4 pl-6 list-disc" />
+                        ),
+                        li: ({node, ...props}) => (
+                        <li {...props} className="mb-2" />
+                        ),
+                        h2: ({node, ...props}) => {
+                            const content = props.children?.[0];
+                            if (typeof content === 'string' && /CONTENT(?: BATCH)?/.test(content)) {
+                            return null;
+                            }
+                            return <h2 {...props} className="text-xl font-bold mt-6 mb-4" />;
+                        },
+                        // Handles the **Blog Post Headline** format
+                        strong: ({node, ...props}) => {
+                            const content = props.children?.[0];
+                            // If it's a blog post headline, render it as a heading instead of bold text
+                            if (typeof content === 'string' && content === 'Blog Post Headline') {
+                                return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
+                            }
+                            if (typeof content === 'string' && content === 'Blog Post') {
+                                return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
+                            }
+                            if (typeof content === 'string' && content === 'Social Media Caption') {
+                                return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
+                            }
+                            return <strong {...props} />;
+                        }
+                    }}
+                >
+                    {blogData.rawText}
+                </ReactMarkdown>
+                
+                {/* Add publish button for blog posts */}
+                    {blogData && (
+                        <div className="mt-6 flex justify-center">
+                            <button 
+                                onClick={() => currentBlogData && handlePublish(currentBlogData)}
+                                disabled={!currentBlogData}
+                                className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                🚀 Publish Blog Post
+                            </button>
+                        </div>
+                    )}
+
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        const lastBotMessage = [...localMessageData].reverse().find(msg => msg.author === "bot");
+        if (lastBotMessage) {
+            const blogData = parseBlogResponse(lastBotMessage.text);
+            setCurrentBlogData(blogData);
+        }
+    }, [localMessageData]);
+
     return (
         <div>
             <div className="sticky z-20">
@@ -219,66 +350,52 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             <div className="sticky top-0 z-10 bg-gray-100 w-full py-4 ">
                 <h1 className="text-lg font-bold text-center text-gray-800">{chatType}</h1>
             </div>
-<div className="flex flex-col justify-center items-center gap-y-10 h-screen pt-4 pb-24">
-    <ul ref={messagesContainerRef} className="flex flex-col w-[80%] max-w-4xl gap-y-4 overflow-y-auto px-4">
-        {localMessageData.map((message, index) => (
-            <li
-                key={index}
-                className={`flex rounded-3xl py-3 px-4 ${message.author === "user" ? "self-end bg-blue-600 text-white" : "self-start bg-white text-gray-800 border max-w-[70%] break-words inline-block"}`}
-            >
-                <div className={message.author === "user" ? "max-w-max" : "w-full"}>
-                    <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
-                        {typeof message.text === "object" 
-                            ? JSON.stringify(message.text)
-                            : <ReactMarkdown
-                                components={{
-                                    pre: ({node, ...props}) => (
-                                        <pre {...props} className="whitespace-pre-wrap bg-gray-50 p-3 rounded w-full my-6" />
-                                    ),
-                                    p: ({node, ...props}) => (
-                                        <p {...props} className="mb-0 leading-6" />
-                                    ),
-                                    br: ({node, ...props}) => (
-                                        <br {...props} style={{ lineHeight: '2' }} />
-                                    )
+        <div className="flex flex-col justify-center items-center gap-y-10 h-screen pt-4 pb-24">
+            <ul ref={messagesContainerRef} className="flex flex-col w-[80%] max-w-4xl gap-y-4 overflow-y-auto px-4">
+                {localMessageData.map((message, index) => (
+                    <li
+                        key={index}
+                        className={`flex rounded-3xl py-3 px-4 ${message.author === "user" ? "self-end bg-blue-600 text-white" : "self-start bg-white text-gray-800 border max-w-[70%] break-words inline-block"}`}
+                    >
+                        <div className={message.author === "user" ? "max-w-max" : "w-full"}>
+                            <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
+                                {typeof message.text === "object" 
+                                    ? JSON.stringify(message.text)
+                                    : renderContent(message.text)
+                                }
+                            </div>
+                        </div>
+                    </li>
+                ))}
+                            {loading && (
+                                <li className="self-start bg-white flex rounded-full py-2 px-4 opacity-60">
+                                    Bot is typing...
+                                </li>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </ul>
+                        <form onSubmit={handleMessageSubmission} className="flex items-center bg-gray-200 rounded-2xl w-[38%] py-2 px-4">
+                            <textarea
+                                ref={textareaRef}
+                                value={messageText}
+                                onChange={handleMessageChange}
+                                onKeyPress={handleKeyPress}
+                                className="w-full bg-gray-200 focus:outline-none resize-none placeholder-gray-500 max-h-50 overflow-y-auto"
+                                placeholder="Message LLM..."
+                                disabled={loading}
+                                rows="1"
+                                style={{
+                                    minHeight: '24px',
+                                    maxHeight: '120px'
                                 }}
-                            >
-                                {message.text}
-                            </ReactMarkdown>
-                        }
+                            />
+                            <button className="bg-blue-600 rounded-full p-2 ml-2 h-10 w-10 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || !messageText.trim()}>
+                                <UpArrowIcon className="text-white w-5 h-5" />
+                            </button>
+                        </form>
+                        <br></br>
                     </div>
                 </div>
-            </li>
-        ))}
-                    {loading && (
-                        <li className="self-start bg-white flex rounded-full py-2 px-4 opacity-60">
-                            Bot is typing...
-                        </li>
-                    )}
-                    <div ref={messagesEndRef} />
-                </ul>
-                <form onSubmit={handleMessageSubmission} className="flex items-center bg-gray-200 rounded-2xl w-[38%] py-2 px-4">
-                    <textarea
-                        ref={textareaRef}
-                        value={messageText}
-                        onChange={handleMessageChange}
-                        onKeyPress={handleKeyPress}
-                        className="w-full bg-gray-200 focus:outline-none resize-none placeholder-gray-500 max-h-50 overflow-y-auto"
-                        placeholder="Message LLM..."
-                        disabled={loading}
-                        rows="1"
-                        style={{
-                            minHeight: '24px',
-                            maxHeight: '120px'
-                        }}
-                    />
-                    <button className="bg-blue-600 rounded-full p-2 ml-2 h-10 w-10 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || !messageText.trim()}>
-                        <UpArrowIcon className="text-white w-5 h-5" />
-                    </button>
-                </form>
-                <br></br>
-            </div>
-        </div>
     )
 }
 
