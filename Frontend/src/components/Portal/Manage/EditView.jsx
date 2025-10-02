@@ -7,6 +7,7 @@ import SecondaryButton from "../../Button/SecondaryButton";
 import DeleteIcon from "../../Icons/DeleteIcon.jsx";
 import ChevronDownIcon from "../../Icons/ChevronDownIcon.jsx";
 import ChevronUpIcon from "../../Icons/ChevronUpIcon.jsx";
+import { getCategoriesList } from "../../../api/categories.js";
 
 const EditView = () => {
 
@@ -27,12 +28,20 @@ const EditView = () => {
   const [originalClientData, setOriginalClientData] = useState([{}]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const categories = [
-    {id: 1, name: 'Manufacuring'},
-    {id: 2, name: 'Installation'},
-    {id: 3, name: 'Software Development'},
-    {id: 4, name: 'Cybersecurity'}
-  ]
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesRes = await getCategoriesList();
+        setCategories(categoriesRes.data.categories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   function formatString(str) {
     if (!str) {return null};
