@@ -8,7 +8,7 @@ import History from "./History";
 // Tab names
 const tabData = [
     {description: "Find Project", path: "find", element: <FindJob />}, 
-    {description: "Submit Project", path: "submit", element: <SubmitJob />},
+    {description: "Submit New Project", path: "submit", element: <SubmitJob />},
     {description: "History", path: "history", element: <History />}, 
 ];
 

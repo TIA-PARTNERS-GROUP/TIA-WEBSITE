@@ -19,6 +19,7 @@ const ArticleTable = () => {
   const [isAllChecked, setIsAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [ tableData, setTableData ] = useState([{title: "Loading...", date: "Loading..."}]);
+  const isTradeRoute = window.location.pathname.startsWith('/trade/');
 
   useEffect(() => {
   const fetchData = async () => {
@@ -168,7 +169,7 @@ const ArticleTable = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-[6fr_0.7fr_0.7fr] gap-4 w-full my-auto">
+      {!isTradeRoute && <div className="grid grid-cols-[6fr_0.7fr_0.7fr] gap-4 w-full my-auto">
           <SecondaryButton
               onClick={() => (handleAddNewClick())}
               className="sm:text-xs text-sm block text-center py-0.5 mt-2 sm:max-w-[120px] max-w-[130px]"
@@ -200,14 +201,25 @@ const ArticleTable = () => {
             </button>
           <p className="sm:text-xs">Delete</p>
         </div>   
-      </div>
+      </div> }
   <div className="sm:p-4 md:p-6 lg:p-8">
     <table className="relative w-full sm:text-xs text-left border-y table-auto"> 
       <thead>
         <tr>
           <th className="border-y-2 border-black py-2">Title</th>
-          <th className="border-y-2 border-black py-2">Date</th>
-          <th className="border-y-2 border-black py-2">Status</th>
+          {isTradeRoute ? (
+            <>
+              <th className="border-y-2 border-black py-2">Open Date</th>
+              <th className="border-y-2 border-black py-2">Close Date</th>
+              <th className="border-y-2 border-black py-2">Completion Date</th>
+              <th className="border-y-2 border-black py-2">Category</th>
+            </>
+          ) : (
+            <>
+              <th className="border-y-2 border-black py-2">Date</th>
+              <th className="border-y-2 border-black py-2">Status</th>
+            </>
+          )}
         </tr>
       </thead>
       <tbody>
@@ -217,22 +229,33 @@ const ArticleTable = () => {
             className="group hover:bg-gray-100 hover:cursor-pointer" 
             onClick={() => {handleRowClick(row)}}>
             <td className="items-center border-y py-2 font-medium">{row.title}</td>
-            <td className="items-center border-y py-2 font-medium">{formatDate(row.date)}</td>
-            <td className="flex items-center justify-between border-y font-medium">
-              <div>{formatStatus(row.status)}</div>
-              <div className="relative">  
-                <button 
-                onClick={(e) => handleCheckboxClick(row.id, e)}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center w-8 h-8"
-                aria-label="Notifications"
-                >
-                  <SquareSelectIcon className="w-5 h-5 @md:w-5 @md:h-5 text-black" />
-                  {checkedItems[row.id] && (
-                    <TickIcon className="absolute w-5 h-5 text-black" />
-                  )}
-                </button>
-              </div>
-            </td>
+            {isTradeRoute ? (
+              <>
+                <td className="items-center border-y py-2 font-medium">{formatDate(row.openDate || row.date)}</td>
+                <td className="items-center border-y py-2 font-medium">{formatDate(row.closeDate)}</td>
+                <td className="items-center border-y py-2 font-medium">{formatDate(row.completionDate)}</td>
+                <td className="items-center border-y py-2 font-medium">{row.category || "N/A"}</td>
+              </>
+            ) : (
+              <>
+                <td className="items-center border-y py-2 font-medium">{formatDate(row.date)}</td>
+                <td className="flex items-center justify-between border-y font-medium">
+                  <div>{formatStatus(row.status)}</div>
+                  <div className="relative">  
+                    <button 
+                    onClick={(e) => handleCheckboxClick(row.id, e)}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center w-8 h-8"
+                    aria-label="Notifications"
+                    >
+                      <SquareSelectIcon className="w-5 h-5 @md:w-5 @md:h-5 text-black" />
+                      {checkedItems[row.id] && (
+                        <TickIcon className="absolute w-5 h-5 text-black" />
+                      )}
+                    </button>
+                  </div>
+                </td>
+              </>
+            )}
           </tr>
         ))}
       </tbody>

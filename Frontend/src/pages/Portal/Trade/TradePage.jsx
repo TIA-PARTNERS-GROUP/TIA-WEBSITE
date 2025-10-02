@@ -9,7 +9,7 @@ const TradePage = () => {
         <PortalHeader module={"Trade"}/>
         <ProfileTab />
       </div>
-      <div className="bg-white rounded-xl p-8">
+      <div>
         <Outlet />
       </div>
     </main>
