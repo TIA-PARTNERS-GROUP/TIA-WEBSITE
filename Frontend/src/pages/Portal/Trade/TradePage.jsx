@@ -1,5 +1,5 @@
+import { Outlet } from "react-router-dom";
 import PortalHeader from "../../../components/Portal/Sidebar/PortalHeader";
-import TradeTab from "../../../components/Portal/Trade/TradeTab";
 import ProfileTab from "../../../components/Portal/Dashboard/ProfileTab";
 
 const TradePage = () => {
@@ -10,7 +10,7 @@ const TradePage = () => {
         <ProfileTab />
       </div>
       <div className="bg-white rounded-xl p-8">
-        <TradeTab />
+        <Outlet />
       </div>
     </main>
   );

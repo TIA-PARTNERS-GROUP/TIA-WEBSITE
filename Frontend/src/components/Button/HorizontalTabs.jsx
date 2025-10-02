@@ -12,7 +12,11 @@ const tabHierarchy = {
   'complementary': 2,
 
   'smartconnect': 1,
-  'quick-search': 2
+  'quick-search': 2,
+
+  'find': 1,
+  'submit': 2,
+  'history': 3
 };
 
 const HorizontalTabs = ({tabData, basePath = '', activePath = '', activeTab, setActiveTab, setTabDirection}) => {

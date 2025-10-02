@@ -21,7 +21,7 @@ const sidebarItems = [
   {match: "build", path: "/build", icon: <BuildIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Build"},
   {match: "collaborate", path: "/collaborate", icon: <CollaborateIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Collaborate"},
   {match: "network", path: "/network", icon: <NetworkIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Network"},
-  {match: "trade", path: "/trade", icon: <TradeIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Trade"}
+  {match: "trade", path: "/trade/find", icon: <TradeIcon className="w-4 h-4 @md:w-5 @md:h-5" />, label: "Trade"}
 ];
 
 const routeHierarchy = {

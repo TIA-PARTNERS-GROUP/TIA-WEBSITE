@@ -6,6 +6,7 @@ import { LoadingProvider } from "./utils/LoadingContext.jsx";
 
 import MainLayout from "./Layouts/MainLayout.jsx";
 import PortalLayout from "./Layouts/PortalLayout.jsx";
+import TradeContent from "./pages/Portal/Trade/TradeContent.jsx";
 
 const HomePage = React.lazy(() => import("./pages/Landing/LandingPage.jsx"));
 const ChatPage = React.lazy(() => import("./pages/Portal/Chat/ChatPage.jsx"));
@@ -93,10 +94,8 @@ function App() {
           <Route path="/collaborate" element={<CollaboratePage />} />
           <Route path="/network" element={<NetworkPage />} />
           <Route path="/trade" element={<TradePage />}>
-            <Route index element={<FindJob />} />
-            <Route path="find" element={<FindJob />} />
-            <Route path="submit" element={<SubmitJob />} />
-            <Route path="history" element={<History />} />
+            <Route index element={<TradeContent />} />
+            <Route path=":tradeType" element={<TradeContent activeTab={activeTab} setActiveTab={setActiveTab} tabDirection={tabDirection} setTabDirection={setTabDirection}/>} />
           </Route>
           <Route path="/tools/business-value-estimator" element={<BusinessValueEstimatorPage />} />
           <Route path="/chat-llm/alliance" element={<ChatPage chatType="Alliance Partners"/>} />
