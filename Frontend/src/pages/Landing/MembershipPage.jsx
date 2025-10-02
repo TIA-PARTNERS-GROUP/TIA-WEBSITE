@@ -130,7 +130,7 @@ const MembershipPlansPage = () => {
               </ul>
             </div>
             <div className="mt-6 text-center">
-              <PrimaryButton className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => (navigate("/register"))}>
+              <PrimaryButton className="w-full bg-gray-300 hover:bg-gray-300 hover:cursor-not-allowed">
                 <a className="inline-block text-white rounded-lg w-full">
                   Sign Up
                 </a>
@@ -179,7 +179,7 @@ const MembershipPlansPage = () => {
               </ul>
             </div>
             <div className="mt-6 text-center">
-              <PrimaryButton className="w-full" onClick={() => (navigate("/register"))}>
+              <PrimaryButton className="w-full bg-gray-300 hover:bg-gray-300 hover:cursor-not-allowed">
                 <a className="inline-block text-white rounded-lg w-full">
                   Sign Up
                 </a>

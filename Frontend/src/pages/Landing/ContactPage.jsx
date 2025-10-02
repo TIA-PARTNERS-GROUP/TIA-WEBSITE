@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -12,7 +13,44 @@ const ContactPage = () => {
     e.preventDefault();
     // send form via API or email service
     console.log("submit contact form:", form);
+    setIsSubmitted(true);
+    setForm({ name: "", email: "", message: "" });
   };
+
+  if (isSubmitted) {
+    return (
+      <motion.section 
+        className="max-w-2xl mx-auto py-16 px-4 text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={{
+          hidden: { opacity: 0, y: 30 },
+          visible: { opacity: 1, y: 0 }
+        }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-3xl font-bold mb-4 text-blue-600">
+            Thanks for your feedback!
+          </h1>
+          <p className="text-gray-600 mb-6">
+            We appreciate you reaching out and will get back to you soon.
+          </p>
+          <button
+            onClick={() => setIsSubmitted(false)}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Send Another Message
+          </button>
+        </motion.div>
+      </motion.section>
+    );
+  }
 
   return (
     <motion.section 
