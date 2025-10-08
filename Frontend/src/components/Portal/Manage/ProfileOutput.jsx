@@ -15,7 +15,8 @@ const ProfileOutput =({
     clientData, 
     contactInfo,
     connectionNum,
-    companyCategory
+    companyCategory,
+    fromNotifications
   }) => {
   
   const { startLoading, stopLoading } = useLoading();
@@ -85,6 +86,7 @@ const ProfileOutput =({
             companyCategory={displayCategory} 
             contactName={displayContactInfo[0]} 
             contactEmail={displayContactInfo[2]}
+            fromNotifications={fromNotifications}
           />
       </div>
       <div className="bg-white rounded-xl sm:px-4 px-8 py-2">

@@ -6,8 +6,10 @@ import PrimaryButton from '../../Button/PrimaryButton.jsx';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
 import MessageIcon from "../../Icons/MessageIcon";
+import ProfileView from '../Manage/ProfileView.jsx';
+import CloseIcon from '../../Icons/CloseIcon.jsx';
 import axios from '../../../api/axios.js';
-import { addConnection } from '../../../api/business.js';
+import { addConnection, getOtherBusinessInfo } from '../../../api/business.js';
 
 
 const PortalHeader = ( {module, mock = false} ) => {
@@ -15,10 +17,25 @@ const PortalHeader = ( {module, mock = false} ) => {
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
 
-  const [notifications, setNotifications] = useState([]);
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const [profileData, setProfileData] = useState(null);
 
+  const [notifications, setNotifications] = useState([]);
   const [notificationClicked, setNotificationClicked] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const [showDeclineConfirm, setShowDeclineConfirm] = useState(false);
+  const [pendingDeclineNotification, setPendingDeclineNotification] = useState(null);
+  const [declineReason, setDeclineReason] = useState('');
+
+  const declineReasons = [
+    { value: '', label: 'Select a reason...' },
+    { value: 'too-many-connections', label: 'Too many connections' },
+    { value: 'not-good-match', label: 'Not a good match for my business' },
+    { value: 'different-industry', label: 'Different industry focus' },
+    { value: 'not-interested', label: 'Not interested at this time' },
+    { value: 'other', label: 'Other' }
+  ];
 
   useEffect(() => {
       const fetchUserNotifications = async () => {
@@ -89,12 +106,35 @@ const PortalHeader = ( {module, mock = false} ) => {
   };
 
   const handleDeclineConnection = async (notificationId) => {
+    if (!declineReason) {
+      alert("Please select a reason for declining");
+      return;
+    }
+
     try {
       await removeNotification(notificationId);
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
+      setShowDeclineConfirm(false);
+      setPendingDeclineNotification(null);
+      setDeclineReason('');
     } catch (error) {
       console.error('Error declining connection:', error);
     }
+  };
+
+  const handleDeclineClick = (notificationId, senderId, receiverId) => {
+    setPendingDeclineNotification({
+      id: notificationId,
+      senderId,
+      receiverId
+    });
+    setShowDeclineConfirm(true);
+  };
+
+  const handleCancelDecline = () => {
+    setShowDeclineConfirm(false);
+    setPendingDeclineNotification(null);
+    setDeclineReason('');
   };
 
   const handleNotificationAction = (notificationId, senderId, receiverId, action) => {
@@ -103,7 +143,7 @@ const PortalHeader = ( {module, mock = false} ) => {
       if (action === 'accept') {
         handleAcceptConnection(notificationId, senderId, receiverId, notification.sender_business_name || notification.sender_name);
       } else {
-        handleDeclineConnection(notificationId);
+        handleDeclineClick(notificationId, senderId, receiverId);
       }
     }
   };
@@ -129,6 +169,34 @@ const PortalHeader = ( {module, mock = false} ) => {
       window.location.href = "/";
     }
   }
+
+  const handleCloseProfile = () => {
+    setShowProfilePopup(false);
+    setProfileData(null);
+  };
+
+  const handleViewProfile = async (businessId) => {
+    try {
+      // Fetch business info for the profile
+      const businessRes = await getOtherBusinessInfo(businessId);
+      const businessData = businessRes.data;
+      
+      // Set profile data for the popup
+      setProfileData({
+        companyName: businessData.businessName,
+        contactInfo: [businessData.contactName, businessData.contactPhone, businessData.contactEmail],
+        companyDescription: businessData.businessDescription,
+        whatwedoData: businessData.services || [],
+        clientData: businessData.clients || [],
+        connectionNum: businessData.connections?.length || 0,
+        companyCategory: businessData.businessCategory,
+        fromNotifications: true
+      });
+      setShowProfilePopup(true);
+    } catch (error) {
+      console.error('Failed to fetch business profile:', error);
+    }
+  };
 
   return (
     <div className="container mx-auto flex flex-col items-start text-left">
@@ -181,9 +249,20 @@ const PortalHeader = ( {module, mock = false} ) => {
                                 </PrimaryButton>
                                 <SecondaryButton
                                   onClick={() => handleNotificationAction(notification.id, 'decline')}
-                                  className="text-xs px-3 py-1.5 flex-1"
+                                  className="text-xs bg-rose-600 text-white px-3 py-1.5 flex-1"
                                 >
                                   Decline
+                                </SecondaryButton>
+                              </div>
+                            )}
+
+                            {notification.message === "connect" && (
+                              <div className="mt-2">
+                                <SecondaryButton
+                                  onClick={() => handleViewProfile(notification.sender_business_id)}
+                                  className="text-xs px-3 py-1.5 w-full"
+                                >
+                                  View Profile
                                 </SecondaryButton>
                               </div>
                             )}
@@ -219,6 +298,97 @@ const PortalHeader = ( {module, mock = false} ) => {
           </SecondaryButton>
         </div>
       </div>
+
+      {/* Decline Confirmation */}
+      {showDeclineConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50"
+            onClick={handleCancelDecline}
+          ></div>
+          
+          <div className="relative bg-white rounded-lg shadow-lg w-80 max-w-sm mx-4 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Are you sure you wish to decline?
+            </h3>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Reason for declining:
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <select
+                value={declineReason}
+                onChange={(e) => setDeclineReason(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                {declineReasons.map((reason) => (
+                  <option key={reason.value} value={reason.value}>
+                    {reason.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="flex gap-3 justify-end">
+              <SecondaryButton
+                onClick={handleCancelDecline}
+                className="text-sm px-4 py-2"
+              >
+                Cancel
+              </SecondaryButton>
+              <PrimaryButton
+                onClick={() => {
+                  const selectElement = document.querySelector('select[required]');
+                  if (!declineReason) {
+                    selectElement.reportValidity();
+                    return;
+                  }
+                  handleDeclineConnection(pendingDeclineNotification.id);
+                }}
+                className="text-sm px-4 py-2 bg-red-600 hover:bg-red-700"
+              >
+                Decline
+              </PrimaryButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Profile Popup */}
+      {showProfilePopup && profileData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+          <div className="bg-gray-100 rounded-xl w-full max-w-6xl h-[90vh] overflow-hidden flex flex-col">
+            {/* Header with close button */}
+            <div className="flex justify-between items-center p-4 border-b">
+              <h2 className="text-xl font-semibold">{profileData.companyName}'s Profile</h2>
+              <button 
+                onClick={handleCloseProfile}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <CloseIcon className="w-6 h-6" />
+              </button>
+            </div>
+            
+            {/* Profile content */}
+            <div className="flex-1 overflow-auto">
+              <ProfileView 
+                personalProfile={false}
+                companyName={profileData.companyName} 
+                companyDescription={profileData.companyDescription} 
+                whatwedoData={profileData.whatwedoData}
+                clientData={profileData.clientData}
+                contactInfo={profileData.contactInfo} 
+                connectionNum={profileData.connectionNum}
+                companyCategory={profileData.companyCategory}
+                fromNotifications={profileData.fromNotifications}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

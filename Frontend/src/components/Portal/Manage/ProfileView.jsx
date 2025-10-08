@@ -11,7 +11,8 @@ const ProfileView = ({
   clientData, 
   contactInfo, 
   connectionNum, 
-  companyCategory 
+  companyCategory,
+  fromNotifications = false 
 }) => {
 
   const location = useLocation();
@@ -28,6 +29,7 @@ const ProfileView = ({
       contactInfo={contactInfo}
       connectionNum={connectionNum}
       companyCategory={companyCategory}
+      fromNotifications={fromNotifications}
     />
   );
 };

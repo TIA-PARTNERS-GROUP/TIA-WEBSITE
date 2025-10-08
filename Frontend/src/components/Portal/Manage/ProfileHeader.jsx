@@ -11,7 +11,17 @@ import ConnectionPopup from "../Connect/ConnectionPopup";
 
 const defaultCompanyName = "DyCom Group";
 
-const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyName, connectionNum = 0, connectionId, businessId, companyCategory = null, contactName, contactEmail}) => {
+const ProfileHeader = ({ 
+  personalProfile = true, 
+  companyName = defaultCompanyName, 
+  connectionNum = 0, 
+  connectionId, 
+  businessId, 
+  companyCategory = null, 
+  contactName, 
+  contactEmail,
+  fromNotifications = false
+}) => {
 
   const navigate = useNavigate();
   let connected = !!connectionId;
@@ -107,7 +117,7 @@ const ProfileHeader = ({ personalProfile = true, companyName = defaultCompanyNam
       <div className="flex-1">
         <div className="flex items-center gap-10 sm:pt-2 2xl:pt-10">
           <h2 className="sm:text-xl xl:text-3xl 2xl:text-4xl lg:text-2xl font-semibold text-black-800">{companyName}</h2>
-          {!personalProfile && (
+          {!personalProfile && !fromNotifications && (
             <PrimaryButton 
                 className={`text-xs ${
                                         connectionStatus
