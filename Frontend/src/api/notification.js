@@ -19,3 +19,11 @@ export function removeNotification(notificationId) {
         data: { id: notificationId }
     });
 }
+
+export function setNotificationOpened(notificationId) {
+    return api.patch('/notifications/setOpened',
+        { 
+            id: notificationId
+        }
+    );
+}

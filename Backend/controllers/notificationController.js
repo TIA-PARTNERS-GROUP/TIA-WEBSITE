@@ -103,3 +103,36 @@ export const removeNotification = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const setNotificationOpened = async (req, res) => {
+  try {
+    const notification = notificationModel(db);
+    const { id } = req.body;
+    const userId = req.user.id;
+
+    if (!id) {
+      return res.status(400).json({ message: "Notification ID is required" });
+    }
+
+    // Verify the notification exists and user has permission
+    const notificationData = await notification.getNotificationById(id);
+    if (!notificationData) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    if (notificationData.receiver_user_id !== userId) {
+      return res.status(403).json({ message: "Not authorized to modify this notification" });
+    }
+
+    const rowsAffected = await notification.setNotificationOpened(id);
+    
+    if (rowsAffected === 0) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    return res.status(200).json({ message: "Notification marked as opened" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

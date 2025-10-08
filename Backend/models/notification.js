@@ -24,7 +24,7 @@ export default (db) => ({
         JOIN users ru ON n.receiver_user_id = ru.id
         LEFT JOIN businesses rb ON rb.operator_user_id = ru.id
         
-        WHERE n.receiver_user_id = ? AND n.opened = 0
+        WHERE n.receiver_user_id = ?
         ORDER BY n.time_sent DESC
       `, [receiverUserId]);
 
@@ -101,5 +101,14 @@ export default (db) => ({
       SELECT * FROM notifications WHERE id = ?
     `, [notificationId]);
     return rows.length > 0 ? rows[0] : null;
-  }
+  },
+
+  async setNotificationOpened(notificationId) {
+    const [result] = await db.query(`
+      UPDATE notifications 
+      SET opened = 1 
+      WHERE id = ?
+    `, [notificationId]);
+    return result.affectedRows;
+  },
 });

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../../../utils/LoadingContext.jsx';
-import { addNotification, getCurrentUserNotifications, removeNotification } from '../../../api/notification.js';
+import { addNotification, getCurrentUserNotifications, removeNotification, setNotificationOpened } from '../../../api/notification.js';
 import PrimaryButton from '../../Button/PrimaryButton.jsx';
 import SecondaryButton from "../../Button/SecondaryButton";
 import NotificationIcon from "../../../components/Icons/NotificationIcon";
@@ -170,18 +170,24 @@ const PortalHeader = ( {module, mock = false} ) => {
     }
   }
 
-  const handleCloseProfile = () => {
+  const handleCloseProfile = async () => {
+    const res = await getCurrentUserNotifications();
+    if (res.data && res.data.notifications) {
+      setNotifications(res.data.notifications);
+    }
+    
     setShowProfilePopup(false);
     setProfileData(null);
   };
 
-  const handleViewProfile = async (businessId) => {
+  const handleViewProfile = async (businessId, notificationId, notificationOpened) => {
     try {
-      // Fetch business info for the profile
+
+      if (!notificationOpened) {await setNotificationOpened(notificationId)}
+
       const businessRes = await getOtherBusinessInfo(businessId);
       const businessData = businessRes.data;
       
-      // Set profile data for the popup
       setProfileData({
         companyName: businessData.businessName,
         contactInfo: [businessData.contactName, businessData.contactPhone, businessData.contactEmail],
@@ -248,8 +254,9 @@ const PortalHeader = ( {module, mock = false} ) => {
                                   Accept
                                 </PrimaryButton>
                                 <SecondaryButton
-                                  onClick={() => handleNotificationAction(notification.id, 'decline')}
-                                  className="text-xs bg-rose-600 text-white px-3 py-1.5 flex-1"
+                                  onClick={() => handleNotificationAction(notification.id, notification.sender_business_id, notification.receiver_business_id, 'decline')}
+                                  className="text-xs bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 flex-1"
+                                  disabled={!notification.opened}
                                 >
                                   Decline
                                 </SecondaryButton>
@@ -259,7 +266,7 @@ const PortalHeader = ( {module, mock = false} ) => {
                             {notification.message === "connect" && (
                               <div className="mt-2">
                                 <SecondaryButton
-                                  onClick={() => handleViewProfile(notification.sender_business_id)}
+                                  onClick={() => handleViewProfile(notification.sender_business_id, notification.id, notification.opened)}
                                   className="text-xs px-3 py-1.5 w-full"
                                 >
                                   View Profile

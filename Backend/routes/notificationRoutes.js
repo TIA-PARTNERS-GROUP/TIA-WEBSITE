@@ -3,7 +3,8 @@ import {
   getMyNotifications, 
   getPendingConnections,
   addNotification, 
-  removeNotification 
+  removeNotification,
+  setNotificationOpened
 } from '../controllers/notificationController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
 
@@ -210,5 +211,51 @@ router.post('/addnotification', verifyToken, addNotification);
  *         description: Internal server error
  */
 router.delete('/removenotification', verifyToken, removeNotification);
+
+/**
+ * @swagger
+ * /notifications/setopened:
+ *   patch:
+ *     summary: Mark a notification as opened
+ *     description: Sets the opened field to 1 for a specific notification (only allowed for receiver)
+ *     tags:
+ *       - Notifications
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: ID of the notification to mark as opened
+ *     responses:
+ *       200:
+ *         description: Notification successfully marked as opened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Notification marked as opened
+ *       400:
+ *         description: Missing notification ID
+ *       401:
+ *         description: Authorization header missing or invalid
+ *       403:
+ *         description: Not authorized to modify this notification
+ *       404:
+ *         description: Notification not found
+ *       500:
+ *         description: Internal server error
+ */
+router.patch('/setopened', verifyToken, setNotificationOpened);
 
 export default router;
