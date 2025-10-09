@@ -1,11 +1,12 @@
 import express from 'express';
 import authRoutes from './authRoutes.js';
 import userRoutes from './userRoutes.js';
-import businessRoutes from './businessRoutes.js'
-import chatBotRoutes from './chatBotRoutes.js'
-import taskRoutes from './taskRoutes.js'
-import notificationRoutes from './notificationRoutes.js'
-import categoryRoutes from './categoryRoutes.js'
+import businessRoutes from './businessRoutes.js';
+import chatBotRoutes from './chatBotRoutes.js';
+import taskRoutes from './taskRoutes.js';
+import notificationRoutes from './notificationRoutes.js';
+import categoryRoutes from './categoryRoutes.js';
+import feedbackRoutes from './feedbackRoutes.js';
 import config from '../config/config.js';
 
 const router = express.Router();
@@ -18,7 +19,8 @@ router.use('/business', businessRoutes);
 router.use('/chatbot', chatBotRoutes);
 router.use('/tasks', taskRoutes);
 router.use('/notifications', notificationRoutes);
-router.use('/category', categoryRoutes)
+router.use('/category', categoryRoutes);
+router.use('/feedback', feedbackRoutes);
 // router.use('/connect', connectRoutes);
 // router.use('/manage', manageRoutes);
 // router.use('/projects', projectRoutes);
