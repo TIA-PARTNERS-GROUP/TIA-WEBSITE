@@ -686,20 +686,21 @@ CREATE TABLE `user_daily_activity_progress` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `user_dashboard_config`
+-- Table structure for table `user_dashboard_configs`
 --
 
-DROP TABLE IF EXISTS `user_dashboard_config`;
+DROP TABLE IF EXISTS `user_dashboard_configs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_dashboard_config` (
+CREATE TABLE `user_dashboard_configs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
   `config` json NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `user_dashboard_config_user_id_idx` (`user_id`),
-  CONSTRAINT `user_dashboard_config_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `user_dashboard_configs_user_id_idx` (`user_id`),
+  CONSTRAINT `user_dashboard_configs_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
