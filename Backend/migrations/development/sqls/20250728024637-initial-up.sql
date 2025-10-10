@@ -452,10 +452,10 @@ DROP TABLE IF EXISTS `project_business_categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `project_business_categories` (
   `project_id` int unsigned NOT NULL,
-  `business_category_id int` int unsigned NOT NULL,
-  PRIMARY KEY (`project_id`,`business_category_id int`),
-  KEY `project_business_categories_category_id_idx` (`business_category_id int`),
-  CONSTRAINT `project_business_categories_category_id` FOREIGN KEY (`business_category_id int`) REFERENCES `business_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  `business_category_id` int unsigned NOT NULL,
+  PRIMARY KEY (`project_id`,`business_category_id`),
+  KEY `project_business_categories_category_id_idx` (`business_category_id`),
+  CONSTRAINT `project_business_categories_category_id` FOREIGN KEY (`business_category_id`) REFERENCES `business_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `project_business_categories_project_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -509,7 +509,7 @@ CREATE TABLE `projects` (
   `status` enum('open','closed') NOT NULL,
   `open_date` datetime DEFAULT NULL,
   `close_date` datetime DEFAULT NULL,
-  `project_completion` datetime DEFAULT NULL,
+  `completion_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `projects_managed_by_user_id_idx` (`managed_by_user_id`),

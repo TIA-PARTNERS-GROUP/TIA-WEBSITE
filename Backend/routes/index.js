@@ -7,6 +7,7 @@ import taskRoutes from './taskRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
 import categoryRoutes from './categoryRoutes.js';
 import feedbackRoutes from './feedbackRoutes.js';
+import projectRoutes from './projectRoutes.js';
 import config from '../config/config.js';
 
 const router = express.Router();
@@ -23,7 +24,7 @@ router.use('/category', categoryRoutes);
 router.use('/feedback', feedbackRoutes);
 // router.use('/connect', connectRoutes);
 // router.use('/manage', manageRoutes);
-// router.use('/projects', projectRoutes);
+router.use('/projects', projectRoutes);
 // router.use('/references', referenceRoutes);
 
 // Redirect to dashboard for users, devs get direct access to api
