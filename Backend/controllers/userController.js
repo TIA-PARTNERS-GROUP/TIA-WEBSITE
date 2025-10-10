@@ -20,7 +20,7 @@ export const checkUserExists = async (req, res) => {
 
     } catch (error) {
         console.error('', error);
-        res.status(500).json({ success: false, message: error.message || 'Failed to process request' });
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
@@ -55,7 +55,7 @@ export const getUserDetails = async (req, res) => {
 
     } catch (error) {
         console.error('', error);
-        res.status(500).json({ success: false, message: error.message || 'Failed to process request' });
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
@@ -80,6 +80,41 @@ export const getMe = async (req, res) => {
 
     } catch (error) {
         console.error('', error);
-        res.status(500).json({ success: false, message: error.message || 'Failed to process request' });
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
+export const getDashboardConfig = async (req, res) => {
+    try {
+        const user = userModel(db);
+        const userConfig = await user.fetchDashboardConfig(req.user.id);
+
+        if (!userConfig) {
+            return res.status(404).json({message: 'User has no config recorded'})
+        }
+
+        return res.status(200).json({message: "Success", config: userConfig.config})
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' })
+    }
+};
+
+
+export const updateDashboardConfig = async (req, res) => {
+    try {
+        const user = userModel(db);
+        const {config} = req.body;
+        if (!config) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        await user.updateDashboardConfig(req.user.id, config);
+        return res.status(200).json({message: "Success"});
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' })
+    }
+}
