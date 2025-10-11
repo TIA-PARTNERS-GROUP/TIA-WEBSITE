@@ -11,7 +11,7 @@ import ChevronUpIcon from "../../Icons/ChevronUpIcon";
 import PrimaryButton from "../../Button/PrimaryButton";
 import { getCategoriesList } from "../../../api/categories";
 
-const SearchBar = () => {
+const SearchBar = ({ isProjectsRoute }) => {
     const navigate = useNavigate();
     const { partnerType, searchType } = useParams();
 
@@ -57,20 +57,39 @@ const SearchBar = () => {
             params.append('q', searchText);
         }
         
-        const selectedCategories = selectedFilters['business-category'];
-        if (selectedCategories && selectedCategories.length > 0) {
-            params.append('categories', selectedCategories.join(','));
-        }
-        
-        const connectionStatus = selectedFilters['connection-status'];
-        if (connectionStatus) {
-            const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
-            params.append('status', statusParam);
+        if (isProjectsRoute) {
+            const selectedCategories = selectedFilters['project-category'];
+            if (selectedCategories && selectedCategories.length > 0) {
+                params.append('categories', selectedCategories.join(','));
+            }
+            
+            const projectStatus = selectedFilters['project-status'];
+            if (projectStatus) {
+                const statusParam = projectStatus.toLowerCase();
+                params.append('status', statusParam);
+            }
+            
+            const selectedRegions = selectedFilters['regions'];
+            if (selectedRegions && selectedRegions.length > 0) {
+                params.append('regions', selectedRegions.join(','));
+            }
+        } else {
+            const selectedCategories = selectedFilters['business-category'];
+            if (selectedCategories && selectedCategories.length > 0) {
+                params.append('categories', selectedCategories.join(','));
+            }
+            
+            const connectionStatus = selectedFilters['connection-status'];
+            if (connectionStatus) {
+                const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
+                params.append('status', statusParam);
+            }
         }
         
         params.append('sort', selectedSort);
 
-        navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
+        const basePath = isProjectsRoute ? '/trade/find' : `/connect/${partnerType}/${searchType}`;
+        navigate(`${basePath}?${params.toString()}`);
     };
 
     const toggleFilter = () => {
@@ -89,44 +108,91 @@ const SearchBar = () => {
         const categoriesParam = searchParams.get('categories') || '';
         const urlCategories = categoriesParam ? categoriesParam.split(',').map(id => parseInt(id)).filter(id => !isNaN(id)) : [];
         const urlStatus = searchParams.get('status') || '';
+        const urlRegions = searchParams.get('regions') || '';
         
         setSearchText(urlQuery);
-        setQueryEntered(!!urlQuery || urlCategories.length > 0 || !!urlStatus);
         
-        setSelectedFilters(prev => ({
-            ...prev,
-            'business-category': urlCategories,
-            'connection-status': urlStatus 
-                ? urlStatus.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-                : null
-        }));
-    }, [location.search]);
+        if (isProjectsRoute) {
+            setQueryEntered(!!urlQuery || urlCategories.length > 0 || !!urlStatus || !!urlRegions);
+            
+            setSelectedFilters(prev => ({
+                ...prev,
+                'project-category': urlCategories,
+                'project-status': urlStatus 
+                    ? urlStatus.charAt(0).toUpperCase() + urlStatus.slice(1)
+                    : null,
+                'regions': urlRegions ? urlRegions.split(',') : []
+            }));
+        } else {
+            setQueryEntered(!!urlQuery || urlCategories.length > 0 || !!urlStatus);
+            
+            setSelectedFilters(prev => ({
+                ...prev,
+                'business-category': urlCategories,
+                'connection-status': urlStatus 
+                    ? urlStatus.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                    : null
+            }));
+        }
+    }, [location.search, isProjectsRoute]);
 
-    const sortOptions = [
-        { value: 'name-asc', label: 'Business Name (A-Z)' },
-        { value: 'name-desc', label: 'Business Name (Z-A)' }
-    ];
+    const sortOptions = isProjectsRoute 
+        ? [
+            { value: 'name-asc', label: 'Project Name (A-Z)' },
+            { value: 'name-desc', label: 'Project Name (Z-A)' },
+            { value: 'date-asc', label: 'Date: Oldest First' },
+            { value: 'date-desc', label: 'Date: Newest First' }
+        ]
+        : [
+            { value: 'name-asc', label: 'Business Name (A-Z)' },
+            { value: 'name-desc', label: 'Business Name (Z-A)' }
+        ];
 
-    const filterCategories = [
-        {
-            id: 'business-category',
-            title: 'Business Category',
-            options: loading 
-                ? [{ id: 'loading', label: 'Loading categories...' }] : ''
-                    ? [{ id: 'error', label: 'Failed to load categories' }]
+    const filterCategories = isProjectsRoute
+        ? [
+            {
+                id: 'project-category',
+                title: 'Project Category',
+                options: loading 
+                    ? [{ id: 'loading', label: 'Loading categories...' }] 
                     : categories.map(cat => ({ 
                         id: cat.id, 
                         label: formatString(cat.name || cat.title || `Category ${cat.id}`)
                     })),
-            type: 'checkbox'
-        },
-        {
-            id: 'connection-status',
-            title: 'Connection Status',
-            options: ['Connected', 'Not Connected'],
-            type: 'radio'
-        }
-    ];
+                type: 'checkbox'
+            },
+            {
+                id: 'project-status',
+                title: 'Project Status',
+                options: ['Open', 'Closed'],
+                type: 'radio'
+            },
+            {
+                id: 'regions',
+                title: 'Regions',
+                options: ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'NT', 'ACT'],
+                type: 'checkbox'
+            }
+        ]
+        : [
+            {
+                id: 'business-category',
+                title: 'Business Category',
+                options: loading 
+                    ? [{ id: 'loading', label: 'Loading categories...' }] 
+                    : categories.map(cat => ({ 
+                        id: cat.id, 
+                        label: formatString(cat.name || cat.title || `Category ${cat.id}`)
+                    })),
+                type: 'checkbox'
+            },
+            {
+                id: 'connection-status',
+                title: 'Connection Status',
+                options: ['Connected', 'Not Connected'],
+                type: 'radio'
+            }
+        ];
 
     const toggleSort = () => {
         setIsSortOpen(!isSortOpen);
@@ -199,7 +265,8 @@ const SearchBar = () => {
             }, {})
         );
         
-        navigate(`/connect/${partnerType}/${searchType}?q=${searchText}`);
+        const basePath = isProjectsRoute ? '/trade/find' : `/connect/${partnerType}/${searchType}`;
+        navigate(`${basePath}?q=${searchText}`);
         setIsFilterOpen(false);
     };
 
@@ -210,22 +277,39 @@ const SearchBar = () => {
             params.append('q', searchText);
         }
         
-        const selectedCategories = selectedFilters['business-category'];
-        if (selectedCategories && selectedCategories.length > 0) {
-            // Send as comma-separated string
-            params.append('categories', selectedCategories.join(','));
-        }
-
-        const connectionStatus = selectedFilters['connection-status'];
-        if (connectionStatus) {
-            const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
-            params.append('status', statusParam);
+        if (isProjectsRoute) {
+            const selectedCategories = selectedFilters['project-category'];
+            if (selectedCategories && selectedCategories.length > 0) {
+                params.append('categories', selectedCategories.join(','));
+            }
+            
+            const projectStatus = selectedFilters['project-status'];
+            if (projectStatus) {
+                params.append('status', projectStatus.toLowerCase());
+            }
+            
+            const selectedRegions = selectedFilters['regions'];
+            if (selectedRegions && selectedRegions.length > 0) {
+                params.append('regions', selectedRegions.join(','));
+            }
+        } else {
+            const selectedCategories = selectedFilters['business-category'];
+            if (selectedCategories && selectedCategories.length > 0) {
+                params.append('categories', selectedCategories.join(','));
+            }
+            
+            const connectionStatus = selectedFilters['connection-status'];
+            if (connectionStatus) {
+                const statusParam = connectionStatus.toLowerCase().replace(/\s+/g, '-');
+                params.append('status', statusParam);
+            }
         }
 
         params.append('sort', selectedSort);
         
         setIsFilterOpen(false);
-        navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
+        const basePath = isProjectsRoute ? '/trade/find' : `/connect/${partnerType}/${searchType}`;
+        navigate(`${basePath}?${params.toString()}`);
     };
 
     const getCategoryLabelById = (id) => {
@@ -299,7 +383,7 @@ const SearchBar = () => {
                 {searchParams.get('q') && <strong> {searchParams.get('q')}</strong>}
                 <br></br>
                 {searchParams.get('categories') && (
-                    <span> <br></br>Business Categories: <strong>
+                    <span> <br></br>{isProjectsRoute ? 'Project' : 'Business'} Categories: <strong>
                         {searchParams.get('categories').split(',').map(id => {
                             const categoryId = parseInt(id);
                             return getCategoryLabelById(categoryId);
@@ -308,7 +392,15 @@ const SearchBar = () => {
                 )}
                 <br></br>
                 {searchParams.get('status') && (
-                    <span> Connection Status: <strong>{searchParams.get('status') === "connected" ? "Connected" : "Not Connected"}</strong></span>
+                    <span> {isProjectsRoute ? 'Project' : 'Connection'} Status: <strong>
+                        {isProjectsRoute 
+                            ? searchParams.get('status').charAt(0).toUpperCase() + searchParams.get('status').slice(1)
+                            : searchParams.get('status') === "connected" ? "Connected" : "Not Connected"
+                        }
+                    </strong></span>
+                )}
+                {isProjectsRoute && searchParams.get('regions') && (
+                    <span> <br></br>Regions: <strong>{searchParams.get('regions')}</strong></span>
                 )}
             </p>
         )}

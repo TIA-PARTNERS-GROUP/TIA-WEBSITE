@@ -11,7 +11,7 @@ import DeleteIcon from "../../Icons/DeleteIcon";
 import SquareSelectIcon from "../../Icons/SquareSelectIcon";
 import TickIcon from "../../Icons/TickIcon";
 
-const ArticleTable = () => {
+const ArticleTable = ({ isTradeRoute }) => {
 
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ const ArticleTable = () => {
   const [isAllChecked, setIsAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [ tableData, setTableData ] = useState([{title: "Loading...", date: "Loading..."}]);
-  const isTradeRoute = window.location.pathname.startsWith('/trade/');
 
   useEffect(() => {
   const fetchData = async () => {
