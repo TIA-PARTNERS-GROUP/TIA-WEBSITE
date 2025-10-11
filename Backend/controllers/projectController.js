@@ -85,3 +85,132 @@ export const addProject = async (req, res) => {
     }
    
 }
+
+export const getProject = async (req, res) => {
+    const project = projectModel(db);
+    try {
+        const id = req.params.id;
+        const projectData = await project.getProjectById(id);
+
+        if (!projectData) {
+            return res.status(404).json({message: "No project with that id"});
+        }
+
+        return res.status(200).json({project: projectData});
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({error: "Internal server error"});
+    }
+}
+
+export const addApplicant = async (req, res) => {
+    const project = projectModel(db);
+    try {
+        const projectId = req.params.id;
+        const projectInfo = await project.getProjectById(projectId);
+        if (!projectInfo) {
+            return res.status(404).json({message: "No project with that id"});
+        }
+
+        const applicantAdded = await project.addApplicant(projectId, req.user.id);
+        if (!applicantAdded) {
+            return res.status(409).json({message: "Applicant already added"});
+        }
+        return res.status(201).json({message: "Applicant added"});
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({error: "Internal server error"});
+    }
+}
+
+export const updateProject = async (req, res) => {
+    try {
+        const project = projectModel(db);
+        const projectId = req.params.id;
+
+        if (!projectId) {
+            return res.status(400).json({ message: 'No project id provided' });
+        }
+
+        const projectInfo = await project.getProjectById(projectId);
+        if (!projectInfo) {
+            return res.status(404).json({ message: 'No project with that id' });
+        }
+
+        // Verify the requesting user manages this project
+        if (projectInfo.managed_by_user_id !== req.user.id) {
+            return res.status(403).json({ message: 'You can only update projects you manage' });
+        }
+
+        try {
+            await project.updateProject(projectId, req.body);
+        } catch (error) {
+            return res.status(400).json({ message: 'Bad request' });
+        }
+
+        return res.status(201).json({ message: 'Project updated' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const deleteProject = async (req, res) => {
+    try {
+        const project = projectModel(db);
+        const projectId = req.params.id;
+
+        if (!projectId) {
+            return res.status(400).json({ message: 'No project id provided' });
+        }
+
+        const projectInfo = await project.getProjectById(projectId);
+        if (!projectInfo) {
+            return res.status(404).json({ message: 'No project with that id' });
+        }
+
+        if (projectInfo.managed_by_user_id !== req.user.id) {
+            return res.status(403).json({ message: 'You can only delete projects you manage' });
+        }
+
+        const rowsAffected = await project.deleteProject(projectId);
+        if (!rowsAffected) {
+            return res.status(404).json({ message: 'No project with that id' });
+        }
+
+        return res.status(200).json({ message: 'Project deleted' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const getMyProjects = async (req, res) => {
+    try {
+        const project = projectModel(db);
+        const userId = req.user.id;
+
+        const projects = await project.getProjectsByManagerId(userId);
+
+        return res.status(200).json({ message: 'Success', projects });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const getAppliedProjects = async (req, res) => {
+    try {
+        const project = projectModel(db);
+        const userId = req.user.id;
+
+        const projects = await project.getProjectsByApplicantId(userId);
+
+        return res.status(200).json({ message: 'Success', projects });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
