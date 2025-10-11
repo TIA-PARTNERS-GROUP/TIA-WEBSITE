@@ -1,18 +1,28 @@
 import { useState, useEffect } from "react";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
-//import { deleteProject } from "../../../api/projects";
-//import { addApplicant } from "../../../api/projects";
+import { getCurrentUserInfo } from "../../../api/user";
+import { deleteProject } from "../../../api/projects";
+import { addApplicant } from "../../../api/projects";
 
 const ProjectPopup = ({
     project,
-    isOwner = false,
     onClose,
     onDelete,
     onApply
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
+
+    useEffect(() => {
+        const checkOwnership = async () => {
+            const res = await getCurrentUserInfo();
+            setIsOwner(res.data.data.id === project?.managed_by_user_id);
+        }
+
+        checkOwnership();
+    }, [project]);
 
     const formatDate = (dateString) => {
         if (!dateString) return 'Not specified';

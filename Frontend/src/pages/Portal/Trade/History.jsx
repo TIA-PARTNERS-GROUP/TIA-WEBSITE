@@ -154,6 +154,7 @@ const History = () => {
         navigate(`/projects/${project.id}`, {
             state: {
                 id: project.id,
+                managed_by_user_id: project.managed_by_user_id,
                 title: project.title,
                 description: project.description,
                 status: project.status,
@@ -169,6 +170,11 @@ const History = () => {
         });
     };
 
+    const handleDeleteProject = (projectId) => {
+      console.log('History: Deleting project', projectId);
+      setProjectsData(prev => prev.filter(project => project.id !== projectId));
+    };
+
     return (
       <div className="bg-white rounded-xl sm:px-6 lg:px-6 2xl:px-8 py-2">
         <h2 className="pt-10 sm:text-xl 2xl:text-3xl md:text-2xl font-semibold text-black-800 pb-4">Project History</h2>
@@ -182,6 +188,7 @@ const History = () => {
             tableData={projectsData}
             onRowClick={handleProjectRowClick}
             showManagementControls={false}
+            onDeleteProject={handleDeleteProject}
         />
         
         <PaginationNav

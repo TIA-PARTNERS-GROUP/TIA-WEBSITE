@@ -16,7 +16,8 @@ const ArticleTable = ({
     isTradeRoute = false, 
     tableData: externalTableData, 
     onRowClick,
-    showManagementControls = true 
+    showManagementControls = true ,
+    onDeleteProject
 }) => {
 
   const [selectedProject, setSelectedProject] = useState(null);
@@ -135,7 +136,11 @@ const ArticleTable = ({
   };
 
   const handleDeleteProject = (projectId) => {
-    setTableData(prev => prev.filter(project => project.id !== projectId));
+    if (externalTableData && onDeleteProject) {
+      onDeleteProject(projectId);
+    } else {
+      setInternalTableData(prev => prev.filter(project => project.id !== projectId));
+    }
   };
 
   const handleApplyToProject = (projectId) => {
@@ -299,7 +304,6 @@ const ArticleTable = ({
     {showProjectPopup && selectedProject && (
         <ProjectPopup
             project={selectedProject}
-            isOwner={false} // You'll need to determine this based on your auth context
             onClose={() => setShowProjectPopup(false)}
             onDelete={handleDeleteProject}
             onApply={handleApplyToProject}

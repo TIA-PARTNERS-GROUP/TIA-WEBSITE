@@ -55,6 +55,7 @@ const FindJob = () => {
                 // Transform API response to match ArticleTable expected format
                 const projects = res.data.data.map(project => ({
                     id: project.id,
+                    managed_by_user_id: project.managed_by_user_id,
                     title: project.name,
                     description: project.description,
                     status: project.status,
@@ -112,6 +113,11 @@ const FindJob = () => {
         }
     };
 
+    const handleDeleteProject = (projectId) => {
+        console.log('FindJob: Deleting project', projectId);
+        setProjectsData(prev => prev.filter(project => project.id !== projectId));
+    };
+
     return (
       <div className="bg-white rounded-xl sm:px-6 lg:px-6 2xl:px-8 py-2">
         <h2 className="pt-10 sm:text-xl 2xl:text-3xl md:text-2xl font-semibold text-black-800 pb-4">Find Project</h2>
@@ -121,6 +127,7 @@ const FindJob = () => {
             tableData={projectsData}
             onRowClick={true}
             showManagementControls={false}
+            onDeleteProject={handleDeleteProject}
         />
         
         <PaginationNav

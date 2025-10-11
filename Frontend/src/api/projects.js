@@ -37,3 +37,11 @@ export function getMyProjects() {
 export function getAppliedProjects() {
     return api.get('/projects/applied');
 };
+
+export function deleteProject(projectId) {
+    return api.delete(`/projects/${projectId}`)
+}
+
+export function addApplicant(projectId) {
+    return api.post(`/projects/${projectId}/applicants`)
+}
