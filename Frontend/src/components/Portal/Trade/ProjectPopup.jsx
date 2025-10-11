@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import { getCurrentUserInfo } from "../../../api/user";
-import { deleteProject } from "../../../api/projects";
+import { deleteProject, getAppliedProjects } from "../../../api/projects";
 import { addApplicant } from "../../../api/projects";
 
 const ProjectPopup = ({
@@ -14,6 +14,7 @@ const ProjectPopup = ({
     const [isLoading, setIsLoading] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
+    const [hasApplied, setHasApplied] = useState(false);
 
     useEffect(() => {
         const checkOwnership = async () => {
@@ -21,7 +22,20 @@ const ProjectPopup = ({
             setIsOwner(res.data.data.id === project?.managed_by_user_id);
         }
 
+        const checkApplicationStatus = async () => {
+            try {
+                const appliedRes = await getAppliedProjects();
+                const hasAppliedToProject = appliedRes.data.projects.some(appliedProject => 
+                    appliedProject.id === project?.id
+                );
+                setHasApplied(hasAppliedToProject);
+            } catch (error) {
+                console.error('Error checking application status:', error);
+            }
+        };
+
         checkOwnership();
+        checkApplicationStatus();
     }, [project]);
 
     const formatDate = (dateString) => {
@@ -192,13 +206,22 @@ const ProjectPopup = ({
                                 Delete Project
                             </PrimaryButton>
                         ) : project?.status === 'open' ? (
-                            <PrimaryButton 
-                                onClick={handleApply}
-                                disabled={isLoading}
-                                className="px-4 py-2"
-                            >
-                                {isLoading ? "Applying..." : "Apply to Project"}
-                            </PrimaryButton>
+                            hasApplied ? (
+                                <PrimaryButton 
+                                    disabled={true}
+                                    className="px-4 py-2 bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
+                                >
+                                    Pending Application...
+                                </PrimaryButton>
+                            ) : (
+                                <PrimaryButton 
+                                    onClick={handleApply}
+                                    disabled={isLoading}
+                                    className="px-4 py-2"
+                                >
+                                    {isLoading ? "Applying..." : "Apply to Project"}
+                                </PrimaryButton>
+                            )
                         ) : null}
                     </div>
                 )}
