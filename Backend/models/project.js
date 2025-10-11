@@ -372,5 +372,107 @@ export default (db) => ({
     return projects;
   }
 
+  ,
+
+  async getPaginated(page = 1, limit = 20, categories = [], skills = [], regions = [], status = null, searchQuery = '') {
+    const offset = (page - 1) * limit;
+
+    let whereClauses = [];
+    const params = [];
+
+    if (searchQuery) {
+      whereClauses.push('(p.name LIKE ? OR p.description LIKE ?)');
+      const s = `%${searchQuery}%`;
+      params.push(s, s);
+    }
+
+    if (status) {
+      whereClauses.push('p.status = ?');
+      params.push(status);
+    }
+
+    if (categories && categories.length > 0) {
+      const placeholders = categories.map(() => '?').join(',');
+      whereClauses.push(`p.id IN (SELECT project_id FROM project_business_categories WHERE business_category_id IN (${placeholders}))`);
+      params.push(...categories);
+    }
+
+    if (skills && skills.length > 0) {
+      const placeholders = skills.map(() => '?').join(',');
+      whereClauses.push(`p.id IN (SELECT project_id FROM project_business_skills WHERE business_skill_id IN (${placeholders}))`);
+      params.push(...skills);
+    }
+
+    if (regions && regions.length > 0) {
+      const placeholders = regions.map(() => '?').join(',');
+      whereClauses.push(`p.id IN (SELECT project_id FROM project_regions WHERE region_id IN (${placeholders}))`);
+      params.push(...regions);
+    }
+
+    const where = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
+
+    const baseQuery = `
+      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date
+      FROM projects p
+      ${where}
+    `;
+
+    const fullQuery = `
+      SELECT *, COUNT(*) OVER() AS total_count
+      FROM (${baseQuery} ORDER BY p.id DESC LIMIT ? OFFSET ?) AS paginated_data
+    `;
+
+    // push limit and offset last
+    const finalParams = [...params, limit, offset];
+    const [rows] = await db.query(fullQuery, finalParams);
+
+    if (rows.length === 0) {
+      return {
+        data: [],
+        pagination: {
+          currentPage: page,
+          totalPages: 0,
+          totalItems: 0,
+          itemsPerPage: limit,
+          hasNext: false,
+          hasPrev: false
+        }
+      };
+    }
+
+    const total = rows[0].total_count;
+    const totalPages = Math.ceil(total / limit);
+
+    // Remove total_count and fetch categories/skills/regions for each row
+    const data = [];
+    for (const r of rows) {
+      const { total_count, ...rest } = r;
+      const pid = rest.id;
+
+      const [catRows] = await db.query(`SELECT business_category_id FROM project_business_categories WHERE project_id = ?`, [pid]);
+      const categoriesRes = catRows.map(x => x.business_category_id);
+
+      const [skillRows] = await db.query(`SELECT business_skill_id FROM project_business_skills WHERE project_id = ?`, [pid]);
+      const skillsRes = skillRows.map(x => x.business_skill_id);
+
+      const [regionRows] = await db.query(`SELECT region_id FROM project_regions WHERE project_id = ?`, [pid]);
+      const regionsRes = regionRows.map(x => x.region_id);
+
+      data.push({ ...rest, categories: categoriesRes, skills: skillsRes, regions: regionsRes });
+    }
+
+    return {
+      data,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalItems: total,
+        itemsPerPage: limit,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    };
+  }
+
 
 });

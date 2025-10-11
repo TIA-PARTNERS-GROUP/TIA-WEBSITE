@@ -214,3 +214,31 @@ export const getAppliedProjects = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+export const getProjects = async (req, res) => {
+    try {
+        const project = projectModel(db);
+
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 20;
+        const search = req.query.search || '';
+        const status = req.query.status || null;
+
+        const parseList = (val, forceString = false) => {
+            if (!val) return [];
+            if (Array.isArray(val)) return val.map(x => forceString ? String(x).trim() : (isNaN(parseInt(x,10)) ? x : parseInt(x,10)));
+            return val.split(',').map(x => forceString ? String(x).trim() : (isNaN(parseInt(x,10)) ? x.trim() : parseInt(x,10)));
+        }
+
+        const categories = parseList(req.query.categories, false);
+        const skills = parseList(req.query.skills, false);
+        const regions = parseList(req.query.regions, true); // region codes (e.g., 'nsw', 'vic')
+
+        const result = await project.getPaginated(page, limit, categories, skills, regions, status, search);
+
+        return res.status(200).json({ message: 'Success', data: result.data, pagination: result.pagination });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
