@@ -55,13 +55,13 @@ const ProjectPopup = ({
             <div className="bg-white rounded-lg p-6 w-[900px] max-w-3xl mx-auto max-h-[90vh] overflow-y-auto">
                 <h3 className="text-lg font-semibold mb-4">Project Details</h3>
 
-                <div className="grid grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <p className="text-sm text-gray-600 mb-2">Project Name:</p>
-                        <p className="font-medium">{project?.title}</p>
-                    </div>
+                <div className="gap-6 mb-6">
+                    <p className="text-sm text-gray-600 mb-2">Project Name:</p>
+                    <p className="font-medium">{project?.title}</p>
+                </div>
 
-                    <div>
+                <div className="gap-6 mb-6">
+                <div>
                         <p className="text-sm text-gray-600 mb-2">Status:</p>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                             project?.status === 'open' 
@@ -71,12 +71,35 @@ const ProjectPopup = ({
                             {project?.status === 'open' ? 'Open' : 'Closed'}
                         </span>
                     </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-6 mb-6">
+
+                    
 
                     <div>
                         <p className="text-sm text-gray-600 mb-2">Category:</p>
                         <p className="font-medium">{project?.category || "N/A"}</p>
                     </div>
 
+                                    {project?.skills && project.skills.length > 0 && (
+                    <div className="mb-6">
+                        <p className="text-sm text-gray-600 mb-2">Required Skills:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {project.skills.map((skill, index) => (
+                                <span 
+                                    key={index}
+                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                >
+                                    {typeof skill === 'object' ? skill.name : `Skill ${skill}`}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                </div>
+
+                <div className="grid grid-cols-3 gap-6 mb-6">
                     <div>
                         <p className="text-sm text-gray-600 mb-2">Open Date:</p>
                         <p className="font-medium">{formatDate(project?.openDate)}</p>
@@ -93,21 +116,7 @@ const ProjectPopup = ({
                     </div>
                 </div>
 
-                {project?.skills && project.skills.length > 0 && (
-                    <div className="mb-6">
-                        <p className="text-sm text-gray-600 mb-2">Required Skills:</p>
-                        <div className="flex flex-wrap gap-2">
-                            {project.skills.map((skill, index) => (
-                                <span 
-                                    key={index}
-                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                                >
-                                    {typeof skill === 'object' ? skill.name : `Skill ${skill}`}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                )}
+
 
                 {project?.regions && project.regions.length > 0 && (
                     <div className="mb-6">

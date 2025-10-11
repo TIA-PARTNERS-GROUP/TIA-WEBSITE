@@ -29,3 +29,11 @@ export function addProject(name, description, status, openDate, closeDate, compl
         }
     );
 };
+
+export function getMyProjects() {
+    return api.get('/projects/my');
+};
+
+export function getAppliedProjects() {
+    return api.get('/projects/applied');
+};

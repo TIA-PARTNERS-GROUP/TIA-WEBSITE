@@ -11,7 +11,7 @@ import ChevronUpIcon from "../../Icons/ChevronUpIcon";
 import PrimaryButton from "../../Button/PrimaryButton";
 import { getCategoriesList } from "../../../api/categories";
 
-const SearchBar = ({ isProjectsRoute }) => {
+const SearchBar = ({ isProjectsRoute = false, isHistoryRoute = false }) => {
     const navigate = useNavigate();
     const { partnerType, searchType } = useParams();
 
@@ -88,7 +88,14 @@ const SearchBar = ({ isProjectsRoute }) => {
         
         params.append('sort', selectedSort);
 
-        const basePath = isProjectsRoute ? '/trade/find' : `/connect/${partnerType}/${searchType}`;
+        let basePath;
+        if (isHistoryRoute) {
+            basePath = '/trade/history';
+        } else if (isProjectsRoute) {
+            basePath = '/trade/find';
+        } else {
+            basePath = `/connect/${partnerType}/${searchType}`;
+        }
         navigate(`${basePath}?${params.toString()}`);
     };
 
@@ -141,7 +148,10 @@ const SearchBar = ({ isProjectsRoute }) => {
             { value: 'name-asc', label: 'Project Name (A-Z)' },
             { value: 'name-desc', label: 'Project Name (Z-A)' },
             { value: 'date-asc', label: 'Date: Oldest First' },
-            { value: 'date-desc', label: 'Date: Newest First' }
+            { value: 'date-desc', label: 'Date: Newest First' },
+            ...(isHistoryRoute ? [
+                { value: 'type', label: 'Project Type' }
+            ] : []),
         ]
         : [
             { value: 'name-asc', label: 'Business Name (A-Z)' },
@@ -172,7 +182,13 @@ const SearchBar = ({ isProjectsRoute }) => {
                 title: 'Regions',
                 options: ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'NT', 'ACT'],
                 type: 'checkbox'
-            }
+            },
+            ...(isHistoryRoute ? [{
+                id: 'project-type',
+                title: 'Project Type',
+                options: ['All Projects', 'Managed', 'Applied'],
+                type: 'radio'
+            }] : []),
         ]
         : [
             {
@@ -265,7 +281,14 @@ const SearchBar = ({ isProjectsRoute }) => {
             }, {})
         );
         
-        const basePath = isProjectsRoute ? '/trade/find' : `/connect/${partnerType}/${searchType}`;
+        let basePath;
+        if (isHistoryRoute) {
+            basePath = '/trade/history';
+        } else if (isProjectsRoute) {
+            basePath = '/trade/find';
+        } else {
+            basePath = `/connect/${partnerType}/${searchType}`;
+        }
         navigate(`${basePath}?q=${searchText}`);
         setIsFilterOpen(false);
     };
@@ -292,6 +315,15 @@ const SearchBar = ({ isProjectsRoute }) => {
             if (selectedRegions && selectedRegions.length > 0) {
                 params.append('regions', selectedRegions.join(','));
             }
+
+            if (isHistoryRoute) {
+                const projectType = selectedFilters['project-type'];
+                if (projectType && projectType !== 'All Projects') {
+                    const typeParam = projectType.toLowerCase();
+                    params.append('type', typeParam);
+                }
+            }
+            
         } else {
             const selectedCategories = selectedFilters['business-category'];
             if (selectedCategories && selectedCategories.length > 0) {
@@ -308,7 +340,14 @@ const SearchBar = ({ isProjectsRoute }) => {
         params.append('sort', selectedSort);
         
         setIsFilterOpen(false);
-        const basePath = isProjectsRoute ? '/trade/find' : `/connect/${partnerType}/${searchType}`;
+        let basePath;
+        if (isHistoryRoute) {
+            basePath = '/trade/history';
+        } else if (isProjectsRoute) {
+            basePath = '/trade/find';
+        } else {
+            basePath = `/connect/${partnerType}/${searchType}`;
+        }
         navigate(`${basePath}?${params.toString()}`);
     };
 
