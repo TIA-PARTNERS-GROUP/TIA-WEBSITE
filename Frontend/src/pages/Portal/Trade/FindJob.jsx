@@ -103,23 +103,6 @@ const FindJob = () => {
         }
     };
 
-    const handleProjectRowClick = (project) => {
-        navigate(`/projects/${project.id}`, {
-            state: {
-                id: project.id,
-                title: project.title,
-                description: project.description,
-                status: project.status,
-                openDate: project.openDate,
-                closeDate: project.closeDate,
-                completionDate: project.completionDate,
-                category: project.category,
-                skills: project.skills,
-                regions: project.regions
-            }
-        });
-    };
-
     return (
       <div className="bg-white rounded-xl sm:px-6 lg:px-6 2xl:px-8 py-2">
         <h2 className="pt-10 sm:text-xl 2xl:text-3xl md:text-2xl font-semibold text-black-800 pb-4">Find Project</h2>
@@ -127,7 +110,7 @@ const FindJob = () => {
          <ArticleTable 
             isTradeRoute={true}
             tableData={projectsData}
-            onRowClick={handleProjectRowClick}
+            onRowClick={true}
             showManagementControls={false}
         />
         

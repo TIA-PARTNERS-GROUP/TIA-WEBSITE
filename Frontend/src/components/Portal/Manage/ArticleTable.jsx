@@ -10,6 +10,7 @@ import SecondaryButton from "../../Button/SecondaryButton";
 import DeleteIcon from "../../Icons/DeleteIcon";
 import SquareSelectIcon from "../../Icons/SquareSelectIcon";
 import TickIcon from "../../Icons/TickIcon";
+import ProjectPopup from "../Trade/ProjectPopup";
 
 const ArticleTable = ({ 
     isTradeRoute = false, 
@@ -18,6 +19,8 @@ const ArticleTable = ({
     showManagementControls = true 
 }) => {
 
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showProjectPopup, setShowProjectPopup] = useState(false);
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
   const { manageType } = useParams();
@@ -111,7 +114,8 @@ const ArticleTable = ({
     const handleRowClick = (row) => {
     if (onRowClick) {
       // Use custom row click handler if provided (for projects)
-      onRowClick(row);
+      setSelectedProject(row);
+      setShowProjectPopup(true);
     } else {
       // Use default navigation for manage pages
       navigate(`/manage/${manageType}/individual-view`, {
@@ -124,6 +128,15 @@ const ArticleTable = ({
         },
       });
     }
+  };
+
+  const handleDeleteProject = (projectId) => {
+    setTableData(prev => prev.filter(project => project.id !== projectId));
+  };
+
+  const handleApplyToProject = (projectId) => {
+      // Handle application success (you might want to update the UI)
+      console.log(`Applied to project ${projectId}`);
   };
 
   const handleMarkAll = () => {
@@ -274,6 +287,17 @@ const ArticleTable = ({
       </tbody>
     </table>
     </div>
+
+    {showProjectPopup && selectedProject && (
+        <ProjectPopup
+            project={selectedProject}
+            isOwner={false} // You'll need to determine this based on your auth context
+            onClose={() => setShowProjectPopup(false)}
+            onDelete={handleDeleteProject}
+            onApply={handleApplyToProject}
+        />
+    )}
+
   </div>
   )
 }
