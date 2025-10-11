@@ -109,7 +109,7 @@ const ArticleTable = ({
   }
 
   const handleCheckboxClick = (id, e) => {
-    e.stopPropagation(); // Prevent row click event
+    e.stopPropagation();
     setCheckedItems(prev => ({
       ...prev,
       [id]: !prev[id]
@@ -118,11 +118,9 @@ const ArticleTable = ({
 
     const handleRowClick = (row) => {
     if (onRowClick) {
-      // Use custom row click handler if provided (for projects)
       setSelectedProject(row);
       setShowProjectPopup(true);
     } else {
-      // Use default navigation for manage pages
       navigate(`/manage/${manageType}/individual-view`, {
         state: {
           id: row.id,
@@ -144,7 +142,6 @@ const ArticleTable = ({
   };
 
   const handleApplyToProject = (projectId) => {
-      // Handle application success (you might want to update the UI)
       console.log(`Applied to project ${projectId}`);
   };
 
@@ -170,7 +167,6 @@ const ArticleTable = ({
     if (selectedIds.length === 0) return;
     
     try {
-      // Make all API calls first
       const deletePromises = selectedIds.map(id => {
         switch (manageType) {
           case "case-studies":
@@ -184,10 +180,8 @@ const ArticleTable = ({
         }
       });
     
-    // Wait for all delete operations to complete
     await Promise.all(deletePromises);
     
-    // Only update state if API calls succeed
     setInternalTableData(prev => prev.filter(item => !selectedIds.includes(item.id)));
     setCheckedItems(prev => {
       const updatedCheckedItems = { ...prev };

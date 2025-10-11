@@ -92,7 +92,6 @@ const SubmitJob = () => {
   };
 
   const handleSkillSelect = (selectedSkill) => {
-    // Add skill to selected skills if not already selected
     if (!selectedSkills.find(skill => skill.id === selectedSkill.id)) {
       setSelectedSkills(prev => [...prev, selectedSkill]);
     }
@@ -104,7 +103,6 @@ const SubmitJob = () => {
   };
 
   const handleStateSelect = (selectedState) => {
-    // Add region to selected regions if not already selected
     if (!selectedRegions.includes(selectedState)) {
       setSelectedRegions(prev => [...prev, selectedState]);
     }
@@ -137,7 +135,6 @@ const SubmitJob = () => {
             selectedRegions
         );
         
-        // Navigate to projects list or success page
         navigate("/trade/find");
         
     } catch (error) {
