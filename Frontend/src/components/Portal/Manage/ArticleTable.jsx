@@ -11,14 +11,22 @@ import DeleteIcon from "../../Icons/DeleteIcon";
 import SquareSelectIcon from "../../Icons/SquareSelectIcon";
 import TickIcon from "../../Icons/TickIcon";
 
-const ArticleTable = ({ isTradeRoute }) => {
+const ArticleTable = ({ 
+    isTradeRoute = false, 
+    tableData: externalTableData, 
+    onRowClick,
+    showManagementControls = true 
+}) => {
 
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
   const { manageType } = useParams();
   const [isAllChecked, setIsAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
-  const [ tableData, setTableData ] = useState([{title: "Loading...", date: "Loading..."}]);
+  const [internalTableData, setInternalTableData] = useState([{title: "Loading...", date: "Loading..."}]);
+  const tableData = externalTableData || internalTableData;
+
+  console.log()
 
   useEffect(() => {
   const fetchData = async () => {
@@ -60,7 +68,7 @@ const ArticleTable = ({ isTradeRoute }) => {
   };
 
   fetchData();
-}, []);
+}, [manageType, externalTableData]);
 
   useEffect(() => {
     const allChecked = Object.values(checkedItems).length > 0 && 
@@ -100,16 +108,22 @@ const ArticleTable = ({ isTradeRoute }) => {
     }));
   };
 
-  const handleRowClick = (row) => {
-    navigate(`/manage/${manageType}/individual-view`, {
-      state: {
-        id: row.id,
-        title: row.title,
-        date: row.date,
-        content: row.content,
-        status: row.status
-      },
-    });
+    const handleRowClick = (row) => {
+    if (onRowClick) {
+      // Use custom row click handler if provided (for projects)
+      onRowClick(row);
+    } else {
+      // Use default navigation for manage pages
+      navigate(`/manage/${manageType}/individual-view`, {
+        state: {
+          id: row.id,
+          title: row.title,
+          date: row.date,
+          content: row.content,
+          status: row.status
+        },
+      });
+    }
   };
 
   const handleMarkAll = () => {

@@ -5,6 +5,9 @@ import PrimaryButton from "../../../components/Button/PrimaryButton.jsx";
 import SecondaryButton from "../../../components/Button/SecondaryButton";
 import ChevronDownIcon from "../../../components/Icons/ChevronDownIcon";
 import ChevronUpIcon from "../../../components/Icons/ChevronUpIcon";
+import { getCategoriesList } from "../../../api/categories";
+//import { getSkillsList } from "../../../api/skills";
+import { addProject } from "../../../api/projects";
 
 const SubmitJob = () => {
   const navigate = useNavigate();
@@ -21,38 +24,65 @@ const SubmitJob = () => {
   const [skillId, setSkillId] = useState(null);
   const [state, setState] = useState("Select State");
   const [details, setDetails] = useState("");
+  const [status, setStatus] = useState("open");
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSkillsOpen, setIsSkillsOpen] = useState(false);
   const [isStateOpen, setIsStateOpen] = useState(false);
 
-  // TODO: Fetch categories from API
   const [categories, setCategories] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedRegions, setSelectedRegions] = useState([]);
   
+  const getSkillsList = () => {
+    const skills = [
+      {id: 1, name: "Skill 1"}
+    ]
+    return skills
+  }
+
   const australianStates = [
-    "New South Wales",
-    "Victoria", 
-    "Queensland",
-    "Western Australia",
-    "South Australia",
-    "Tasmania",
-    "Australian Capital Territory",
-    "Northern Territory"
+    "nsw",
+    "vic", 
+    "qld",
+    "wa",
+    "sa",
+    "tas",
+    "act",
+    "nt"
   ];
 
+  const stateLabels = {
+    nsw: "New South Wales",
+    vic: "Victoria",
+    qld: "Queensland", 
+    wa: "Western Australia",
+    sa: "South Australia",
+    tas: "Tasmania",
+    act: "Australian Capital Territory",
+    nt: "Northern Territory"
+  };
+
   useEffect(() => {
-    const fetchCategories = async () => {
-      // TODO: Implement API call to fetch categories
-      // try {
-      //   const categoriesRes = await getJobCategories();
-      //   setCategories(categoriesRes.data.categories);
-      // } catch (error) {
-      //   console.error('Error fetching categories:', error);
-      // }
+    const fetchData = async () => {
+      startLoading();
+      try {
+        const [categoriesRes] = await Promise.all([
+          getCategoriesList(),
+        ]);
+        const skillsRes = getSkillsList()
+        console.log(skillsRes)
+        setCategories(categoriesRes.data.categories || []);
+        setSkills(skillsRes || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        stopLoading();
+      }
     };
 
-    fetchCategories();
+    fetchData();
   }, []);
 
   const handleCategorySelect = (selectedCategory) => {
@@ -62,50 +92,60 @@ const SubmitJob = () => {
   };
 
   const handleSkillSelect = (selectedSkill) => {
-    setSkill(selectedSkill.name);
-    setSkillId(selectedSkill.id);
+    // Add skill to selected skills if not already selected
+    if (!selectedSkills.find(skill => skill.id === selectedSkill.id)) {
+      setSelectedSkills(prev => [...prev, selectedSkill]);
+    }
     setIsSkillsOpen(false);
   }
 
+  const removeSkill = (skillId) => {
+    setSelectedSkills(prev => prev.filter(skill => skill.id !== skillId));
+  };
+
   const handleStateSelect = (selectedState) => {
-    setState(selectedState);
+    // Add region to selected regions if not already selected
+    if (!selectedRegions.includes(selectedState)) {
+      setSelectedRegions(prev => [...prev, selectedState]);
+    }
     setIsStateOpen(false);
   };
 
+  const removeRegion = (region) => {
+    setSelectedRegions(prev => prev.filter(r => r !== region));
+  };
+
   const handleSubmit = async () => {
+    if (!projectName || !details || !categoryId || selectedSkills.length === 0 || selectedRegions.length === 0) {
+        alert("Please fill in all required fields: Project Name, Description, Category, Skills, and State");
+        return;
+    }
+
     setSubmitting(true);
+    startLoading();
     
     try {
-      // TODO: Implement API call to submit job
-      // const jobData = {
-      //   projectName,
-      //   openDate,
-      //   closeDate,
-      //   completionDate,
-      //   categoryId,
-      //   skills: skills.map(skill => skill.description),
-      //   state,
-      //   details
-      // };
-      // await submitJob(jobData);
-      
-      // TODO: Navigate to success page or job listing
-      // navigate(`/trade/jobs/success`);
-      console.log("Job submitted:", {
-        projectName,
-        openDate,
-        closeDate,
-        completionDate,
-        category,
-        skill,
-        state,
-        details
-      });
-      
+        await addProject(
+            projectName,
+            details,
+            status,
+            openDate || null,
+            closeDate || null,
+            completionDate || null,
+            [categoryId],
+            selectedSkills.map(skill => skill.id),
+            selectedRegions
+        );
+        
+        // Navigate to projects list or success page
+        navigate("/trade/find");
+        
     } catch (error) {
-      console.error('Error submitting job:', error);
+        console.error('Error submitting project:', error);
+        alert("Failed to submit project. Please try again.");
     } finally {
-      setSubmitting(false);
+        setSubmitting(false);
+        stopLoading();
     }
   };
 
@@ -115,7 +155,7 @@ const SubmitJob = () => {
       
       {/* Project Name */}
       <div className="form-group">
-        <p className="pt-4 pb-1 text-md font-semibold text-blue-600">PROJECT NAME</p>
+        <p className="pt-4 pb-1 text-md font-semibold text-blue-600">PROJECT NAME *</p>
         <input 
           type="text" 
           value={projectName}
@@ -136,7 +176,6 @@ const SubmitJob = () => {
             value={openDate}
             onChange={(e) => setOpenDate(e.target.value)}
             className="border-b-2 placeholder-gray-300 w-full" 
-            required
           />
         </div>
         <div className="form-group">
@@ -146,7 +185,6 @@ const SubmitJob = () => {
             value={closeDate}
             onChange={(e) => setCloseDate(e.target.value)}
             className="border-b-2 placeholder-gray-300 w-full" 
-            required
           />
         </div>
         <div className="form-group">
@@ -156,7 +194,6 @@ const SubmitJob = () => {
             value={completionDate}
             onChange={(e) => setCompletionDate(e.target.value)}
             className="border-b-2 placeholder-gray-300 w-full" 
-            required
           />
         </div>
       </div>
@@ -165,7 +202,7 @@ const SubmitJob = () => {
       <h2 className="pt-10 text-xl @md:text-xl font-bold text-black-800 pb-4">Project Details</h2>
       <div className="grid grid-cols-3 gap-6">
         <div className="form-group relative">
-          <p className="pt-4 pb-1 text-md font-semibold text-blue-600">CATEGORY</p>
+          <p className="pt-4 pb-1 text-md font-semibold text-blue-600">CATEGORY *</p>
           <button
             type="button"
             className="w-full hs-dropdown-toggle text-left border-b-2 border-gray-200 bg-white 
@@ -200,7 +237,7 @@ const SubmitJob = () => {
         </div>
 
         <div className="form-group relative">
-          <p className="pt-4 pb-1 text-md font-semibold text-blue-600">SKILLS</p>
+          <p className="pt-4 pb-1 text-md font-semibold text-blue-600">SKILLS *</p>
           <button
             type="button"
             className="w-full hs-dropdown-toggle text-left border-b-2 border-gray-200 bg-white 
@@ -208,7 +245,9 @@ const SubmitJob = () => {
                        focus:border-transparent transition-all duration-200 flex items-center justify-between py-2"
             onClick={() => setIsSkillsOpen(!isSkillsOpen)}
           >
-            <span className="truncate">{skill}</span>
+            <span className="truncate">
+              {selectedSkills.length > 0 ? `${selectedSkills.length} selected` : "Select Skills"}
+            </span>
             {isSkillsOpen ? (
               <ChevronUpIcon className="w-5 h-5 text-gray-500 flex-shrink-0" />
             ) : (
@@ -232,10 +271,31 @@ const SubmitJob = () => {
               ))}
             </div>
           )}
+          
+          {/* Selected Skills Display */}
+          {selectedSkills.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {selectedSkills.map(skill => (
+                <span 
+                  key={skill.id}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  {skill.name}
+                  <button 
+                    type="button"
+                    onClick={() => removeSkill(skill.id)}
+                    className="ml-2 hover:text-blue-600"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="form-group relative">
-          <p className="pt-4 pb-1 text-md font-semibold text-blue-600">STATE</p>
+          <p className="pt-4 pb-1 text-md font-semibold text-blue-600">STATE *</p>
           <button
             type="button"
             className="w-full hs-dropdown-toggle text-left border-b-2 border-gray-200 bg-white 
@@ -243,7 +303,9 @@ const SubmitJob = () => {
                        focus:border-transparent transition-all duration-200 flex items-center justify-between py-2"
             onClick={() => setIsStateOpen(!isStateOpen)}
           >
-            <span className="truncate">{state}</span>
+            <span className="truncate">
+              {selectedRegions.length > 0 ? `${selectedRegions.length} selected` : "Select State"}
+            </span>
             {isStateOpen ? (
               <ChevronUpIcon className="w-5 h-5 text-gray-500 flex-shrink-0" />
             ) : (
@@ -254,16 +316,37 @@ const SubmitJob = () => {
           {isStateOpen && (
             <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg 
                            max-h-60 overflow-y-auto w-full">
-              {australianStates.map((stateOption) => (
+              {australianStates.map((stateCode) => (
                 <button
-                  key={stateOption}
+                  key={stateCode}
                   type="button"
                   className="w-full px-4 py-3 text-left hover:bg-gray-100 focus:outline-none focus:bg-blue-50 
                              focus:text-blue-600 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
-                  onClick={() => handleStateSelect(stateOption)}
+                  onClick={() => handleStateSelect(stateCode)}
                 >
-                  {stateOption}
+                  {stateLabels[stateCode]}
                 </button>
+              ))}
+            </div>
+          )}
+          
+          {/* Selected Regions Display */}
+          {selectedRegions.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {selectedRegions.map(region => (
+                <span 
+                  key={region}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                >
+                  {stateLabels[region]}
+                  <button 
+                    type="button"
+                    onClick={() => removeRegion(region)}
+                    className="ml-2 hover:text-green-600"
+                  >
+                    ×
+                  </button>
+                </span>
               ))}
             </div>
           )}
@@ -272,7 +355,7 @@ const SubmitJob = () => {
 
       {/* Project Description*/}
       <div className="form-group">
-        <p className="pt-4 pb-1 text-md font-semibold text-blue-600">DESCRIPTION</p>
+        <p className="pt-4 pb-1 text-md font-semibold text-blue-600">DESCRIPTION *</p>
         <textarea 
           type="text" 
           cols="30"
@@ -299,7 +382,7 @@ const SubmitJob = () => {
           onClick={handleSubmit}
           disabled={submitting}
         >
-          {submitting ? "Submitting..." : "Submit Job"}
+          {submitting ? "Submitting..." : "Submit Project"}
         </PrimaryButton>
       </div>
     </div>

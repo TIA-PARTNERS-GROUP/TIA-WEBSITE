@@ -54,14 +54,11 @@ const FindJob = () => {
                     openDate: project.open_date,
                     closeDate: project.close_date,
                     completionDate: project.completion_date,
-                    category: project.category_name,
+                    category: `Category ${project.categories[0]}` || "N/A",
                     skills: project.skills || [],
                     regions: project.regions || [],
-                    manager: project.manager_name,
-                    createdAt: project.created_at,
-                    // Add fields that ArticleTable expects
-                    date: project.open_date || project.created_at, // Use open date or created date
-                    content: project.description // Use description as content
+                    date: project.open_date || project.created_at,
+                    content: project.description
                 }));
                 
                 let filteredData = projects;
@@ -83,8 +80,8 @@ const FindJob = () => {
                 }
 
                 setProjectsData(filteredData);
-                setTotalPages(Math.ceil(res.data.pagination?.total / itemsPerPage) || 1);
-                setTotalItems(res.data.pagination?.total || filteredData.length);
+                setTotalPages(res.data.pagination?.totalPages || 1);
+                setTotalItems(res.data.pagination?.totalItems || filteredData.length);
             
             } catch (error) {
                 console.error('Error fetching projects:', error);
