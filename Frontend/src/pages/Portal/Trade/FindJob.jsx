@@ -5,6 +5,7 @@ import { queryProjects } from "../../../api/projects";
 import ArticleTable from "../../../components/Portal/Manage/ArticleTable";
 import SearchBar from "../../../components/Portal/Connect/SearchBar";
 import PaginationNav from "../../../components/Portal/Connect/PaginationNav";
+import { getCategoriesList } from "../../../api/categories";
 
 const FindJob = () => {
 
@@ -44,7 +45,13 @@ const FindJob = () => {
                 const regionsString = regions.length > 0 ? regions.join(',') : null;
                 
                 const res = await queryProjects(currentPage, itemsPerPage, queryValue, categoriesString, skillsString, regionsString, statusParam);
-                
+
+                const categoriesRes = await getCategoriesList();
+                const categoriesMap = categoriesRes.data.categories.reduce((acc, category) => {
+                    acc[category.id] = category.name;
+                    return acc;
+                }, {});
+                        
                 // Transform API response to match ArticleTable expected format
                 const projects = res.data.data.map(project => ({
                     id: project.id,
@@ -54,7 +61,9 @@ const FindJob = () => {
                     openDate: project.open_date,
                     closeDate: project.close_date,
                     completionDate: project.completion_date,
-                    category: `Category ${project.categories[0]}` || "N/A",
+                    category: project.categories && project.categories.length > 0 
+                        ? categoriesMap[project.categories[0]] || `Category ${project.categories[0]}`
+                        : "N/A",
                     skills: project.skills || [],
                     regions: project.regions || [],
                     date: project.open_date || project.created_at,

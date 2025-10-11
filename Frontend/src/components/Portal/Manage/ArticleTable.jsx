@@ -55,7 +55,7 @@ const ArticleTable = ({
                   manageType === "testimonials" ? response.data.testimonials : 
                   response.data.caseStudies;
       
-      setTableData(data);
+      setInternalTableData(data);
       
       const initialCheckedState = data.reduce((acc, item) => {
         acc[item.id] = false;
@@ -87,6 +87,10 @@ const ArticleTable = ({
       year: 'numeric'
     });
   };
+
+  const formatRegion = (region) => {
+    return region;
+  }
 
   const formatStatus = (status) => {
     switch (status) {
@@ -179,7 +183,7 @@ const ArticleTable = ({
     await Promise.all(deletePromises);
     
     // Only update state if API calls succeed
-    setTableData(prev => prev.filter(item => !selectedIds.includes(item.id)));
+    setInternalTableData(prev => prev.filter(item => !selectedIds.includes(item.id)));
     setCheckedItems(prev => {
       const updatedCheckedItems = { ...prev };
       selectedIds.forEach(id => {
@@ -229,16 +233,18 @@ const ArticleTable = ({
         </div>   
       </div> }
   <div className="sm:p-4 md:p-6 lg:p-8">
-    <table className="relative w-full sm:text-xs text-left border-y table-auto"> 
+    <table className="relative w-full sm:text-xs text-left border-y table-auto table-fixed"> 
       <thead>
         <tr>
-          <th className="border-y-2 border-black py-2">Title</th>
+          <th className={`border-y-2 border-black py-2 ${isTradeRoute ? 'w-2/5' : 'w-2/3'}`}>Title</th>
           {isTradeRoute ? (
             <>
+              <th className="border-y-2 border-black py-2">Category</th>
+              <th className="border-y-2 border-black py-2">Skills</th>
+              <th className="border-y-2 border-black py-2">Region</th>
               <th className="border-y-2 border-black py-2">Open Date</th>
               <th className="border-y-2 border-black py-2">Close Date</th>
               <th className="border-y-2 border-black py-2">Completion Date</th>
-              <th className="border-y-2 border-black py-2">Category</th>
             </>
           ) : (
             <>
@@ -257,10 +263,12 @@ const ArticleTable = ({
             <td className="items-center border-y py-2 font-medium">{row.title}</td>
             {isTradeRoute ? (
               <>
+                <td className="items-center border-y py-2 font-medium">{row.category || "N/A"}</td>
+                <td className="items-center border-y py-2 font-medium">{row.skills || "N/A"}</td>
+                <td className="items-center border-y py-2 font-medium">{formatRegion(row.regions) || "N/A"}</td>
                 <td className="items-center border-y py-2 font-medium">{formatDate(row.openDate || row.date)}</td>
                 <td className="items-center border-y py-2 font-medium">{formatDate(row.closeDate)}</td>
                 <td className="items-center border-y py-2 font-medium">{formatDate(row.completionDate)}</td>
-                <td className="items-center border-y py-2 font-medium">{row.category || "N/A"}</td>
               </>
             ) : (
               <>
