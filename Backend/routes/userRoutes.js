@@ -1,5 +1,5 @@
 import Router from 'express';
-import { checkUserExists, getUserDetails, getMe} from '../controllers/userController.js';
+import { checkUserExists, getUserDetails, getMe, getDashboardConfig, updateDashboardConfig} from '../controllers/userController.js';
 import { getUserPosts, getMyPosts, addPost, removePost, publishPost } from '../controllers/postController.js';
 import { getMyTestimonials, addTestimonial, removeTestimonial, publishTestimonial, getUserTestimonials } from '../controllers/testimonialController.js';
 import { getMyCaseStudies, addCaseStudy, removeCaseStudy, publishCaseStudy, getUserCaseStudies } from '../controllers/caseStudyController.js';
@@ -785,6 +785,81 @@ router.delete('/removepost', verifyToken, removePost);
 
 /**
  * @swagger
+ * /users/config:
+ *   get:
+ *     summary: Get dashboard configuration for the authenticated user
+ *     tags:
+ *       - User
+ *     description: Returns the saved dashboard configuration for the authenticated user. Requires a valid Bearer JWT token.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard configuration retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 config:
+ *                   type: object
+ *                   description: User-specific dashboard configuration.
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       500:
+ *         description: Internal server error.
+ */
+router.get('/config', verifyToken, getDashboardConfig);
+
+/**
+ * @swagger
+ * /users/config:
+ *   post:
+ *     summary: Update dashboard configuration for the authenticated user
+ *     tags:
+ *       - User
+ *     description: Stores or updates the dashboard configuration for the authenticated user. Requires a valid Bearer JWT token.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - config
+ *             properties:
+ *               config:
+ *                 type: object
+ *                 description: Arbitrary configuration object for the user's dashboard.
+ *     responses:
+ *       200:
+ *         description: Dashboard configuration updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Config updated
+ *                 config:
+ *                   type: object
+ *       400:
+ *         description: Invalid request body.
+ *       401:
+ *         description: Unauthorized or missing token.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/config', verifyToken, updateDashboardConfig);
+
+/**
+ * @swagger
  * /users/{id}:
  *   get:
  *     summary: Get user details by ID
@@ -910,7 +985,10 @@ router.get('/:id', verifyToken, getUserDetails);
  *       500:
  *         description: Internal server error.
  */
-router.get('/:id/posts', verifyToken, getUserPosts)
+router.get('/:id/posts', verifyToken, getUserPosts);
+
+
+
 
 
 export default router;
