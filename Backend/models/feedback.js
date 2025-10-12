@@ -1,12 +1,12 @@
 export default (db) => ({
-    async addFeedback(userId, content) {
+    async addFeedback(name, email, content) {
         try {
             await db.query(
                 `
-                INSERT INTO feedback (submitted_by_user_id, content)
-                VALUES (?, ?)
+                INSERT INTO feedback (name, email, content)
+                VALUES (?, ?, ?)
                 `,
-                [userId, content]
+                [name, email, content]
             )
         }
         catch (error) {

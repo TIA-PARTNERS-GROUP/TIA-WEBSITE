@@ -290,13 +290,12 @@ DROP TABLE IF EXISTS `feedback`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `submitted_by_user_id` int unsigned NOT NULL,
+  `name` varchar(120) NOT NULL,
+  `email` varchar(254) NOT NULL,
   `content` text NOT NULL,
   `date_submitted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `feedback_user_id_idx` (`submitted_by_user_id`),
-  CONSTRAINT `feedback_user_id` FOREIGN KEY (`submitted_by_user_id`) REFERENCES `users` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

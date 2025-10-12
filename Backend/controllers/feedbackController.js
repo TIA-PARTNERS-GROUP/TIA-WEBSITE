@@ -5,12 +5,12 @@ import feedbackModel from '../models/feedback.js'
 export const submitFeedback = async (req, res) => {
     try {
         const feedback = feedbackModel(db);
-        const {content} = req.body;
-        if (!content) {
+        const {name, email, content} = req.body;
+        if (!content || !name || !email) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
-        await feedback.addFeedback(req.user.id, content);
+        await feedback.addFeedback(name, email, content);
         // potentially email feedback somewhere at this point
         return res.status(201).json({message:"Success"});
     }
