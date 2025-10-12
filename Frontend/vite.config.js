@@ -8,6 +8,11 @@ import svgr from '@svgr/rollup';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
+  const allowedHosts = process.env.VITE_ALLOWED_HOSTS ? process.env.VITE_ALLOWED_HOSTS.split(',') : [];
+  console.log('VITE_ALLOWED_HOSTS:', process.env.VITE_ALLOWED_HOSTS);
+  console.log('allowedHosts:', allowedHosts);
+  console.log(`Backend URL: ${env.VITE_PROXY_TARGET}`);
+
   return {
     plugins: [
       react(),
@@ -24,11 +29,16 @@ export default defineConfig(({ mode }) => {
       svgr(),
     ],
     server: {
+      host: '0.0.0.0',
       port: env.VITE_FRONTEND_BASE_PORT,
+      allowedHosts: allowedHosts,
+      hmr: {
+        host: allowedHosts[0],
+        port: env.VITE_FRONTEND_BASE_PORT
+      },
       proxy: {
         '/api': {
-          target: env.VITE_API_BASE_URL,
-          changeOrigin: true
+          target: env.VITE_PROXY_TARGET
         },
       },
     },
