@@ -140,5 +140,27 @@ export default (db) => ({
     }
 
     return rows[0];
+  },
+
+  async fetchDashboardConfig(userId) {
+    const [rows] = await db.query(`
+      SELECT config
+      FROM user_dashboard_configs
+      WHERE user_id = ?
+      `, [userId]);
+
+    if (rows.length == 0) {
+      return null;
+    }
+    return rows[0];
+  },
+
+  async updateDashboardConfig(userId, newConfig) {
+    await db.query(`
+      INSERT user_dashboard_configs (user_id, config)
+      VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE
+        config = VALUES(config)
+      `, [userId, JSON.stringify(newConfig)])
   }
 });

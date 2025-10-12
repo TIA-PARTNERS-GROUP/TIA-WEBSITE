@@ -22,7 +22,7 @@ const router = Router();
  */
 
 
-/**s
+/**
  * @swagger
  * /auth/register:
  *   post:
