@@ -87,6 +87,7 @@ const History = () => {
 
                 const projects = uniqueProjects.map(project => ({
                     id: project.id,
+                    business_id: project.business_id,
                     title: project.name,
                     description: project.description,
                     status: project.status,

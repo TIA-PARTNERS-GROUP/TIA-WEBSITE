@@ -30,8 +30,6 @@ const ArticleTable = ({
   const [internalTableData, setInternalTableData] = useState([{title: "Loading...", date: "Loading..."}]);
   const tableData = externalTableData || internalTableData;
 
-  console.log()
-
   useEffect(() => {
   const fetchData = async () => {
     startLoading();
@@ -88,10 +86,6 @@ const ArticleTable = ({
       year: 'numeric'
     });
   };
-
-  const formatRegion = (region) => {
-    return region;
-  }
 
   const formatStatus = (status) => {
     switch (status) {
@@ -263,8 +257,12 @@ const ArticleTable = ({
             {isTradeRoute ? (
               <>
                 <td className="items-center border-y py-2 font-medium">{row.category || "N/A"}</td>
-                <td className="items-center border-y py-2 font-medium">{row.skills || "N/A"}</td>
-                <td className="items-center border-y py-2 font-medium">{formatRegion(row.regions) || "N/A"}</td>
+                <td className="items-center border-y py-2 font-medium">
+                    {Array.isArray(row.skills) ? row.skills.join(', ') : row.skills || "N/A"}
+                </td>
+                <td className="items-center border-y py-2 font-medium">
+                    {Array.isArray(row.regions) ? row.regions.join(', ') : row.regions || "N/A"}
+                </td>
                 <td className="items-center border-y py-2 font-medium">{formatDate(row.openDate || row.date)}</td>
                 <td className="items-center border-y py-2 font-medium">{formatDate(row.closeDate)}</td>
                 <td className="items-center border-y py-2 font-medium">{formatDate(row.completionDate)}</td>

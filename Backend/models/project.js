@@ -71,9 +71,19 @@ export default (db) => ({
 
   async getProjectById(id) {
     const [rows] = await db.query(`
-      SELECT id, managed_by_user_id, name, description, status, open_date, close_date, completion_date
-      FROM projects
-      WHERE id = ?
+      SELECT 
+        p.id, 
+        p.managed_by_user_id, 
+        p.name, 
+        p.description, 
+        p.status, 
+        p.open_date, 
+        p.close_date, 
+        p.completion_date,
+        b.id as business_id
+      FROM projects p
+      LEFT JOIN businesses b ON p.managed_by_user_id = b.operator_user_id
+      WHERE p.id = ?
       `, [id]);
 
     if (rows.length == 0) {
@@ -107,6 +117,7 @@ export default (db) => ({
     return {
       id: project.id,
       managed_by_user_id: project.managed_by_user_id,
+      business_id: project.business_id,
       name: project.name,
       description: project.description,
       status: project.status,
@@ -266,6 +277,7 @@ export default (db) => ({
       await conn.query('DELETE FROM project_business_skills WHERE project_id = ?', [id]);
       await conn.query('DELETE FROM project_regions WHERE project_id = ?', [id]);
       await conn.query('DELETE FROM project_applicants WHERE project_id = ?', [id]);
+      await conn.query('DELETE FROM notifications WHERE message LIKE ?', [`%project(${id})%`]);
 
       // Delete the project itself
       const [result] = await conn.query('DELETE FROM projects WHERE id = ?', [id]);
@@ -412,8 +424,9 @@ export default (db) => ({
     const where = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
     const baseQuery = `
-      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date
+      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date, b.id as business_id
       FROM projects p
+      LEFT JOIN businesses b ON p.managed_by_user_id = b.operator_user_id
       ${where}
     `;
 
@@ -472,6 +485,20 @@ export default (db) => ({
         hasPrev: page > 1
       }
     };
+  },
+
+  async removeApplicant(projectId, userId) {
+    try {
+        const [result] = await db.query(`
+            DELETE FROM project_applicants 
+            WHERE project_id = ? AND user_id = ?
+        `, [projectId, userId]);
+        
+        return result.affectedRows;
+    } catch (error) {
+        console.error("Error in project model removeApplicant:", error);
+        throw error;
+    }
   }
 
 

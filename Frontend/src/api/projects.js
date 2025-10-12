@@ -45,3 +45,19 @@ export function deleteProject(projectId) {
 export function addApplicant(projectId) {
     return api.post(`/projects/${projectId}/applicants`)
 }
+
+export function removeApplicant(projectId, userId) {
+    return api.delete(`/projects/${projectId}/applicants/${userId}`)
+}
+
+export function closeProject(projectId) {
+    return api.patch(`/projects/${projectId}`,
+        { 
+            status: "closed"
+        }
+    ); 
+}
+
+export function getProjectDetails(projectId) {
+    return api.get(`/projects/${projectId}`)
+}

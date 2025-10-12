@@ -242,3 +242,31 @@ export const getProjects = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+export const removeApplicant = async (req, res) => {
+    const project = projectModel(db);
+    try {
+        const projectId = req.params.id;
+        const userId = req.params.userId;
+        
+        const projectInfo = await project.getProjectById(projectId);
+        if (!projectInfo) {
+            return res.status(404).json({message: "No project with that id"});
+        }
+
+        // Verify the requesting user manages this project
+        if (projectInfo.managed_by_user_id !== req.user.id) {
+            return res.status(403).json({ message: 'You can only remove applicants from projects you manage' });
+        }
+
+        const rowsAffected = await project.removeApplicant(projectId, userId);
+        if (!rowsAffected) {
+            return res.status(404).json({message: "Applicant not found for this project"});
+        }
+        
+        return res.status(200).json({message: "Applicant removed"});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({error: "Internal server error"});
+    }
+}

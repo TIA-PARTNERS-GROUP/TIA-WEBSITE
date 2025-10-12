@@ -71,6 +71,7 @@ const FindJob = () => {
                         
                 const projects = res.data.data.map(project => ({
                     id: project.id,
+                    business_id: project.business_id,
                     managed_by_user_id: project.managed_by_user_id,
                     title: project.name,
                     description: project.description,

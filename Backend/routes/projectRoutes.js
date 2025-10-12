@@ -1,5 +1,5 @@
 import Router from 'express';
-import { addApplicant, addProject, getProject, updateProject, deleteProject, getMyProjects, getAppliedProjects, getProjects } from '../controllers/projectController.js';
+import { addApplicant, removeApplicant, addProject, getProject, updateProject, deleteProject, getMyProjects, getAppliedProjects, getProjects } from '../controllers/projectController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
 const router = Router();
 
@@ -180,6 +180,42 @@ router.get('/', getProjects);
  *         description: Internal server error
  */
 router.post('/:id/applicants', verifyToken, addApplicant);
+
+/**
+ * @swagger
+ * /projects/{id}/applicants/{userId}:
+ *   delete:
+ *     summary: Remove an applicant from a project (manager only)
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Project ID
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User ID of the applicant to remove
+ *     responses:
+ *       200:
+ *         description: Applicant removed
+ *       403:
+ *         description: Forbidden - not project manager
+ *       404:
+ *         description: Project or applicant not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:id/applicants/:userId', verifyToken, removeApplicant);
 
 /**
  * @swagger

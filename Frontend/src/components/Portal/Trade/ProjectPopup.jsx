@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import { getCurrentUserInfo } from "../../../api/user";
-import { deleteProject, getAppliedProjects } from "../../../api/projects";
+import { deleteProject, getAppliedProjects, getProjectDetails } from "../../../api/projects";
 import { addApplicant } from "../../../api/projects";
+import { addNotification } from "../../../api/notification";
+import { getOtherBusinessInfo } from "../../../api/business";
 
 const ProjectPopup = ({
     project,
@@ -64,7 +66,9 @@ const ProjectPopup = ({
     const handleApply = async () => {
         setIsLoading(true);
         try {
+            const message = `applicant-project(${project.id})`;
             await addApplicant(project.id);
+            await addNotification(project.business_id, message);
             onApply(project.id);
             onClose();
         } catch (error) {
@@ -225,7 +229,7 @@ const ProjectPopup = ({
                                 </PrimaryButton>
                             ) : (
                                 <PrimaryButton 
-                                    onClick={handleApply}
+                                    onClick={() => handleApply(project.managed_by_user_id)}
                                     disabled={isLoading}
                                     className="px-4 py-2"
                                 >

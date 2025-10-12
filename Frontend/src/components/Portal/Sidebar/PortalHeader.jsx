@@ -10,6 +10,7 @@ import ProfileView from '../Manage/ProfileView.jsx';
 import CloseIcon from '../../Icons/CloseIcon.jsx';
 import axios from '../../../api/axios.js';
 import { addConnection, getOtherBusinessInfo } from '../../../api/business.js';
+import { closeProject, getProjectDetails, removeApplicant } from '../../../api/projects.js';
 
 
 const PortalHeader = ( {module, mock = false} ) => {
@@ -23,6 +24,7 @@ const PortalHeader = ( {module, mock = false} ) => {
   const [notifications, setNotifications] = useState([]);
   const [notificationClicked, setNotificationClicked] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notificationDetails, setNotificationDetails] = useState({});
 
   const [showDeclineConfirm, setShowDeclineConfirm] = useState(false);
   const [pendingDeclineNotification, setPendingDeclineNotification] = useState(null);
@@ -36,6 +38,16 @@ const PortalHeader = ( {module, mock = false} ) => {
     { value: 'not-interested', label: 'Not interested at this time' },
     { value: 'other', label: 'Other' }
   ];
+
+  const applicantDeclineReasons = [
+    { value: '', label: 'Select a reason...' },
+    { value: 'not-fit-role', label: 'Not a fit for the project role' },
+    { value: 'insufficient-skills', label: 'Insufficient skills or experience' },
+    { value: 'found-other', label: 'Found another applicant' },
+    { value: 'project-cancelled', label: 'Project has been cancelled' },
+    { value: 'timing-issue', label: 'Timing doesn\'t work' },
+    { value: 'other', label: 'Other' }
+];
 
   useEffect(() => {
       const fetchUserNotifications = async () => {
@@ -64,7 +76,7 @@ const PortalHeader = ( {module, mock = false} ) => {
     // If closing dropdown, remove 'accept' notifications
     if (!newState) {
       notifications.forEach(async (notif) => {
-        if (notif.message === "accept") {
+        if (notif.message === "accept" || notif.message === "project-accept") {
           try {
             // Call your API to remove it from server
             await removeNotification(notif.id);  // or removeConnection if relevant
@@ -76,7 +88,7 @@ const PortalHeader = ( {module, mock = false} ) => {
 
       // Remove locally
       setNotifications(prevNotifications =>
-        prevNotifications.filter(n => n.message !== "accept")
+        prevNotifications.filter(n => n.message !== "accept" && n.message !== "project-accept")
       );
     }
 
@@ -91,27 +103,60 @@ const PortalHeader = ( {module, mock = false} ) => {
     navigate(link);
   }
 
-  const handleAcceptConnection = async (notificationId, senderId, receiverId, senderBusinessName) => {
-    try {
-      console.log(`Accepting connection from ${senderBusinessName}, notification ID: ${notificationId}`);
-      const message = "accept";
-      console.log(senderId, receiverId);
-      await addConnection(senderId, receiverId);
-      await removeNotification(notificationId);
-      await addNotification(senderId, message);
-      setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
-    } catch (error) {
-      console.error('Error accepting connection:', error);
+  const handleAcceptConnection = async (notificationId, senderId, receiverId, senderBusinessName, notificationMessage) => {
+    if (notificationMessage === "connect") {
+      try {
+        console.log(`Accepting connection from ${senderBusinessName}, notification ID: ${notificationId}`);
+        const message = "accept";
+        console.log(senderId, receiverId);
+        await addConnection(senderId, receiverId);
+        await removeNotification(notificationId);
+        await addNotification(senderId, message);
+        setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
+      } catch (error) {
+        console.error('Error accepting connection:', error);
+      }
+    } else if (notificationMessage.startsWith("applicant")) {
+      try {
+        console.log(`Accepting applicant ${senderBusinessName} for project, notification ID: ${notificationId}`);
+        
+        const projectMatch = notificationMessage.match(/applicant-project\((\d+)\)/);
+        const projectId = projectMatch ? projectMatch[1] : null;
+            
+        if (projectId) {
+            await closeProject(projectId);
+        }
+        
+        const message = "project-accept";
+        await removeNotification(notificationId);
+        await addNotification(senderId, message);
+        setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
+      } catch (error) {
+          console.error('Error accepting applicant:', error);
+      }
     }
+
   };
 
-  const handleDeclineConnection = async (notificationId) => {
+  const handleDeclineConnection = async (notificationId, notificationMessage) => {
+
+    const notification = notifications.find(n => n.id === notificationId);
+
     if (!declineReason) {
       alert("Please select a reason for declining");
       return;
     }
 
     try {
+      if (pendingDeclineNotification?.type?.startsWith("applicant")) {
+        const projectMatch = notificationMessage.match(/applicant-project\((\d+)\)/);
+        const projectId = projectMatch ? projectMatch[1] : null;
+        const applicantUserId = notification.sender_user_id;
+        
+        if (projectId && applicantUserId) {
+            await removeApplicant(projectId, applicantUserId);
+        }
+      }
       await removeNotification(notificationId);
       setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
       setShowDeclineConfirm(false);
@@ -123,10 +168,12 @@ const PortalHeader = ( {module, mock = false} ) => {
   };
 
   const handleDeclineClick = (notificationId, senderId, receiverId) => {
+    const notification = notifications.find(n => n.id === notificationId);
     setPendingDeclineNotification({
       id: notificationId,
       senderId,
-      receiverId
+      receiverId,
+      type: notification.message
     });
     setShowDeclineConfirm(true);
   };
@@ -141,21 +188,65 @@ const PortalHeader = ( {module, mock = false} ) => {
     const notification = notifications.find(n => n.id === notificationId);
     if (notification) {
       if (action === 'accept') {
-        handleAcceptConnection(notificationId, senderId, receiverId, notification.sender_business_name || notification.sender_name);
+        handleAcceptConnection(notificationId, senderId, receiverId, notification.sender_business_name || notification.sender_name, notification.message);
       } else {
         handleDeclineClick(notificationId, senderId, receiverId);
       }
     }
   };
 
+  useEffect(() => {
+    const fetchProjectTitles = async () => {
+      const projectNotifications = notifications.filter(n => n.message.startsWith("applicant"));
+      
+      for (const notification of projectNotifications) {
+        const projectMatch = notification.message.match(/applicant-project\((\d+)\)/);
+        const projectId = projectMatch ? projectMatch[1] : null;
+        
+        if (projectId && !notificationDetails[projectId]) {
+          try {
+            const projectRes = await getProjectDetails(projectId);
+            const projectTitle = projectRes.data.project?.name || `Project #${projectId}`;
+            
+            setNotificationDetails(prev => ({
+              ...prev,
+              [projectId]: projectTitle
+            }));
+          } catch (error) {
+            console.error('Error fetching project details:', error);
+            setNotificationDetails(prev => ({
+              ...prev,
+              [projectId]: `Project #${projectId}`
+            }));
+          }
+        }
+      }
+    };
+
+    if (notifications.length > 0) {
+      fetchProjectTitles();
+    }
+  }, [notifications]);
+
   const getNotificationDisplayText = (notification) => {
     const senderName = notification.sender_business_name || notification.sender_name || "Someone";
 
+    if (notification.message.startsWith("applicant")) {
+      const projectMatch = notification.message.match(/applicant-project\((\d+)\)/);
+      const projectId = projectMatch ? projectMatch[1] : null;
+      
+      const projectTitle = projectId ? notificationDetails[projectId] || `Project #${projectId}` : "your project";
+      
+      return `${senderName} has applied to your project "${projectTitle}"`;
+    }
+    
     switch (notification.message) {
       case "connect":
         return `${senderName} wants to connect with you`;
       case "accept":
         return `${senderName} accepted your connection request!`;
+      case "project-accept":
+        return `${senderName} accepted your project application!`;
       default:
         return notification.message || "New notification";
     }
@@ -245,7 +336,7 @@ const PortalHeader = ( {module, mock = false} ) => {
                               {getNotificationDisplayText(notification)}
                             </p>
 
-                            {notification.message === "connect" && (
+                            {(notification.message === "connect" || notification.message.startsWith("applicant")) && (
                               <div className="flex gap-2">
                                 <PrimaryButton
                                   onClick={() => handleNotificationAction(notification.id, notification.sender_business_id, notification.receiver_business_id, 'accept')}
@@ -263,7 +354,7 @@ const PortalHeader = ( {module, mock = false} ) => {
                               </div>
                             )}
 
-                            {notification.message === "connect" && (
+                            {(notification.message === "connect" || notification.message.startsWith("applicant")) && (
                               <div className="mt-2">
                                 <SecondaryButton
                                   onClick={() => handleViewProfile(notification.sender_business_id, notification.id, notification.opened)}
@@ -330,10 +421,10 @@ const PortalHeader = ( {module, mock = false} ) => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
-                {declineReasons.map((reason) => (
-                  <option key={reason.value} value={reason.value}>
-                    {reason.label}
-                  </option>
+                {(pendingDeclineNotification?.type.startsWith("applicant") ? applicantDeclineReasons : declineReasons).map((reason) => (
+                    <option key={reason.value} value={reason.value}>
+                        {reason.label}
+                    </option>
                 ))}
               </select>
             </div>
@@ -346,13 +437,13 @@ const PortalHeader = ( {module, mock = false} ) => {
                 Cancel
               </SecondaryButton>
               <PrimaryButton
-                onClick={() => {
+                onClick={async () => {
                   const selectElement = document.querySelector('select[required]');
                   if (!declineReason) {
                     selectElement.reportValidity();
                     return;
                   }
-                  handleDeclineConnection(pendingDeclineNotification.id);
+                  handleDeclineConnection(pendingDeclineNotification.id, pendingDeclineNotification.type);
                 }}
                 className="text-sm px-4 py-2 bg-red-600 hover:bg-red-700"
               >
