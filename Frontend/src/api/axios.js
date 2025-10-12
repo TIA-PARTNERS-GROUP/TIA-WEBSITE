@@ -2,9 +2,11 @@ import axios from 'axios';
 import config from '../config';
 
 const api = axios.create({
-    baseURL: config.apiBaseUrl, // should be '/api'
+    baseURL: config.apiBaseUrl,
     withCredentials: true
 });
+
+console.log('API Base URL:', config.apiBaseUrl);
 
 // Attach access token to requests
 api.interceptors.request.use(

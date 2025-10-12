@@ -1,6 +1,6 @@
 services:
   backend:
-    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-website-backend:latest
+    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-website-backend:latest #@sha256:a263a165b43982f9227486ca0b9a7b89781c79b87f879d646c5fc5fb23a84e81
     ports:
       - "5000:5000"
     depends_on:
@@ -9,15 +9,16 @@ services:
     environment:
       - ADK_API_URL=http://llm:8080/chat
       - FRONTEND_BASE_URL=http://frontend:3000
-      - FRONTEND_AWS_URL=ec2-13-239-184-226.ap-southeast-2.compute.amazonaws.com
+      - DB_HOST=db
     command: sh -c "sleep 15 && npm install && npm run migrate && npm run dev"
     networks:
       - tia-network
 
   frontend:
-    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-website-frontend:latest
+    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-website-frontend:latest #@sha256:26a2fcc8b85e4e8567947bd1f0a53cc8903b7195822e3268311099b1bc892ca1
     environment:
       - VITE_ALLOWED_HOSTS=ec2-13-239-184-226.ap-southeast-2.compute.amazonaws.com
+      - VITE_API_BASE_URL=/api
       - VITE_PROXY_TARGET=http://backend:5000
     ports:
       - "3000:3000"
