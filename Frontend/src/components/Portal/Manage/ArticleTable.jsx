@@ -17,7 +17,8 @@ const ArticleTable = ({
     tableData: externalTableData, 
     onRowClick,
     showManagementControls = true ,
-    onDeleteProject
+    onDeleteProject,
+    onEditProject={handleProjectEdit}
 }) => {
 
   const [selectedProject, setSelectedProject] = useState(null);
@@ -29,6 +30,7 @@ const ArticleTable = ({
   const [checkedItems, setCheckedItems] = useState({});
   const [internalTableData, setInternalTableData] = useState([{title: "Loading...", date: "Loading..."}]);
   const tableData = externalTableData || internalTableData;
+  const [dataRevision, setDataRevision] = useState(0); 
 
   useEffect(() => {
   const fetchData = async () => {
@@ -70,7 +72,7 @@ const ArticleTable = ({
   };
 
   fetchData();
-}, [manageType, externalTableData]);
+}, [manageType, externalTableData, dataRevision]);
 
   useEffect(() => {
     const allChecked = Object.values(checkedItems).length > 0 && 
@@ -190,6 +192,13 @@ const ArticleTable = ({
     }
   };
 
+  const handlePopupClose = () => {
+    setShowProjectPopup(false);
+    if (!externalTableData) {
+        setDataRevision(prev => prev + 1);
+    }
+  };
+
   return (
     <div>
       {!isTradeRoute && <div className="grid grid-cols-[6fr_0.7fr_0.7fr] gap-4 w-full my-auto">
@@ -232,6 +241,7 @@ const ArticleTable = ({
           <th className={`border-y-2 border-black py-2 ${isTradeRoute ? 'w-2/5' : 'w-2/3'}`}>Title</th>
           {isTradeRoute ? (
             <>
+              <th className="border-y-2 border-black py-2">Submitted by</th>
               <th className="border-y-2 border-black py-2">Category</th>
               <th className="border-y-2 border-black py-2">Skills</th>
               <th className="border-y-2 border-black py-2">Region</th>
@@ -256,9 +266,10 @@ const ArticleTable = ({
             <td className="items-center border-y py-2 font-medium">{row.title}</td>
             {isTradeRoute ? (
               <>
+                <td className="items-center border-y py-2 font-medium">{row.business_name || "N/A"}</td>
                 <td className="items-center border-y py-2 font-medium">{row.category || "N/A"}</td>
                 <td className="items-center border-y py-2 font-medium">
-                    {Array.isArray(row.skills) ? row.skills.join(', ') : row.skills || "N/A"}
+                    {Array.isArray(row.skillsDisplay) ? row.skillsDisplay.join(', ') : row.skillsDisplay || "N/A"}
                 </td>
                 <td className="items-center border-y py-2 font-medium">
                     {Array.isArray(row.regions) ? row.regions.join(', ') : row.regions || "N/A"}
@@ -296,9 +307,10 @@ const ArticleTable = ({
     {showProjectPopup && selectedProject && (
         <ProjectPopup
             project={selectedProject}
-            onClose={() => setShowProjectPopup(false)}
+            onClose={handlePopupClose}
             onDelete={handleDeleteProject}
             onApply={handleApplyToProject}
+            onEdit={onEditProject}
         />
     )}
 

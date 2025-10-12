@@ -80,7 +80,8 @@ export default (db) => ({
         p.open_date, 
         p.close_date, 
         p.completion_date,
-        b.id as business_id
+        b.id as business_id,
+        b.name as business_name
       FROM projects p
       LEFT JOIN businesses b ON p.managed_by_user_id = b.operator_user_id
       WHERE p.id = ?
@@ -118,6 +119,7 @@ export default (db) => ({
       id: project.id,
       managed_by_user_id: project.managed_by_user_id,
       business_id: project.business_id,
+      business_name: project.business_name,
       name: project.name,
       description: project.description,
       status: project.status,
@@ -299,10 +301,12 @@ export default (db) => ({
 
   async getProjectsByManagerId(userId) {
     const [rows] = await db.query(`
-      SELECT id, managed_by_user_id, name, description, status, open_date, close_date, completion_date
-      FROM projects
-      WHERE managed_by_user_id = ?
-      ORDER BY id DESC
+      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date,
+             b.id as business_id, b.name as business_name
+      FROM projects p
+      LEFT JOIN businesses b ON p.managed_by_user_id = b.operator_user_id
+      WHERE p.managed_by_user_id = ?
+      ORDER BY p.id DESC
     `, [userId]);
 
     if (!rows || rows.length === 0) return [];
@@ -322,6 +326,8 @@ export default (db) => ({
       projects.push({
         id: p.id,
         managed_by_user_id: p.managed_by_user_id,
+        business_id: p.business_id,
+        business_name: p.business_name,
         name: p.name,
         description: p.description,
         status: p.status,
@@ -341,9 +347,11 @@ export default (db) => ({
 
   async getProjectsByApplicantId(userId) {
     const [rows] = await db.query(`
-      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date
+      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date,
+             b.id as business_id, b.name as business_name
       FROM projects p
       JOIN project_applicants pa ON pa.project_id = p.id
+      LEFT JOIN businesses b ON p.managed_by_user_id = b.operator_user_id
       WHERE pa.user_id = ?
       ORDER BY p.id DESC
     `, [userId]);
@@ -368,6 +376,8 @@ export default (db) => ({
       projects.push({
         id: p.id,
         managed_by_user_id: p.managed_by_user_id,
+        business_id: p.business_id,
+        business_name: p.business_name,
         name: p.name,
         description: p.description,
         status: p.status,
@@ -424,7 +434,8 @@ export default (db) => ({
     const where = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
     const baseQuery = `
-      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date, b.id as business_id
+      SELECT p.id, p.managed_by_user_id, p.name, p.description, p.status, p.open_date, p.close_date, p.completion_date, 
+         b.id as business_id, b.name as business_name
       FROM projects p
       LEFT JOIN businesses b ON p.managed_by_user_id = b.operator_user_id
       ${where}

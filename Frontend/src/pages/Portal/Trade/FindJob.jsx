@@ -31,6 +31,8 @@ const FindJob = () => {
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
 
+    const [dataRevision, setDataRevision] = useState(0);
+
     const regionMap = {
         'qld': 'Queensland',
         'nsw': 'New South Wales',
@@ -72,6 +74,7 @@ const FindJob = () => {
                 const projects = res.data.data.map(project => ({
                     id: project.id,
                     business_id: project.business_id,
+                    business_name: project.business_name,
                     managed_by_user_id: project.managed_by_user_id,
                     title: project.name,
                     description: project.description,
@@ -82,7 +85,8 @@ const FindJob = () => {
                     category: project.categories && project.categories.length > 0 
                         ? categoriesMap[project.categories[0]] || `Category ${project.categories[0]}`
                         : "N/A",
-                    skills: project.skills && project.skills.length > 0 
+                    skills: project.skills,
+                    skillsDisplay: project.skills && project.skills.length > 0 
                         ? skillsMap[project.skills[0]] || `Skill ${project.skills[0]}`
                         : "N/A",
                     regions: project.regions ? project.regions.map(region => regionMap[region.toLowerCase()] || region) : [],
@@ -118,7 +122,7 @@ const FindJob = () => {
         };
 
         fetchProjects();
-    }, [queryValue, categoriesParam, skillsParam, regionsParam, statusParam, sortParam, currentPage]);
+    }, [queryValue, categoriesParam, skillsParam, regionsParam, statusParam, sortParam, currentPage, dataRevision]);
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
@@ -132,7 +136,11 @@ const FindJob = () => {
 
     const handleDeleteProject = (projectId) => {
         console.log('FindJob: Deleting project', projectId);
-        setProjectsData(prev => prev.filter(project => project.id !== projectId));
+        setDataRevision(prev => prev + 1);
+    };
+
+    const handleProjectEdit = (updatedProject) => {
+        setDataRevision(prev => prev + 1);
     };
 
     return (
@@ -145,6 +153,7 @@ const FindJob = () => {
             onRowClick={true}
             showManagementControls={false}
             onDeleteProject={handleDeleteProject}
+            onEditProject={handleProjectEdit}
         />
         
         <PaginationNav

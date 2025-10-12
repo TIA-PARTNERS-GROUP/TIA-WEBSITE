@@ -31,6 +31,8 @@ const History = () => {
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
 
+    const [dataRevision, setDataRevision] = useState(0);
+
     const regionMap = {
         'qld': 'Queensland',
         'nsw': 'New South Wales',
@@ -87,7 +89,9 @@ const History = () => {
 
                 const projects = uniqueProjects.map(project => ({
                     id: project.id,
+                    managed_by_user_id: project.managed_by_user_id,
                     business_id: project.business_id,
+                    business_name: project.business_name,
                     title: project.name,
                     description: project.description,
                     status: project.status,
@@ -104,6 +108,7 @@ const History = () => {
                     date: project.open_date || project.created_at,
                     content: project.description,
                     projectType: myProjects.some(p => p.id === project.id) ? 'managed' : 'applied',
+
                     application: project.application || null
                 }));
 
@@ -158,7 +163,7 @@ const History = () => {
         };
 
         fetchProjects();
-    }, [queryValue, categoriesParam, skillsParam, regionsParam, statusParam, projectTypeParam, sortParam, currentPage]);
+    }, [queryValue, categoriesParam, skillsParam, regionsParam, statusParam, projectTypeParam, sortParam, currentPage, dataRevision]);
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
@@ -191,8 +196,12 @@ const History = () => {
     };
 
     const handleDeleteProject = (projectId) => {
-      console.log('History: Deleting project', projectId);
-      setProjectsData(prev => prev.filter(project => project.id !== projectId));
+        console.log('History: Deleting project', projectId);
+        setDataRevision(prev => prev + 1);
+    };
+
+    const handleProjectEdit = (updatedProject) => {
+        setDataRevision(prev => prev + 1);
     };
 
     return (
@@ -209,6 +218,7 @@ const History = () => {
             onRowClick={handleProjectRowClick}
             showManagementControls={false}
             onDeleteProject={handleDeleteProject}
+            onEditProject={handleProjectEdit}
         />
         
         <PaginationNav
