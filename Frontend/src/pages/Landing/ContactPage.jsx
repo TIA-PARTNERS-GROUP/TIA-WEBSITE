@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { addFeedback } from "../../api/feedback";
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -9,9 +10,9 @@ const ContactPage = () => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // send form via API or email service
+    await addFeedback(form.name, form.email, form.message);
     console.log("submit contact form:", form);
     setIsSubmitted(true);
     setForm({ name: "", email: "", message: "" });

@@ -50,21 +50,18 @@ const ProjectPopup = ({
         nt: "Northern Territory"
     };
 
-    // Helper to get skill objects from IDs
     const getSkillObjectsFromIds = (skillIds, allSkills) => {
         if (!Array.isArray(skillIds)) return [];
         return skillIds
             .filter((id) => typeof id === "number")
             .map((id) => allSkills.find(skill => skill.id === id))
-            .filter(obj => obj !== undefined); // Filter out any skills not found
+            .filter(obj => obj !== undefined); 
     };
 
     const formatDateForInput = (dateString) => {
         if (!dateString) return "";
         const date = new Date(dateString);
         
-        // FIX: Use local time methods (getFullYear, getMonth, getDate) 
-        // instead of UTC methods (getUTCFullYear, etc.)
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
@@ -72,7 +69,6 @@ const ProjectPopup = ({
         return `${year}-${month}-${day}`;
     };
 
-    // Consolidated useEffect for fetching lists and initializing project states
     useEffect(() => {
 
         const fetchData = async () => {
@@ -84,7 +80,7 @@ const ProjectPopup = ({
 
                 setCategories(categoriesRes.data.categories || []);
                 const fetchedSkills = skillsRes.data.skills || [];
-                setSkills(fetchedSkills); // Set skills state
+                setSkills(fetchedSkills); 
 
 
                 if (project) {
@@ -92,15 +88,13 @@ const ProjectPopup = ({
                         ? project.skills.filter((id) => typeof id === "number")
                         : [];
                     
-                    
-                    // 1. Set editedProject state
+
                     setEditedProject({
                         title: project.title || "",
                         description: project.description || "",
                         status: project.status || "open",
                         category: project.category || "",
                         categoryId: project.categories?.[0] || null,
-                        // skillIds is an array of NUMBERS (IDs) only
                         skillIds: initialSkillIds, 
                         regions: Array.isArray(project.regions)
                             ? project.regions.filter((r) => typeof r === "string" && r.length > 0)
@@ -110,7 +104,6 @@ const ProjectPopup = ({
                         completionDate: formatDateForInput(project.completionDate),
                     });
 
-                    // 2. Set selectedSkillObjects using the freshly fetched 'fetchedSkills'
                     const skillObjects = getSkillObjectsFromIds(initialSkillIds, fetchedSkills);
                     setSelectedSkillObjects(skillObjects);
                     
@@ -129,7 +122,7 @@ const ProjectPopup = ({
             .catch((error) => {
                 console.error("Error during fetch:", error);
                 stopLoading(); 
-                setDataReady(false); // Handle error case
+                setDataReady(false); 
             });
     }, [project]); 
 
@@ -137,7 +130,6 @@ const ProjectPopup = ({
     useEffect(() => {
         const checkOwnership = async () => {
             const res = await getCurrentUserInfo();
-            // Optional chaining for safety
             setIsOwner(res.data.data.id === project?.managed_by_user_id);
         }
 
@@ -153,7 +145,6 @@ const ProjectPopup = ({
             }
         };
 
-        // Only run checks if project exists
         if (project) {
             checkOwnership();
             checkApplicationStatus();
@@ -206,7 +197,7 @@ const ProjectPopup = ({
     const handleSave = async () => {
         setIsLoading(true);
         try {
-            // Ensure skillIds is an array of numbers before sending
+
             const updatedData = {
                 ...editedProject,
                 skillIds: editedProject.skillIds.filter((id) => typeof id === "number"),
@@ -217,7 +208,7 @@ const ProjectPopup = ({
 
             setIsEditing(false);
             if (onEdit) {
-                // Pass the updated data back. The parent must use this to update the 'project' prop.
+
                 onEdit(updatedData);
             }
         } catch (error) {
@@ -230,21 +221,20 @@ const ProjectPopup = ({
     const handleCancelEdit = () => {
         setIsEditing(false);
 
-        // Get original skill IDs (guaranteed to be an array of numbers or an empty array)
+
         const originalSkillIds = Array.isArray(project?.skills)
             ? project.skills.filter((id) => typeof id === "number")
             : [];
         
 
 
-        // Reset editedProject to original values from the project prop
         setEditedProject({
             title: project?.title || '',
             description: project?.description || '',
             status: project?.status || 'open',
             category: project?.category || '',
             categoryId: project?.categories && project.categories.length > 0 ? project.categories[0] : null,
-            skillIds: originalSkillIds, // This is the array of IDs
+            skillIds: originalSkillIds, 
             regions: Array.isArray(project?.regions) 
                 ? project.regions.filter(region => region !== null && region !== undefined)
                 : [],
@@ -253,7 +243,7 @@ const ProjectPopup = ({
             completionDate: formatDateForInput(project?.completionDate)
         });
 
-        // Reset selectedSkillObjects for display using the fetched skills list
+
         const restoredSkills = getSkillObjectsFromIds(originalSkillIds, skills);
         setSelectedSkillObjects(restoredSkills);
     };
@@ -276,24 +266,24 @@ const ProjectPopup = ({
 
     const handleSkillSelect = (selectedSkill) => {
         if (!editedProject.skillIds.includes(selectedSkill.id)) {
-            // Add ID to skillIds
+
             setEditedProject((prev) => ({
                 ...prev,
                 skillIds: [...prev.skillIds, selectedSkill.id],
             }));
-            // Add full skill object to selectedSkillObjects for display
+
             setSelectedSkillObjects((prev) => [...prev, selectedSkill]);
         }
         setIsSkillsOpen(false);
     };
 
     const removeSkill = (skillId) => {
-        // Remove ID from skillIds
+
         setEditedProject((prev) => ({
             ...prev,
             skillIds: prev.skillIds.filter((id) => id !== skillId),
         }));
-        // Remove object from selectedSkillObjects
+
         setSelectedSkillObjects((prev) => prev.filter((skill) => skill.id !== skillId));
     };
 
@@ -501,7 +491,6 @@ const ProjectPopup = ({
                                                 <button
                                                     key={skill.id}
                                                     type="button"
-                                                    // Add a check to highlight already selected skills
                                                     className={`w-full px-4 py-3 text-left hover:bg-gray-100 focus:outline-none transition-colors duration-150 border-b border-gray-100 last:border-b-0
                                                                 ${editedProject.skillIds.includes(skill.id) ? 'bg-blue-50 text-blue-600' : 'focus:bg-blue-50 focus:text-blue-600'}`}
                                                     onClick={() => handleSkillSelect(skill)}
@@ -521,7 +510,7 @@ const ProjectPopup = ({
                                                     {skill.name}
                                                     <button
                                                         type="button"
-                                                        onClick={() => removeSkill(skill.id)} // Use the ID for removal
+                                                        onClick={() => removeSkill(skill.id)} 
                                                         className="ml-2 hover:text-blue-600"
                                                     >
                                                         ×
@@ -639,8 +628,8 @@ const ProjectPopup = ({
                                             {/* Logic to display skills from the original project prop */}
                                             {Array.isArray(project.skills) ? (
                                                 project.skills
-                                                    .map(skillId => skills.find(s => s.id === skillId)) // Find the skill object
-                                                    .filter(s => s) // Filter out null/undefined if skill not found
+                                                    .map(skillId => skills.find(s => s.id === skillId))
+                                                    .filter(s => s)
                                                     .map((skill, index) => (
                                                         <span 
                                                             key={skill.id || index}
