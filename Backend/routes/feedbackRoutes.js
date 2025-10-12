@@ -1,6 +1,5 @@
 import Router from 'express';
 import { submitFeedback } from '../controllers/feedbackController.js'
-import { verifyToken } from '../middleware/authTolkien.js';
 const router = Router();
 
 
@@ -9,9 +8,8 @@ const router = Router();
  * /feedback:
  *   post:
  *     summary: Submit feedback
- *     tags: [Feedback]
- *     security:
- *       - bearerAuth: []
+ *     tags:
+ *       - Feedback
  *     requestBody:
  *       required: true
  *       content:
@@ -19,15 +17,23 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
+ *               - name
+ *               - email
  *               - content
  *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Jane Doe
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: jane@example.com
  *               content:
  *                 type: string
- *                 description: The user's feedback message.
- *                 example: "This is a great feature!"
+ *                 example: I love your site! I found a bug on the projects page.
  *     responses:
  *       201:
- *         description: Feedback submitted successfully.
+ *         description: Feedback submitted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -37,13 +43,27 @@ const router = Router();
  *                   type: string
  *                   example: Success
  *       400:
- *         description: Bad Request - Missing required fields.
- *       401:
- *         description: Unauthorized - Token is missing or invalid.
+ *         description: Missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Missing required fields
  *       500:
- *         description: Internal Server Error.
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
  */
 
-router.post('/', verifyToken, submitFeedback)
+router.post('/', submitFeedback)
 
 export default router;

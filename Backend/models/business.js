@@ -206,6 +206,41 @@ export default (db) => ({
     return rows[0];
   },
 
+  async addL2EResponse(userId, responseObj) {
+    // Store the response as JSON text. MySQL JSON column accepts text or object; stringify to be safe.
+    const responseJson = JSON.stringify(responseObj || {});
+    const [result] = await db.query(`
+      INSERT INTO l2e_responses (user_id, response)
+      VALUES (?, ?)
+      `, [userId, responseJson])
+
+    return result.insertId;
+  },
+
+  async getLatestL2EResponseForUser(userId) {
+    const [rows] = await db.query(`
+      SELECT id, user_id, response, date_added
+      FROM l2e_responses
+      WHERE user_id = ?
+      ORDER BY date_added DESC
+      LIMIT 1
+      `, [userId])
+
+    if (rows.length === 0) return null;
+    return rows[0];
+  },
+
+  async getAllL2EResponsesForUser(userId) {
+    const [rows] = await db.query(`
+      SELECT id, user_id, response, date_added
+      FROM l2e_responses
+      WHERE user_id = ?
+      ORDER BY date_added DESC
+      `, [userId])
+
+    return rows;
+  },
+
   async getPaginated(page = 1, limit = 10, categories = [], searchQuery = '') {
     const offset = (page - 1) * limit;
     let query = `

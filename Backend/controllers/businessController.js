@@ -353,3 +353,67 @@ export const queryBusinesses = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const addL2EResponse = async (req, res) => {
+    try {
+        const business = businessModel(db);
+        const user = userModel(db);
+
+        // Ensure user exists and get their user id (req.user.id should exist after verifyToken)
+        const userId = req.user && req.user.id;
+        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+        const responseObj = req.body;
+        if (!responseObj) return res.status(400).json({ message: 'No response provided' });
+
+        const insertId = await business.addL2EResponse(userId, responseObj);
+        return res.status(201).json({ message: 'L2E response recorded', id: insertId });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const getLatestL2EResponse = async (req, res) => {
+    try {
+        const business = businessModel(db);
+        const user = userModel(db);
+
+        const userId = req.user && req.user.id;
+        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+        const row = await business.getLatestL2EResponseForUser(userId);
+        if (!row) return res.status(404).json({ message: 'No responses found' });
+
+        // response column may be stored as JSON string; try to parse
+        let parsed = row.response;
+        try { parsed = JSON.parse(parsed); } catch (e) { /* leave as-is */ }
+
+        return res.status(200).json({ message: 'Success', response: parsed, date_added: row.date_added, id: row.id });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const getAllL2EResponses = async (req, res) => {
+    try {
+        const business = businessModel(db);
+        const user = userModel(db);
+
+        const userId = req.user && req.user.id;
+        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+        const rows = await business.getAllL2EResponsesForUser(userId);
+        const mapped = rows.map(r => {
+            let parsed = r.response;
+            try { parsed = JSON.parse(parsed); } catch (e) { }
+            return { id: r.id, response: parsed, date_added: r.date_added };
+        })
+
+        return res.status(200).json({ message: 'Success', responses: mapped });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
