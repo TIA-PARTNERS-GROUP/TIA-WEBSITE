@@ -237,7 +237,15 @@ const SearchBar = ({ isProjectsRoute = false, isHistoryRoute = false }) => {
         
         params.append('sort', value);
         
-        navigate(`/connect/${partnerType}/${searchType}?${params.toString()}`);
+        let basePath;
+        if (isHistoryRoute) {
+            basePath = '/trade/history';
+        } else if (isProjectsRoute) {
+            basePath = '/trade/find';
+        } else {
+            basePath = `/connect/${partnerType}/${searchType}`;
+        }
+        navigate(`${basePath}?${params.toString()}`);
     };
 
     const [selectedFilters, setSelectedFilters] = useState(
