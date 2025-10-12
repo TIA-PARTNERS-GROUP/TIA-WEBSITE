@@ -5,7 +5,7 @@ import { getMyProjects, getAppliedProjects } from "../../../api/projects";
 import ArticleTable from "../../../components/Portal/Manage/ArticleTable";
 import SearchBar from "../../../components/Portal/Connect/SearchBar";
 import PaginationNav from "../../../components/Portal/Connect/PaginationNav";
-import { getCategoriesList } from "../../../api/categories";
+import { getCategoriesList, getSkillsList } from "../../../api/categories";
 
 const History = () => {
     const [searchParams] = useSearchParams();
@@ -15,7 +15,7 @@ const History = () => {
     const skillsParam = searchParams.get('skills') || '';
     const regionsParam = searchParams.get('regions') || '';
     const statusParam = searchParams.get('status') || null;
-    const projectTypeParam = searchParams.get('type') || 'all'; // 'all', 'managed', 'applied'
+    const projectTypeParam = searchParams.get('type') || 'all';
     const sortParam = searchParams.get('sort') || 'date-desc';
     
     const categories = categoriesParam ? categoriesParam.split(',').map(id => parseInt(id)).filter(id => !isNaN(id)) : [];
@@ -30,6 +30,17 @@ const History = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
+
+    const regionMap = {
+        'qld': 'Queensland',
+        'nsw': 'New South Wales',
+        'vic': 'Victoria',
+        'tas': 'Tasmania',
+        'sa': 'South Australia',
+        'wa': 'Western Australia',
+        'nt': 'Northern Territory',
+        'act': 'Australian Capital Territory'
+    };
 
     useEffect(() => {
         setCurrentPage(pageFromParams);
@@ -68,6 +79,12 @@ const History = () => {
                     return acc;
                 }, {});
 
+                const skillsRes = await getSkillsList();
+                const skillsMap = skillsRes.data.skills.reduce((acc, skill) => {
+                    acc[skill.id] = skill.name;
+                    return acc;
+                }, {});
+
                 const projects = uniqueProjects.map(project => ({
                     id: project.id,
                     title: project.name,
@@ -79,8 +96,10 @@ const History = () => {
                     category: project.categories && project.categories.length > 0 
                         ? categoriesMap[project.categories[0]] || `Category ${project.categories[0]}`
                         : "N/A",
-                    skills: project.skills || [],
-                    regions: project.regions || [],
+                    skills: project.skills && project.skills.length > 0 
+                        ? skillsMap[project.skills[0]] || `Skill ${project.skills[0]}`
+                        : "N/A",
+                    regions: project.regions ? project.regions.map(region => regionMap[region.toLowerCase()] || region) : [],
                     date: project.open_date || project.created_at,
                     content: project.description,
                     projectType: myProjects.some(p => p.id === project.id) ? 'managed' : 'applied',

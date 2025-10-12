@@ -5,7 +5,7 @@ import { queryProjects } from "../../../api/projects";
 import ArticleTable from "../../../components/Portal/Manage/ArticleTable";
 import SearchBar from "../../../components/Portal/Connect/SearchBar";
 import PaginationNav from "../../../components/Portal/Connect/PaginationNav";
-import { getCategoriesList } from "../../../api/categories";
+import { getCategoriesList, getSkillsList } from "../../../api/categories";
 
 const FindJob = () => {
 
@@ -31,6 +31,17 @@ const FindJob = () => {
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
 
+    const regionMap = {
+        'qld': 'Queensland',
+        'nsw': 'New South Wales',
+        'vic': 'Victoria',
+        'tas': 'Tasmania',
+        'sa': 'South Australia',
+        'wa': 'Western Australia',
+        'nt': 'Northern Territory',
+        'act': 'Australian Capital Territory'
+    };
+
     useEffect(() => {
         setCurrentPage(pageFromParams);
     }, [pageFromParams]);
@@ -51,8 +62,13 @@ const FindJob = () => {
                     acc[category.id] = category.name;
                     return acc;
                 }, {});
+
+                const skillsRes = await getSkillsList();
+                const skillsMap = skillsRes.data.skills.reduce((acc, skill) => {
+                    acc[skill.id] = skill.name;
+                    return acc;
+                }, {});
                         
-                // Transform API response to match ArticleTable expected format
                 const projects = res.data.data.map(project => ({
                     id: project.id,
                     managed_by_user_id: project.managed_by_user_id,
@@ -65,20 +81,20 @@ const FindJob = () => {
                     category: project.categories && project.categories.length > 0 
                         ? categoriesMap[project.categories[0]] || `Category ${project.categories[0]}`
                         : "N/A",
-                    skills: project.skills || [],
-                    regions: project.regions || [],
+                    skills: project.skills && project.skills.length > 0 
+                        ? skillsMap[project.skills[0]] || `Skill ${project.skills[0]}`
+                        : "N/A",
+                    regions: project.regions ? project.regions.map(region => regionMap[region.toLowerCase()] || region) : [],
                     date: project.open_date || project.created_at,
                     content: project.description
                 }));
                 
                 let filteredData = projects;
 
-                // Apply status filter if provided
                 if (statusParam) {
                     filteredData = filteredData.filter(project => project.status === statusParam);
                 }
 
-                // Apply sorting
                 if (sortParam === 'name-asc') {
                     filteredData.sort((a, b) => a.title.localeCompare(b.title));
                 } else if (sortParam === 'name-desc') {

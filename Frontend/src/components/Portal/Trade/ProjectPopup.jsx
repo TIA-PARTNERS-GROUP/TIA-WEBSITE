@@ -106,21 +106,31 @@ const ProjectPopup = ({
                         <p className="font-medium">{project?.category || "N/A"}</p>
                     </div>
 
-                                    {project?.skills && project.skills.length > 0 && (
-                    <div className="mb-6">
-                        <p className="text-sm text-gray-600 mb-2">Required Skills:</p>
-                        <div className="flex flex-wrap gap-2">
-                            {project.skills.map((skill, index) => (
-                                <span 
-                                    key={index}
-                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                                >
-                                    {typeof skill === 'object' ? skill.name : `Skill ${skill}`}
-                                </span>
-                            ))}
+                    {project?.skills && (
+                        <div className="mb-6">
+                            <p className="text-sm text-gray-600 mb-2">Required Skills:</p>
+                            <div className="flex flex-wrap gap-2">
+                                {typeof project.skills === 'string' ? (
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {project.skills}
+                                    </span>
+                                ) : Array.isArray(project.skills) ? (
+                                    project.skills.map((skill, index) => (
+                                        <span 
+                                            key={index}
+                                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                        >
+                                            {typeof skill === 'object' ? skill.name : `Skill ${skill}`}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {project.skills}
+                                    </span>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
                 </div>
 
                 <div className="grid grid-cols-3 gap-6 mb-6">

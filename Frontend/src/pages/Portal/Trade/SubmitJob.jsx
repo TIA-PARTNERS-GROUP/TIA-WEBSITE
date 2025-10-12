@@ -5,8 +5,7 @@ import PrimaryButton from "../../../components/Button/PrimaryButton.jsx";
 import SecondaryButton from "../../../components/Button/SecondaryButton";
 import ChevronDownIcon from "../../../components/Icons/ChevronDownIcon";
 import ChevronUpIcon from "../../../components/Icons/ChevronUpIcon";
-import { getCategoriesList } from "../../../api/categories";
-//import { getSkillsList } from "../../../api/skills";
+import { getCategoriesList, getSkillsList } from "../../../api/categories";
 import { addProject } from "../../../api/projects";
 
 const SubmitJob = () => {
@@ -35,13 +34,6 @@ const SubmitJob = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedRegions, setSelectedRegions] = useState([]);
   
-  const getSkillsList = () => {
-    const skills = [
-      {id: 1, name: "Skill 1"}
-    ]
-    return skills
-  }
-
   const australianStates = [
     "nsw",
     "vic", 
@@ -68,13 +60,12 @@ const SubmitJob = () => {
     const fetchData = async () => {
       startLoading();
       try {
-        const [categoriesRes] = await Promise.all([
+        const [categoriesRes, skillsRes] = await Promise.all([
           getCategoriesList(),
+          getSkillsList()
         ]);
-        const skillsRes = getSkillsList()
-        console.log(skillsRes)
         setCategories(categoriesRes.data.categories || []);
-        setSkills(skillsRes || []);
+        setSkills(skillsRes.data.skills || []);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {

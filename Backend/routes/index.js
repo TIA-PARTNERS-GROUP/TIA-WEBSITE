@@ -20,7 +20,7 @@ router.use('/business', businessRoutes);
 router.use('/chatbot', chatBotRoutes);
 router.use('/tasks', taskRoutes);
 router.use('/notifications', notificationRoutes);
-router.use('/category', categoryRoutes);
+router.use('', categoryRoutes);
 router.use('/feedback', feedbackRoutes);
 // router.use('/connect', connectRoutes);
 // router.use('/manage', manageRoutes);

@@ -15,6 +15,20 @@ export default (db) => ({
     }
   },
 
+  async getSkills() {
+    try {
+      const [rows] = await db.query(`
+        SELECT id, name 
+        FROM business_skills 
+        ORDER BY name ASC
+      `);
+      return rows;
+    } catch (error) {
+      console.error("Error in category model getSkills:", error);
+      throw error;
+    }
+  },
+
   async getCategoryById(id) {
     try {
       const [rows] = await db.query(`
