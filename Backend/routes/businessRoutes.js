@@ -1,5 +1,5 @@
 import Router from 'express';
-import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses } from '../controllers/businessController.js';
+import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 
 const router = Router();
@@ -797,6 +797,123 @@ router.delete('/removeconnection', verifyToken, removeConnection);
 
 /**
  * @swagger
+ * /business/l2e:
+ *   post:
+ *     summary: Record a new L2E response for the authenticated user
+ *     description: Stores an arbitrary JSON response associated with the authenticated user.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: Arbitrary JSON response object to store
+ *     responses:
+ *       201:
+ *         description: L2E response recorded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: L2E response recorded
+ *                 id:
+ *                   type: integer
+ *                   description: Inserted response id
+ *       400:
+ *         description: No response provided
+ *       401:
+ *         description: Authorization header missing or invalid
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/l2e', verifyToken, addL2EResponse);
+
+
+/**
+ * @swagger
+ * /business/l2e/latest:
+ *   get:
+ *     summary: Get the most recent L2E response for the authenticated user
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Latest response for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 response:
+ *                   type: object
+ *                   description: The stored JSON response
+ *                 date_added:
+ *                   type: string
+ *                   format: date-time
+ *       401:
+ *         description: Authorization header missing or invalid
+ *       404:
+ *         description: No responses found for the user
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/l2e/latest', verifyToken, getLatestL2EResponse);
+
+
+/**
+ * @swagger
+ * /business/l2e:
+ *   get:
+ *     summary: Get all L2E responses for the authenticated user
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All responses for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 responses:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       response:
+ *                         type: object
+ *                       date_added:
+ *                         type: string
+ *                         format: date-time
+ *       401:
+ *         description: Authorization header missing or invalid
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/l2e', verifyToken, getAllL2EResponses);
+
+
+/**
+ * @swagger
  * /business/{id}:
  *   get:
  *     summary: Get business details by ID
@@ -898,5 +1015,6 @@ router.delete('/removeconnection', verifyToken, removeConnection);
  *                   example: Internal server error
  */
 router.get('/:id', verifyToken, getUserProfile);
+
 
 export default router;
