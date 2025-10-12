@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../config';
 
 const api = axios.create({
-    baseURL: config.apiBaseUrl,
+    baseURL: config.apiBaseUrl, // should be '/api'
     withCredentials: true
 });
 
@@ -11,7 +11,6 @@ api.interceptors.request.use(
     (cfg) => {
         const token = sessionStorage.getItem('token');
         if (token) {
-            
             cfg.headers.Authorization = `Bearer ${token}`;
         }
         return cfg;
@@ -20,25 +19,28 @@ api.interceptors.request.use(
 );
 
 // Handle token refresh and logout
-// JOSHUA: TODO - FINISH AUTHENTICATION AND AUTHORIZATION
-// FOLLOWING CODE BELLOW HAS NOT BEEN TESTED
+console.log()
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
+        // Prevent infinite loop if refresh fails
         if (originalRequest?.url?.includes('/auth/refresh')) {
             sessionStorage.removeItem('token');
             window.location.href = '/login';
             return Promise.reject(error);
         }
 
+        // Attempt refresh if unauthorized and not already retried
         if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
                 const { data } = await api.post('/auth/refresh');
-                sessionStorage.setItem('token', data.token);
-                originalRequest.headers.Authorization = `Bearer ${data.token}`;
+                // Use 'token' or 'accessToken' depending on your backend's response
+                const newToken = data.token || data.accessToken;
+                sessionStorage.setItem('token', newToken);
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
                 return api(originalRequest);
             } catch (err) {
                 sessionStorage.removeItem('token');
@@ -51,6 +53,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
-// THIS IS FOR GENERAL API CALL AND HTTP client setup
-// Create sperate files for other backend API calls you can refere to HTTP client here (clients like AXIOS allow for this)

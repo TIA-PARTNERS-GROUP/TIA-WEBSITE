@@ -1,23 +1,44 @@
 services:
   backend:
-    build:
-      context: ./Backend
-    env_file:
-      - ./Backend/.env
+    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-website-backend:latest
     ports:
       - "5000:5000"
     depends_on:
       - db
-    command: sh -c "sleep 15 && npm install && npm run migrate && npm start"
+      - llm
+    environment:
+      - ADK_API_URL=http://llm:8080/chat
+      - FRONTEND_BASE_URL=http://frontend:3000
+      - FRONTEND_AWS_URL=ec2-13-239-184-226.ap-southeast-2.compute.amazonaws.com
+    command: sh -c "sleep 15 && npm install && npm run migrate && npm run dev"
+    networks:
+      - tia-network
 
   frontend:
-    build:
-      context: ./Frontend
-    env_file:
-      - ./Frontend/.env
+    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-website-frontend:latest
+    environment:
+      - VITE_ALLOWED_HOSTS=ec2-13-239-184-226.ap-southeast-2.compute.amazonaws.com
+      - VITE_PROXY_TARGET=http://backend:5000
     ports:
       - "3000:3000"
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "sleep 20 && npm install && npm run dev"
+    depends_on:
+      - backend
+    networks:
+      - tia-network
+
+  llm:
+    image: 912126037556.dkr.ecr.ap-southeast-2.amazonaws.com/tia-llm:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+    command: ["uvicorn", "TIA_Smart_chat_v3.main:app", "--host", "0.0.0.0", "--port", "8080"]
+    depends_on:
+      - db
+    networks:
+      - tia-network
 
   db:
     image: mysql:8
@@ -28,6 +49,18 @@ services:
       - "3333:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    networks:
+      - tia-network
 
 volumes:
   db_data:
+
+networks:
+  tia-network:
+    driver: bridge

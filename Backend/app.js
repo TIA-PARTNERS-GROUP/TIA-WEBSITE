@@ -13,8 +13,16 @@ import { generalAPILimiter } from './middleware/rateLimiter.js';
 // App setup
 const app = express();
 app.use(express.json());
+
+const allowedOrigins = [
+  process.env.FRONTEND_BASE_URL,
+  process.env.FRONTEND_AWS_URL,
+];
+
+console.log('Allowed Origins:', allowedOrigins);
+
 app.use(cors({
-  origin: process.env.FRONTEND_BASE_URL,
+  origin: allowedOrigins,
   credentials: true,
 }))
 
@@ -28,7 +36,7 @@ const swaggerOptions = {
       description: 'API documentation for endpoints',
     },
     servers: [
-      { url: `http://localhost:${config.PORT}/api` },
+      { url: `${process.env.FRONTEND_BASE_URL}:${config.PORT}/api` },
     ],
   },
   apis: ['./routes/*.js'], // Path to the API docs
