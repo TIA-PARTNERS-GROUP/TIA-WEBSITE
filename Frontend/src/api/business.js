@@ -67,3 +67,14 @@ export function removeConnection(id) {
 export function getOtherBusinessInfo(id) {
     return api.get(`/business/${id}`);
 };
+
+export function saveScores(scores) {
+    return api.post('business/l2e', {
+        Excitement: scores.Excitement,
+        Clarity: scores.Clarity,
+        Workload: scores.Workload,
+        Cashflow: scores.Cashflow,
+        Support: scores.Support,
+        Inspiration: scores.Inspiration
+    });
+}
