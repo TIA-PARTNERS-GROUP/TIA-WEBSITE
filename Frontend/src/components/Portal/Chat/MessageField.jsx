@@ -5,6 +5,7 @@ import { resetChatbot, sendChatbotMessage } from "../../../api/chatbot";
 import ReactMarkdown from "react-markdown";
 import UpArrowIcon from "../../Icons/UpArrowIcon";
 import { addBlog } from "../../../api/blogs";
+import { saveL2EScores } from "../../../api/business";
 
 const MessageField = ({ messageData, user_id, name, chatType }) => {
 
@@ -71,21 +72,17 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     }
 
     const getBotResponseText = (response) => {
-        if (typeof response === "string") {
-            return response.trim() 
-                ? response 
-                : "Sorry, the chatbot returned an empty response. Please try again.";
-        } else if (response && typeof response === "object") {
-            if (response.error || response.detail) {
-                return `Sorry, the chatbot is currently unavailable. Please try again later. Error: ${response.error || response.detail}`;
-            }
-            if ((response.text && response.text.trim()) || (response.message && response.message.trim())) {
-                return response.text || response.message;
-            }
-            return "Sorry, the chatbot returned an empty response. Please try again.";
+    if (typeof response === "string") {
+        return response; // ✅ Don't trim — keep markdown and line breaks
+    } else if (response && typeof response === "object") {
+        if (response.error || response.detail) {
+            return `Sorry, the chatbot is currently unavailable. Please try again later. Error: ${response.error || response.detail}`;
         }
-        return "Sorry, no response received from the chatbot. Please try again.";
-    };
+        if (response.text) return response.text;
+        if (response.message) return response.message;
+    }
+    return "Sorry, no response received from the chatbot. Please try again.";
+};
 
     const handlePublish = async (blogData) => {
         console.log('Publishing blog post:', blogData);
@@ -111,7 +108,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
 
                 try {
                     // Send the initial message
-                    const response = await sendChatbotMessage({ 
+                    const message = await sendChatbotMessage({ 
                         user_id, 
                         name, 
                         message: `Hello!`,
@@ -121,6 +118,8 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                         lng: userLng
                     });
 
+                    const response = message.response;
+                    const state = message.state;
                     // Process the bot's response and display it
                     const botText = getBotResponseText(response);
 
@@ -193,7 +192,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
 
         try {
-            const response = await sendChatbotMessage({
+            const message = await sendChatbotMessage({
                 user_id, 
                 name, 
                 message: messageText, 
@@ -202,9 +201,29 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 lat: userLat,
                 lng: userLng
             });
-            console.log(response);
+            console.log(message);
 
+            const response = message.response;
+            const state = message.state;
             const botText = getBotResponseText(response);
+
+            if (chatType === "Ladder To Exit" && state?.LadderAgent?.results) {
+                const ladderResults = state.LadderAgent.results;
+                console.log("🔥 Ladder To Exit results detected:", ladderResults);
+
+                // You can store this in local state, send to an API, etc.
+                // Example: store locally for display or later use
+                setLocalMessageData(prev => [
+                    ...prev,
+                    { author: "bot", text: botText },
+                    {
+                        author: "system",
+                        text: `📊 Ladder to Exit Results:\nClarity: ${ladderResults.clarity}\nWorkload: ${ladderResults.workload}\nCashflow: ${ladderResults.cashflow}\nSupport: ${ladderResults.support}\nInspiration: ${ladderResults.inspiration}`
+                    }
+                ]);
+                await saveL2EScores(ladderResults);
+                return;
+            }
 
             setLocalMessageData(prev => [...prev, { author: "bot", text: botText }]);
         } catch (error) {

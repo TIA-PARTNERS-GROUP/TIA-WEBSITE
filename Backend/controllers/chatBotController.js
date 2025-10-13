@@ -64,7 +64,7 @@ export const sendMessage = async (req, res) => {
       adkResponse.session_id = session_id;
     }
 
-    res.json(adkResponse.response);
+    res.json(adkResponse);
   } catch (err) {
     console.error('Error communicating with ADK agent:', err);
     res.status(500).json({ error: err.message || 'Failed to communicate with ADK agent.' });

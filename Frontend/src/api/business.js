@@ -68,13 +68,10 @@ export function getOtherBusinessInfo(id) {
     return api.get(`/business/${id}`);
 };
 
-export function saveScores(scores) {
-    return api.post('business/l2e', {
-        Excitement: scores.Excitement,
-        Clarity: scores.Clarity,
-        Workload: scores.Workload,
-        Cashflow: scores.Cashflow,
-        Support: scores.Support,
-        Inspiration: scores.Inspiration
-    });
+export function saveL2EScores(scores) {
+    return api.post('business/l2e', {scores});
+}
+
+export function getLatestL2EScore() {
+    return api.get('/business/l2e/latest');
 }

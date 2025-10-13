@@ -26,9 +26,10 @@ import {
   renderGrowthDaily,
   growthExtras,
 } from "./widgets/businessGrowthMap";
+import L2E from "../../../components/Portal/Dashboard/L2E";
 // =======================
 
-const GRID = "grid grid-cols-3 sm:gap-2 lg:gap-3 xl:gap-4 2xl:gap-5 pb-4";
+const GRID = "grid grid-cols-3 sm:gap-2 lg:gap-3 xl:gap-4 2xl:gap-5";
 
 /** Display only ‘Goals achieved this quarter’ */
 function GoalsCompletedCard({ percent = 22 }) {
@@ -151,7 +152,7 @@ export default function DashboardPage({mock = false}) {
 
   // —— Rendering —— //
   return (
-    <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 space-y-4">
+    <main className="font-poppins relative min-h-screen sm:px-4 lg:px-8 2xl:px-10 bg-gray-100 w-full pt-4 pb-12 space-y-4">
       <div className="bg-white rounded-xl p-8">
         <PortalHeader mock={mock} module={"Dashboard"} />
         <ProfileTab mock={mock}/>
@@ -174,6 +175,12 @@ export default function DashboardPage({mock = false}) {
           </>
         )}
       </div>
+
+      {!mock && (
+        <div className="w-2/3">
+          <L2E />
+        </div>
+      )}
     </main>
   );
 }

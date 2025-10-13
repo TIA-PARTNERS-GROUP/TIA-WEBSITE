@@ -4,7 +4,6 @@ import api from './axios';
 export const sendChatbotMessage = async ({ user_id, name, message, chat_type, region, lat, lng}) => {
     try {
         const res = await api.post('/chatbot/message', { user_id, name, message, chat_type, region, lat, lng });
-        console.log(res)
         return res.data;
     } catch (error) {
         console.error('Chatbot call failed:', error);

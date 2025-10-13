@@ -51,7 +51,6 @@ export function renderResourcesDaily(chosenKeys) {
 
   return (
     <div key="res-daily" className="bg-white rounded-xl sm:p-4 2xl:p-8 h-full">
-      <h3 className="font-semibold mb-3">Daily Activities</h3>
       <DailyActivities overallProgress={overall} barData={bars} />
     </div>
   );
