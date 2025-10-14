@@ -1,4 +1,3 @@
-// routes/gnnRoutes.js
 import Router from 'express';
 import {
   getComplementaryPartners,

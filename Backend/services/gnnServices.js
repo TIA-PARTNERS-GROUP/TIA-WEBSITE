@@ -4,9 +4,7 @@ import axios from 'axios';
 
 const GNN_API_URL = process.env.GNN_API_URL;
 
-/**
- * Get complementary partners (same business type, different categories)
- */
+// Get complementary partners (same business type, different categories)
 export async function fetchComplementaryPartners(user_id) {
   try {
     console.log('Fetching complementary partners for user:', { user_id });
@@ -22,9 +20,7 @@ export async function fetchComplementaryPartners(user_id) {
   }
 }
 
-/**
- * Get alliance partners for a specific project
- */
+// Get alliance partners for a specific project
 export async function fetchAlliancePartners(project_id) {
   try {
     console.log('Fetching alliance partners for project:', { project_id });
@@ -40,9 +36,7 @@ export async function fetchAlliancePartners(project_id) {
   }
 }
 
-/**
- * Get mastermind partners (complementary strengths)
- */
+// Get mastermind partners (complementary strengths)
 export async function fetchMastermindPartners(user_id) {
   try {
     console.log('Fetching mastermind partners for user:', { user_id });

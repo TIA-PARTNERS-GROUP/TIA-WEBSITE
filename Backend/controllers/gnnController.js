@@ -1,4 +1,3 @@
-// controllers/gnnController.js
 import { fetchComplementaryPartners, fetchAlliancePartners, fetchMastermindPartners } from "../services/gnnServices.js";
 
 export async function getComplementaryPartners(req, res) {
