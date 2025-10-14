@@ -88,3 +88,14 @@ INSERT INTO business_skills (id, name)
 VALUES
   (1, 'App Development'),
   (2, 'Cybersecurity');
+
+INSERT INTO regions (id, name)
+VALUES
+  ('nsw', 'New South Wales'),
+  ('vic', 'Victoria'),
+  ('qld', 'Queensland'),
+  ('wa', 'Western Australia'),
+  ('sa', 'South Australia'),
+  ('tas', 'Tasmania'),
+  ('nt', 'Northern Territory'),
+  ('act', 'Australian Capital Territory');
