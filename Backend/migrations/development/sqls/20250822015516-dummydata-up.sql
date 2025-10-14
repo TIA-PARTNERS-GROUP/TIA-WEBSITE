@@ -84,7 +84,7 @@ VALUES
   (302, (SELECT id FROM users WHERE first_name='James' AND last_name='Kumar'), 'James Kumar Consulting', NULL, 'James Kumar', NULL, NULL, 'Operations expert who streamlines business processes'),
   (303, (SELECT id FROM users WHERE first_name='Maria' AND last_name='Gonzalez'), 'Maria Gonzalez Consulting', NULL, 'Maria Gonzalez', NULL, NULL, 'Sales guru with proven track record in B2B markets');
 
-INSERT IGNORE INTO business_skills (id, name)
+INSERT INTO business_skills (id, name)
 VALUES
   (1, 'App Development'),
   (2, 'Cybersecurity');
