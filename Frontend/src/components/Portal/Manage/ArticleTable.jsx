@@ -18,7 +18,7 @@ const ArticleTable = ({
     onRowClick,
     showManagementControls = true ,
     onDeleteProject,
-    onEditProject={handleProjectEdit}
+    onEditProject
 }) => {
 
   const [selectedProject, setSelectedProject] = useState(null);
