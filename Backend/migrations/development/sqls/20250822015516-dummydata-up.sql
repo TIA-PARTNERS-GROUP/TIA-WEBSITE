@@ -44,3 +44,42 @@ INSERT INTO business_categories (id, name)
 VALUES (1, "AI Services"),
        (2, "Software Development"),
        (3, "Sales and Marketing");
+
+-- Complementary Partners
+INSERT INTO users (first_name, last_name, contact_email)
+VALUES 
+  ('Sarah', 'Chen', NULL),
+  ('Mike', 'Rodriguez', NULL),
+  ('Jessica', 'Wong', NULL);
+
+INSERT INTO businesses (id, operator_user_id, name, tagline, contact_name, contact_phone_no, contact_email, description)
+VALUES
+  (101, (SELECT id FROM users WHERE first_name='Sarah' AND last_name='Chen'), 'Digital Marketing Pro', NULL, 'Sarah Chen', NULL, NULL, 'Specializes in social media and online advertising campaigns'),
+  (102, (SELECT id FROM users WHERE first_name='Mike' AND last_name='Rodriguez'), 'WebFlow Masters', NULL, 'Mike Rodriguez', NULL, NULL, 'Creates high-converting landing pages and business websites'),
+  (103, (SELECT id FROM users WHERE first_name='Jessica' AND last_name='Wong'), 'Content Creators Co', NULL, 'Jessica Wong', NULL, NULL, 'Produces engaging blog content and video marketing materials');
+
+-- Alliance Partners
+INSERT INTO users (first_name, last_name, contact_email)
+VALUES
+  ('David', 'Thompson', NULL),
+  ('Lisa', 'Park', NULL),
+  ('Robert', 'Johnson', NULL);
+
+INSERT INTO businesses (id, operator_user_id, name, tagline, contact_name, contact_phone_no, contact_email, description)
+VALUES
+  (201, (SELECT id FROM users WHERE first_name='David' AND last_name='Thompson'), 'Thompson Construction', NULL, 'David Thompson', NULL, NULL, 'Commercial construction specialist with 15 years experience'),
+  (202, (SELECT id FROM users WHERE first_name='Lisa' AND last_name='Park'), 'Park Engineering Solutions', NULL, 'Lisa Park', NULL, NULL, 'Licensed engineer for complex architectural projects'),
+  (203, (SELECT id FROM users WHERE first_name='Robert' AND last_name='Johnson'), 'Johnson Electrical Systems', NULL, 'Robert Johnson', NULL, NULL, 'Commercial electrical contractor for large-scale projects');
+
+-- Mastermind Partners
+INSERT INTO users (first_name, last_name, contact_email)
+VALUES
+  ('Amanda', 'Foster', NULL),
+  ('James', 'Kumar', NULL),
+  ('Maria', 'Gonzalez', NULL);
+
+INSERT INTO businesses (id, operator_user_id, name, tagline, contact_name, contact_phone_no, contact_email, description)
+VALUES
+  (301, (SELECT id FROM users WHERE first_name='Amanda' AND last_name='Foster'), 'Amanda Foster Consulting', NULL, 'Amanda Foster', NULL, NULL, 'Serial entrepreneur who has scaled 3 businesses to 7-figures'),
+  (302, (SELECT id FROM users WHERE first_name='James' AND last_name='Kumar'), 'James Kumar Consulting', NULL, 'James Kumar', NULL, NULL, 'Operations expert who streamlines business processes'),
+  (303, (SELECT id FROM users WHERE first_name='Maria' AND last_name='Gonzalez'), 'Maria Gonzalez Consulting', NULL, 'Maria Gonzalez', NULL, NULL, 'Sales guru with proven track record in B2B markets');
