@@ -15,3 +15,34 @@ export const createValidator = (schema) => {
         } catch (error) { return { error }; }
     };
 };
+
+// Express middleware wrapper
+export const validator = (schema, where = 'body') => {
+    return async (req, res, next) => {
+      const target =
+        where === 'query' ? req.query :  //The where parameter determines the validation object.
+        where === 'params' ? req.params :
+        req.body;
+  
+      try {
+        const value = await schema.validateAsync(target, {
+          abortEarly: false,
+          stripUnknown: true,
+          convert: true
+        });
+        if (where === 'body') req.body = value;  // Write the validated value back to req
+        if (where === 'query') req.query = value;
+        if (where === 'params') req.params = value;
+        next(); // Verification passed; proceed with execution.
+      } catch (error) {
+        // Verification failed; return a standardised error response
+        return res.status(400).json({
+          error: 'VALIDATION_FAILED',
+          details: error.details.map(e => ({
+            path: e.path.join('.'),
+            message: e.message
+          }))
+        });
+      }
+    };
+  };
