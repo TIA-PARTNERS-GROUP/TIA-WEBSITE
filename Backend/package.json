@@ -14,7 +14,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": { 
+  "dependencies": {
     "argon2": "^0.43.1",
     "axios": "^1.11.0",
     "cookie-parser": "^1.4.7",

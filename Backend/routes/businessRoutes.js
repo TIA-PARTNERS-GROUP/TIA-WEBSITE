@@ -1,6 +1,19 @@
 import Router from 'express';
 import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
+// Integration of validation middleware with this module's Joi Schema
+import { validator } from '../middleware/validators/joiConfig.js';
+import {
+  querySchema,
+  updateSchema,
+  serviceOpSchema,
+  clientsOpSchema,
+  addConnectionSchema,
+  removeConnectionSchema,
+  l2eBodySchema,
+  byIdParamsSchema
+} from '../middleware/validators/businessValidator.js';
+
 
 const router = Router();
 /**
@@ -115,7 +128,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.get('/query', verifyToken, queryBusinesses);
+router.get('/query', verifyToken, validator(querySchema, 'query'), queryBusinesses);
 /**
  * @swagger
  * /business/myinfo:
@@ -329,7 +342,7 @@ router.get('/myinfo', verifyToken, getMyProfile);
  *                   type: string
  *                   example: Internal server error
  */
-router.patch('/update', verifyToken, updateProfile)
+router.patch('/update', verifyToken, validator(updateSchema), updateProfile)
 
 /**
  * @swagger
@@ -403,7 +416,7 @@ router.patch('/update', verifyToken, updateProfile)
  *       500:
  *         description: Internal server error
  */
-router.post('/addservice', verifyToken, addServices)
+router.post('/addservice', verifyToken, validator(serviceOpSchema), addServices)
 
 /**
  * @swagger
@@ -477,7 +490,7 @@ router.post('/addservice', verifyToken, addServices)
  *       500:
  *         description: Internal server error
  */
-router.post('/addclient', verifyToken, addClients);
+router.post('/addclient', verifyToken, validator(clientsOpSchema), addClients);
 
 /**
  * @swagger
@@ -551,7 +564,7 @@ router.post('/addclient', verifyToken, addClients);
  *       500:
  *         description: Internal server error
  */
-router.delete('/removeservice', verifyToken, removeServices)
+router.delete('/removeservice', verifyToken, validator(serviceOpSchema), removeServices)
 
 /**
  * @swagger
@@ -625,7 +638,7 @@ router.delete('/removeservice', verifyToken, removeServices)
  *       500:
  *         description: Internal server error
  */
-router.delete('/removeclient', verifyToken, removeClients);
+router.delete('/removeclient', verifyToken, validator(clientsOpSchema), removeClients);
 
 
 /**
@@ -713,7 +726,7 @@ router.delete('/removeclient', verifyToken, removeClients);
  *                   type: string
  *                   example: Internal server error
  */
-router.post('/addconnection', verifyToken, addConnection);
+router.post('/addconnection', verifyToken, validator(addConnectionSchema), addConnection);
 
 /**
  * @swagger
@@ -793,7 +806,7 @@ router.post('/addconnection', verifyToken, addConnection);
  *                   type: string
  *                   example: Internal server error
  */
-router.delete('/removeconnection', verifyToken, removeConnection);
+router.delete('/removeconnection', verifyToken, validator(removeConnectionSchema), removeConnection);
 
 /**
  * @swagger
@@ -833,7 +846,7 @@ router.delete('/removeconnection', verifyToken, removeConnection);
  *       500:
  *         description: Internal server error
  */
-router.post('/l2e', verifyToken, addL2EResponse);
+router.post('/l2e', verifyToken, validator(l2eBodySchema), addL2EResponse);
 
 
 /**
@@ -1014,7 +1027,7 @@ router.get('/l2e', verifyToken, getAllL2EResponses);
  *                   type: string
  *                   example: Internal server error
  */
-router.get('/:id', verifyToken, getUserProfile);
+router.get('/:id', verifyToken, validator(byIdParamsSchema, 'params'), getUserProfile);
 
 
 export default router;
