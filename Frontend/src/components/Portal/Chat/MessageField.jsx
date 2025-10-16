@@ -211,17 +211,59 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 const ladderResults = state.LadderAgent.results;
                 console.log("🔥 Ladder To Exit results detected:", ladderResults);
 
-                // You can store this in local state, send to an API, etc.
-                // Example: store locally for display or later use
+                // Save scores to API
+                await saveL2EScores(ladderResults);
+
+                // Create progress bar visualization for Ladder To Exit results
+                const renderLadderResults = (results) => {
+                    const capitaliseWords = (str) => {
+                        return str.charAt(0).toUpperCase() + str.slice(1);
+                    };
+
+                    return (
+                        <div className="bg-white rounded-xl p-6 border border-gray-200">
+                            <h3 className="text-xl font-bold mb-6 text-left">Ladder To Exit Results</h3>
+                            <div className="flex flex-col gap-5">
+                                {Object.entries(results).map(([name, value]) => (
+                                    <div key={name} className="flex items-center gap-4">
+                                        <span className="w-32 shrink-0 text-md font-medium text-gray-700">
+                                            {capitaliseWords(name)}
+                                        </span>
+                                        <div className="flex-1 bg-gray-200 rounded-full h-3">
+                                            <div
+                                                className={`h-3 rounded-full ${
+                                                    value >= 8
+                                                        ? "bg-green-500"
+                                                        : value >= 6
+                                                        ? "bg-lime-400"
+                                                        : value >= 4
+                                                        ? "bg-yellow-300"
+                                                        : value >= 2
+                                                        ? "bg-orange-400"
+                                                        : "bg-red-500"
+                                                }`}
+                                                style={{ width: `${(value / 10) * 100}%` }}
+                                            />
+                                        </div>
+                                        <span className="w-16 text-right text-sm font-medium text-gray-600">
+                                            {value}/10
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                };
+
                 setLocalMessageData(prev => [
                     ...prev,
                     { author: "bot", text: botText },
                     {
                         author: "system",
-                        text: `📊 Ladder to Exit Results:\nClarity: ${ladderResults.clarity}\nWorkload: ${ladderResults.workload}\nCashflow: ${ladderResults.cashflow}\nSupport: ${ladderResults.support}\nInspiration: ${ladderResults.inspiration}`
+                        text: "ladder-results",
+                        customComponent: renderLadderResults(ladderResults)
                     }
                 ]);
-                await saveL2EScores(ladderResults);
                 return;
             }
 
@@ -275,62 +317,60 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         return null;
         };
 
-    const renderContent = (text) => {
+    // Markdown renderer for both user and bot messages
+    const renderMarkdown = (text, isUserMessage = false) => {
         if (typeof text !== 'string') return text;
+        
+        // For blog posts, use the special rendering
         const blogData = parseBlogResponse(text);
-
-        if (!blogData) {
-            return <div className="whitespace-pre-wrap leading-5">{text}</div>;
-        }
-
-    
-        return (
-            <div>
-                <ReactMarkdown
-                    components={{
-                        pre: ({node, ...props}) => (
-                        <pre {...props} className="whitespace-pre-wrap bg-gray-50 p-3 rounded w-full my-6 font-mono text-sm" />
-                        ),
-                        p: ({node, ...props}) => (
-                        <p {...props} className="mt-2 mb-4 leading-6 [&_br]:hidden whitespace-pre-wrap" />
-                        ),
-                        h3: ({node, ...props}) => (
-                        <h3 {...props} className="text-lg font-bold mt-4 mb-3" />
-                        ),
-                        ul: ({node, ...props}) => (
-                        <ul {...props} className="my-4 pl-6 list-disc" />
-                        ),
-                        li: ({node, ...props}) => (
-                        <li {...props} className="mb-2" />
-                        ),
-                        h2: ({node, ...props}) => {
-                            const content = props.children?.[0];
-                            if (typeof content === 'string' && /CONTENT(?: BATCH)?/.test(content)) {
-                            return null;
+        if (blogData) {
+            return (
+                <div>
+                    <ReactMarkdown
+                        components={{
+                            pre: ({node, ...props}) => (
+                            <pre {...props} className="whitespace-pre-wrap bg-gray-50 p-3 rounded w-full my-6 font-mono text-sm" />
+                            ),
+                            p: ({node, ...props}) => (
+                            <p {...props} className="mt-2 mb-4 leading-6 [&_br]:hidden whitespace-pre-wrap" />
+                            ),
+                            h3: ({node, ...props}) => (
+                            <h3 {...props} className="text-lg font-bold mt-4 mb-3" />
+                            ),
+                            ul: ({node, ...props}) => (
+                            <ul {...props} className="my-4 pl-6 list-disc" />
+                            ),
+                            li: ({node, ...props}) => (
+                            <li {...props} className="mb-2" />
+                            ),
+                            h2: ({node, ...props}) => {
+                                const content = props.children?.[0];
+                                if (typeof content === 'string' && /CONTENT(?: BATCH)?/.test(content)) {
+                                return null;
+                                }
+                                return <h2 {...props} className="text-xl font-bold mt-6 mb-4" />;
+                            },
+                            // Handles the **Blog Post Headline** format
+                            strong: ({node, ...props}) => {
+                                const content = props.children?.[0];
+                                // If it's a blog post headline, render it as a heading instead of bold text
+                                if (typeof content === 'string' && content === 'Blog Post Headline') {
+                                    return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
+                                }
+                                if (typeof content === 'string' && content === 'Blog Post') {
+                                    return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
+                                }
+                                if (typeof content === 'string' && content === 'Social Media Caption') {
+                                    return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
+                                }
+                                return <strong {...props} />;
                             }
-                            return <h2 {...props} className="text-xl font-bold mt-6 mb-4" />;
-                        },
-                        // Handles the **Blog Post Headline** format
-                        strong: ({node, ...props}) => {
-                            const content = props.children?.[0];
-                            // If it's a blog post headline, render it as a heading instead of bold text
-                            if (typeof content === 'string' && content === 'Blog Post Headline') {
-                                return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
-                            }
-                            if (typeof content === 'string' && content === 'Blog Post') {
-                                return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
-                            }
-                            if (typeof content === 'string' && content === 'Social Media Caption') {
-                                return <h3 className="text-lg font-bold mt-4 mb-3">{content}</h3>;
-                            }
-                            return <strong {...props} />;
-                        }
-                    }}
-                >
-                    {blogData.rawText}
-                </ReactMarkdown>
-                
-                {/* Add publish button for blog posts */}
+                        }}
+                    >
+                        {blogData.rawText}
+                    </ReactMarkdown>
+                    
+                    {/* Add publish button for blog posts */}
                     {blogData && (
                         <div className="mt-6 flex justify-center">
                             <button 
@@ -342,8 +382,54 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                             </button>
                         </div>
                     )}
+                </div>
+            );
+        }
 
-            </div>
+        // Regular markdown rendering for all other messages
+        return (
+            <ReactMarkdown
+                components={{
+                    pre: ({node, ...props}) => (
+                        <pre {...props} className={`whitespace-pre-wrap p-3 rounded w-full my-2 font-mono text-sm ${isUserMessage ? 'bg-blue-500' : 'bg-gray-50'}`} />
+                    ),
+                    code: ({node, ...props}) => (
+                        <code {...props} className={`px-1 rounded text-sm ${isUserMessage ? 'bg-blue-500' : 'bg-gray-100'}`} />
+                    ),
+                    p: ({node, ...props}) => (
+                        <p {...props} className="my-2 leading-6 whitespace-pre-wrap" />
+                    ),
+                    h1: ({node, ...props}) => (
+                        <h1 {...props} className="text-2xl font-bold mt-4 mb-3" />
+                    ),
+                    h2: ({node, ...props}) => (
+                        <h2 {...props} className="text-xl font-bold mt-4 mb-3" />
+                    ),
+                    h3: ({node, ...props}) => (
+                        <h3 {...props} className="text-lg font-bold mt-3 mb-2" />
+                    ),
+                    ul: ({node, ...props}) => (
+                        <ul {...props} className="my-2 pl-6 list-disc" />
+                    ),
+                    ol: ({node, ...props}) => (
+                        <ol {...props} className="my-2 pl-6 list-decimal" />
+                    ),
+                    li: ({node, ...props}) => (
+                        <li {...props} className="mb-1" />
+                    ),
+                    blockquote: ({node, ...props}) => (
+                        <blockquote {...props} className={`border-l-4 pl-4 my-3 ${isUserMessage ? 'border-blue-300' : 'border-gray-300'}`} />
+                    ),
+                    strong: ({node, ...props}) => (
+                        <strong {...props} className="font-bold" />
+                    ),
+                    em: ({node, ...props}) => (
+                        <em {...props} className="italic" />
+                    ),
+                }}
+            >
+                {text}
+            </ReactMarkdown>
         );
     };
 
@@ -374,15 +460,29 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 {localMessageData.map((message, index) => (
                     <li
                         key={index}
-                        className={`flex rounded-3xl py-3 px-4 ${message.author === "user" ? "self-end bg-blue-600 text-white" : "self-start bg-white text-gray-800 border max-w-[70%] break-words inline-block"}`}
+                        className={`flex rounded-3xl py-3 px-4 ${
+                            message.author === "user" 
+                                ? "self-end bg-blue-600 text-white max-w-[70%]" 
+                                : message.customComponent
+                                    ? "self-start bg-white text-gray-800 border w-full max-w-2xl" // Wider for progress bars
+                                    : "self-start bg-white text-gray-800 border max-w-[70%]"
+                        } break-words inline-block`}
                     >
                         <div className={message.author === "user" ? "max-w-max" : "w-full"}>
-                            <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
-                                {typeof message.text === "object" 
-                                    ? JSON.stringify(message.text)
-                                    : renderContent(message.text)
-                                }
-                            </div>
+                            {message.customComponent ? (
+                                // Render custom components without prose styling and full width
+                                <div className="w-full">
+                                    {message.customComponent}
+                                </div>
+                            ) : (
+                                // Regular messages with prose styling
+                                <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
+                                    {typeof message.text === "object" 
+                                        ? JSON.stringify(message.text)
+                                        : renderMarkdown(message.text, message.author === "user")
+                                    }
+                                </div>
+                            )}
                         </div>
                     </li>
                 ))}

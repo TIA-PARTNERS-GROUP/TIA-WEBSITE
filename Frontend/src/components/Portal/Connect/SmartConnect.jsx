@@ -41,10 +41,14 @@ const SmartConnect = () => {
             return;
         }
 
-        const res = await apiFn(currentPage, itemsPerPage);
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Request timeout after 2 seconds')), 2000);
+        });
+
+        const res = await Promise.race([apiFn(currentPage, itemsPerPage), timeoutPromise]);
         const data = res.data || [];
 
-        // Map the recommendations into your connection card format
+        // Map the recommendations into connection card format
         const formattedConnections = data.map((item, index) => {
           const user = item.recommendation?.user;
           return {
@@ -64,6 +68,10 @@ const SmartConnect = () => {
 
       } catch (error) {
         console.error("Error fetching partner recommendations:", error);
+        setConnectionsData([]);
+        setTotalItems(0);
+        setTotalPages(1);
+        setCurrentPage(1);
       } finally {
         stopLoading();
       }
