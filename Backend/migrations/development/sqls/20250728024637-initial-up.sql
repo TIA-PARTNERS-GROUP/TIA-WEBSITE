@@ -887,7 +887,7 @@ CREATE TABLE `users` (
   `first_name` varchar(60) NOT NULL,
   `last_name` varchar(60) DEFAULT NULL,
   `contact_email` varchar(254) DEFAULT NULL,
-  `contact_phone_no` varchar(10) DEFAULT NULL,
+  `contact_phone_no` varchar(50) DEFAULT NULL,
   `adk_session_id` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
