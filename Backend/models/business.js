@@ -245,59 +245,44 @@ export default (db) => ({
   async getPaginated(page = 1, limit = 10, categories = [], searchQuery = '') {
     const offset = (page - 1) * limit;
     let query = `
-      SELECT 
-        b.id, b.name, b.description, b.contact_name, b.contact_email,
-        bc.name as category_name
       FROM businesses b
       LEFT JOIN business_categories bc ON b.business_category_id = bc.id
       WHERE 1=1
     `;
     let params = [];
 
-    // Add search filter
+    // Search filter
     if (searchQuery) {
       query += ` AND (b.name LIKE ? OR b.description LIKE ? OR b.tagline LIKE ?)`;
       const searchParam = `%${searchQuery}%`;
       params.push(searchParam, searchParam, searchParam);
     }
 
-    // Add business category filter
+    // Category filter
     if (categories.length > 0) {
       query += ` AND b.business_category_id IN (${categories.map(() => '?').join(',')})`;
       params.push(...categories);
     }
 
-    // Get data and total count using window functions
-    const fullQuery = `
-      SELECT *, COUNT(*) OVER() AS total_count
-      FROM (${query} ORDER BY b.name ASC LIMIT ? OFFSET ?) AS paginated_data
+    // Get total count (without pagination)
+    const countQuery = `SELECT COUNT(*) AS total ${query}`;
+    const [[{ total }]] = await db.query(countQuery, params);
+
+    // Get paginated data
+    const dataQuery = `
+      SELECT 
+        b.id, b.name, b.description, b.contact_name, b.contact_email,
+        bc.name AS category_name
+      ${query}
+      ORDER BY b.name ASC
+      LIMIT ? OFFSET ?
     `;
+    const [rows] = await db.query(dataQuery, [...params, limit, offset]);
 
-    params.push(limit, offset);
-    const [rows] = await db.query(fullQuery, params);
-
-    if (rows.length === 0) {
-      return {
-        data: [],
-        pagination: {
-          currentPage: page,
-          totalPages: 0,
-          totalItems: 0,
-          itemsPerPage: limit,
-          hasNext: false,
-          hasPrev: false
-        }
-      };
-    }
-
-    const total = rows[0].total_count;
     const totalPages = Math.ceil(total / limit);
 
-    // Remove the total_count property from each row before returning
-    const data = rows.map(({ total_count, ...rest }) => rest);
-
     return {
-      data,
+      data: rows,
       pagination: {
         currentPage: page,
         totalPages,

@@ -43,6 +43,11 @@ const QuickSearch = () => {
 
             const categoriesString = categories.length > 0 ? categories.join(',') : null;
             const res = await queryBusinesses(currentPage, itemsPerPage, queryValue, categoriesString); 
+            
+            // Use the pagination data from API response
+            setTotalPages(res.data.pagination.totalPages);
+            setTotalItems(res.data.pagination.totalItems);
+            
             const newConnectionsData = res.data.data.map(businessRes => {
                 const connection = personalConnections.find(conn => conn.business_id === businessRes.id);
                 return {
@@ -74,9 +79,6 @@ const QuickSearch = () => {
             }
 
             setConnectionsData(filteredData);
-
-            setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-            setTotalItems(filteredData.length);
         
         } catch (error) {
             console.error('Error fetching connections:', error);
