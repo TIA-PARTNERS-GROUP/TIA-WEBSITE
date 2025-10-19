@@ -78,8 +78,7 @@ const PortalHeader = ( {module, mock = false} ) => {
       notifications.forEach(async (notif) => {
         if (notif.message === "accept" || notif.message === "project-accept") {
           try {
-            // Call your API to remove it from server
-            await removeNotification(notif.id);  // or removeConnection if relevant
+            await removeNotification(notif.id);
           } catch (error) {
             console.error('Error removing notification:', error);
           }
@@ -249,10 +248,28 @@ const PortalHeader = ( {module, mock = false} ) => {
       
       return `${senderName} has applied to your project "${projectTitle}"`;
     }
+
+    if (notification.message.startsWith("connect")) {
+        let connectionType = "connect";
+        
+        if (notification.message.includes('-')) {
+            const typeIdMatch = notification.message.match(/connect-(\d+)/);
+            if (typeIdMatch && typeIdMatch[1]) {
+                const typeId = parseInt(typeIdMatch[1]);
+                // Map type IDs to human-readable names
+                const typeNames = {
+                    1: "an Alliance",
+                    2: "a Complementary", 
+                    3: "a Mastermind"
+                };
+                connectionType = typeNames[typeId] || "connect";
+            }
+        }
+        
+        return `${senderName} wants to connect with you as ${connectionType} partner.`;
+    }
     
     switch (notification.message) {
-      case "connect":
-        return `${senderName} wants to connect with you`;
       case "accept":
         return `${senderName} accepted your connection request!`;
       case "project-accept":

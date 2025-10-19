@@ -22,6 +22,7 @@ export default (db) => ({
     const [rows] = await db.query(`
       SELECT 
         bc.id as connection_id,
+        bc.connection_type_id,
         CASE
           WHEN bc.initiating_business_id = ? THEN bc.receiving_business_id
           ELSE bc.initiating_business_id

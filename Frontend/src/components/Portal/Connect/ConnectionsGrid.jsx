@@ -60,6 +60,15 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
         fetchCurrentBusiness();
     }, []);
 
+    const getPartnerTypeName = (typeId) => {
+        const partnerTypes = {
+            1: "Alliance Partner",
+            2: "Complementary Partner",
+            3: "Mastermind Partner"
+        };
+        return partnerTypes[typeId] || "Connected Partner";
+    };
+
     const handleConnectClick = (business) => {
         setSelectedBusiness(business);
 
@@ -193,6 +202,16 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                             <ProfileIcon className="w-24 h-24 @md:w-14 @md:h-14 text-black mt-0.5" />
                             <h2 className="text-center text-lg font-medium text-blue-600">{company.title}</h2>
                             <p className="text-center text-xs font-semibold px-6 pt-2 pb-2">{formatString(company.category)}</p>
+                            
+                            {/* Display connection type only when connectionModule is true */}
+                            {connectionModule && company.connectionTypeId && (
+                                <div className="text-center mb-2">
+                                    <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                        {getPartnerTypeName(company.connectionTypeId)}
+                                    </span>
+                                </div>
+                            )}
+                            
                             <p className="text-center text-xs font-normal px-6 pt-4 pb-8">{company.description}</p>
                             <div className="flex flex-col items-center gap-y-2 mb-4">
                                 <PrimaryButton 
