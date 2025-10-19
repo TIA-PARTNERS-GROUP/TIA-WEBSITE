@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLoading } from "../../../utils/LoadingContext";
 import { getComplementaryPartners, getAlliancePartners, getMastermindPartners } from "../../../api/gnn";
+import { getMyProjects } from "../../../api/projects";
 import ConnectionsGrid from "../../../components/Portal/Connect/ConnectionsGrid";
 import PaginationNav from "./PaginationNav";
 import PrimaryButton from "../../Button/PrimaryButton";
@@ -45,11 +46,52 @@ const SmartConnect = () => {
           setTimeout(() => reject(new Error('Request timeout after 2 seconds')), 2000);
         });
 
-        const res = await Promise.race([apiFn(currentPage, itemsPerPage), timeoutPromise]);
-        const data = res.data || [];
+        let combinedData = [];
 
-        // Map the recommendations into connection card format
-        const formattedConnections = data.map((item, index) => {
+        if (partnerType?.toLowerCase() === "alliance") {
+          // Step 1: Get user's projects
+          const myProjectsRes = await getMyProjects();
+          const projects = myProjectsRes?.data?.projects || [];
+
+          if (projects.length === 0) {
+            console.warn("No projects found for current user.");
+          } else {
+            // Step 2: Query partners for each project
+            const partnerPromises = projects.map(p => 
+              Promise.race([
+                getAlliancePartners(p.id),
+                timeoutPromise
+              ]).catch(err => {
+                console.error(`Error fetching partners for project ${p.id}:`, err);
+                return { data: [] };
+              })
+            );
+
+            const results = await Promise.all(partnerPromises);
+
+            // Step 3: Combine all responses
+            combinedData = results.flatMap(r => r.data || []);
+          }
+        } else {
+          // For non-alliance partner types, just query once
+          const res = await Promise.race([apiFn(currentPage, itemsPerPage), timeoutPromise]);
+          combinedData = res.data || [];
+        }
+
+        // Step 4: Remove duplicates (based on recommendation.user.id)
+        const uniqueData = [];
+        const seen = new Set();
+
+        for (const item of combinedData) {
+          const userId = item.recommendation?.user?.id;
+          if (userId && !seen.has(userId)) {
+            seen.add(userId);
+            uniqueData.push(item);
+          }
+        }
+
+        // Step 5: Format for display
+        const formattedConnections = uniqueData.map(item => {
           const user = item.recommendation?.user;
           return {
             businessId: user?.id,
@@ -57,14 +99,14 @@ const SmartConnect = () => {
             description: user?.description,
             category: user?.category,
             contactName: user?.name,
-            contactEmail: null, // not provided in response
+            contactEmail: null,
             reason: item.reason
           };
         });
 
         setConnectionsData(formattedConnections);
-        setTotalItems(data.length);
-        setTotalPages(Math.ceil(data.length / itemsPerPage));
+        setTotalItems(formattedConnections.length);
+        setTotalPages(Math.ceil(formattedConnections.length / itemsPerPage));
 
       } catch (error) {
         console.error("Error fetching partner recommendations:", error);
@@ -79,6 +121,7 @@ const SmartConnect = () => {
 
     fetchConnections();
   }, [partnerType, currentPage]);
+
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
