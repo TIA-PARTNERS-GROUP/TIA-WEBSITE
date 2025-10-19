@@ -29,7 +29,11 @@ VALUES (3, 5, "Steve's Lava Chicken", "It's tasty as hell!", "Steve", "012345678
 
 
 INSERT INTO connection_types (id, name)
-VALUES (1, "SmartConnect");
+VALUES 
+  (1, "Alliance"),
+  (2, "Complementary"),
+  (3, "Mastermind");
+
 
 INSERT INTO business_connections (initiating_business_id, receiving_business_id, connection_type_id, active, date_initiated)
 VALUES (1, 2, 1, 1, CURRENT_TIME());
@@ -84,10 +88,24 @@ VALUES
   (302, (SELECT id FROM users WHERE first_name='James' AND last_name='Kumar'), 'James Kumar Consulting', NULL, 'James Kumar', NULL, NULL, 'Operations expert who streamlines business processes'),
   (303, (SELECT id FROM users WHERE first_name='Maria' AND last_name='Gonzalez'), 'Maria Gonzalez Consulting', NULL, 'Maria Gonzalez', NULL, NULL, 'Sales guru with proven track record in B2B markets');
 
-INSERT INTO business_skills (id, name)
+INSERT IGNORE INTO business_skills (id, name)
 VALUES
   (1, 'App Development'),
-  (2, 'Cybersecurity');
+  (2, 'Cloud Solutions'),
+  (3, 'Cyber Security'),
+  (4, 'Data Cabling'),
+  (5, 'Electronic Security Solutions'),
+  (6, 'Internet Communications'),
+  (7, 'IP Phone Solutions (VOIP)'),
+  (8, 'IT Helpdesk'),
+  (9, 'IT Strategy'),
+  (10, 'Managed IT Services'),
+  (11, 'Project Management'),
+  (12, 'Systems Integration'),
+  (13, 'Web Development'),
+  (14, 'Wireless Solutions');
+
+
 
 INSERT INTO regions (id, name)
 VALUES
