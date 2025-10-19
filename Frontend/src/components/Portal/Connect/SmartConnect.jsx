@@ -14,6 +14,7 @@ const SmartConnect = () => {
   const { startLoading, stopLoading } = useLoading();
 
   const [connectionsData, setConnectionsData] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -90,6 +91,9 @@ const SmartConnect = () => {
           }
         }
 
+        // Store the raw recommendations data
+        setRecommendations(uniqueData);
+
         // Step 5: Format for display
         const formattedConnections = uniqueData.map(item => {
           const user = item.recommendation?.user;
@@ -104,13 +108,19 @@ const SmartConnect = () => {
           };
         });
 
-        setConnectionsData(formattedConnections);
+        // Apply pagination
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedConnections = formattedConnections.slice(startIndex, endIndex);
+
+        setConnectionsData(paginatedConnections);
         setTotalItems(formattedConnections.length);
         setTotalPages(Math.ceil(formattedConnections.length / itemsPerPage));
 
       } catch (error) {
         console.error("Error fetching partner recommendations:", error);
         setConnectionsData([]);
+        setRecommendations([]);
         setTotalItems(0);
         setTotalPages(1);
         setCurrentPage(1);
@@ -121,7 +131,6 @@ const SmartConnect = () => {
 
     fetchConnections();
   }, [partnerType, currentPage]);
-
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
@@ -145,7 +154,11 @@ const SmartConnect = () => {
         Our SmartConnect system has recommended the following {partnerType} partners based on your profile:
       </p>
 
-      <ConnectionsGrid connectionsData={connectionsData} />
+      <ConnectionsGrid 
+        connectionsData={connectionsData}
+        searchType="smartconnect"
+        recommendations={recommendations}
+      />
 
       <PaginationNav
         currentPage={currentPage}

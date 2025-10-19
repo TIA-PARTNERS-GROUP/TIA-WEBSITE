@@ -12,7 +12,7 @@ import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
 import CloseIcon from "../../Icons/CloseIcon";
 
-const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
+const ConnectionsGrid = ({ connectionsData, connectionModule, searchType, recommendations = [] }) => {
 
     const { partnerType } = useParams();
     const navigate = useNavigate();
@@ -60,6 +60,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
         fetchCurrentBusiness();
     }, []);
 
+    // Function to get partner type name from ID
     const getPartnerTypeName = (typeId) => {
         const partnerTypes = {
             1: "Alliance Partner",
@@ -67,6 +68,19 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
             3: "Mastermind Partner"
         };
         return partnerTypes[typeId] || "Connected Partner";
+    };
+
+    // Function to get recommendation reason for a business
+    const getRecommendationReason = (businessId) => {
+        if (searchType !== "smartconnect" || !recommendations || recommendations.length === 0) {
+            return null;
+        }
+        
+        const recommendation = recommendations.find(rec => 
+            rec.recommendation.business.id === businessId
+        );
+        
+        return recommendation ? recommendation.reason : null;
     };
 
     const handleConnectClick = (business) => {
@@ -190,7 +204,10 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
     return (
         <>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full mx-auto">
-            {finalConnectionsData.map((company, index) => (
+            {finalConnectionsData.map((company, index) => {
+                const recommendationReason = getRecommendationReason(company.businessId);
+                
+                return (
                 <div key={`connection-${index}`} className="flex flex-col items-center">
                     <div className="bg-gray-200 sm:w-[400px] md:w-[270px] lg:w-[375px] xl:w-[315px] 2xl:w-[400px] h-full rounded-lg shadow-xl">
                         <img
@@ -209,6 +226,16 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                                     <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                                         {getPartnerTypeName(company.connectionTypeId)}
                                     </span>
+                                </div>
+                            )}
+                            
+                            {/* Display recommendation reason when searchType is smartconnect */}
+                            {searchType === "smartconnect" && recommendationReason && (
+                                <div className="text-center mb-2 px-4">
+                                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                                        <p className="text-green-800 text-xs font-medium mb-1">🤝 Recommended because:</p>
+                                        <p className="text-green-700 text-xs">{recommendationReason}</p>
+                                    </div>
                                 </div>
                             )}
                             
@@ -244,9 +271,8 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
                         </div>
                     </div>
                 </div>
-
-                
-            ))}
+                );
+            })}
         </div>
 
         {/* Profile Popup */}
