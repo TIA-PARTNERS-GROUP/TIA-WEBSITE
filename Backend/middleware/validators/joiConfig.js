@@ -31,17 +31,19 @@ export const validator = (schema, where = 'body') => {
           convert: true
         });
         if (where === 'body') req.body = value;  // Write the validated value back to req
-        if (where === 'query') req.query = value;
+        if (where === 'query') Object.assign(req.query, value);
         if (where === 'params') req.params = value;
         next(); // Verification passed; proceed with execution.
       } catch (error) {
         // Verification failed; return a standardised error response
         return res.status(400).json({
           error: 'VALIDATION_FAILED',
-          details: error.details.map(e => ({
-            path: e.path.join('.'),
-            message: e.message
-          }))
+          details: Array.isArray(error.details)
+            ? error.details.map(e => ({
+                path: e.path.join('.'),
+                message: e.message
+              }))
+            : [{ message: error.message }]
         });
       }
     };
