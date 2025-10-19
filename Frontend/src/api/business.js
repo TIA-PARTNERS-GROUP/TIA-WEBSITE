@@ -52,9 +52,13 @@ export function removeClients(clients) {
     });
 }
 
-export function addConnection(initiatingBusinessId, receivingBusinessId) {
+export function addConnection(initiatingBusinessId, receivingBusinessId, connectionTypeId) {
     return api.post('/business/addconnection',
-        { initiatingBusinessId: initiatingBusinessId, receivingBusinessId: receivingBusinessId }
+        { 
+            initiatingBusinessId: initiatingBusinessId, 
+            receivingBusinessId: receivingBusinessId,
+            connectionTypeId: connectionTypeId 
+        }
     );
 };
 

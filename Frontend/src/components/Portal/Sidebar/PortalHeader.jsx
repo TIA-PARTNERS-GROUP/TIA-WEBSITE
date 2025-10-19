@@ -104,12 +104,22 @@ const PortalHeader = ( {module, mock = false} ) => {
   }
 
   const handleAcceptConnection = async (notificationId, senderId, receiverId, senderBusinessName, notificationMessage) => {
-    if (notificationMessage === "connect") {
+    if (notificationMessage.startsWith("connect")) {
       try {
         console.log(`Accepting connection from ${senderBusinessName}, notification ID: ${notificationId}`);
+
+        let connectionTypeId = 2; // Default to 2 (complementary) if no type specified
+            
+            if (notificationMessage.includes('-')) {
+                const typeIdMatch = notificationMessage.match(/connect-(\d+)/);
+                if (typeIdMatch && typeIdMatch[1]) {
+                    connectionTypeId = parseInt(typeIdMatch[1]);
+                }
+            }
+
         const message = "accept";
         console.log(senderId, receiverId);
-        await addConnection(senderId, receiverId);
+        await addConnection(senderId, receiverId, connectionTypeId);
         await removeNotification(notificationId);
         await addNotification(senderId, message);
         setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
@@ -336,7 +346,7 @@ const PortalHeader = ( {module, mock = false} ) => {
                               {getNotificationDisplayText(notification)}
                             </p>
 
-                            {(notification.message === "connect" || notification.message.startsWith("applicant")) && (
+                            {(notification.message.startsWith("connect") || notification.message.startsWith("applicant")) && (
                               <div className="flex gap-2">
                                 <PrimaryButton
                                   onClick={() => handleNotificationAction(notification.id, notification.sender_business_id, notification.receiver_business_id, 'accept')}
@@ -354,7 +364,7 @@ const PortalHeader = ( {module, mock = false} ) => {
                               </div>
                             )}
 
-                            {(notification.message === "connect" || notification.message.startsWith("applicant")) && (
+                            {(notification.message.startsWith("connect") || notification.message.startsWith("applicant")) && (
                               <div className="mt-2">
                                 <SecondaryButton
                                   onClick={() => handleViewProfile(notification.sender_business_id, notification.id, notification.opened)}

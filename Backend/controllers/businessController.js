@@ -237,30 +237,34 @@ export const addConnection = async (req, res) => {
     try {
         const business = businessModel(db);
         const user = userModel(db);
-        const { initiatingBusinessId, receivingBusinessId } = req.body;
+        const { initiatingBusinessId, receivingBusinessId, connectionTypeId } = req.body;
         const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
+        
         if (businessResult == null) {
             res.status(404).json({message: "No business exists for user"});
         }
+        
         const userBusinessId = businessResult.id;
+        
         if (!receivingBusinessId) {
             return res.status(400).json({message: "No receiving business id provided"})
         }
         if (!initiatingBusinessId) {
             return res.status(400).json({message: "No initiating business id provided"})
         }
+        if (!connectionTypeId) {
+            return res.status(400).json({message: "No connection type id provided"})
+        }
 
-        if (userBusinessId != initiatingBusinessId & userBusinessId != receivingBusinessId) {
+        if (userBusinessId != initiatingBusinessId && userBusinessId != receivingBusinessId) {
             return res.status(403).json({message: "You can only create connections for your own business"})
         }
-        
-        
-        
 
         if (initiatingBusinessId == receivingBusinessId) {
             return res.status(400).json({message: "Cannot connect to self"})
         }
-        const connectionId = await business.addConnection(initiatingBusinessId, receivingBusinessId);
+        
+        const connectionId = await business.addConnection(initiatingBusinessId, receivingBusinessId, connectionTypeId);
         return res.status(201).json({message: "Connection added", connectionId: connectionId})
 
     } catch (error) {

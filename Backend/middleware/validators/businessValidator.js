@@ -46,7 +46,8 @@ export const clientsOpSchema = Joi.object({
 // POST /business/addconnection  (req.body)
 export const addConnectionSchema = Joi.object({
   initiatingBusinessId: intId.required(),
-  receivingBusinessId: intId.required()
+  receivingBusinessId: intId.required(),
+  connectionTypeId: Joi.number().integer().positive().required()
 }).custom((val, helpers) => {
   if (val.initiatingBusinessId === val.receivingBusinessId) {
     return helpers.error('any.invalid', 'Cannot connect to self');

@@ -178,11 +178,11 @@ export default (db) => ({
       return result.affectedRows;
   },
 
-  async addConnection(initiatingBusinessId, receivingBusinessId) {
+  async addConnection(initiatingBusinessId, receivingBusinessId, connectionTypeId) {
     const [result] = await db.query(`
       INSERT INTO business_connections (initiating_business_id, receiving_business_id, date_initiated, active, connection_type_id)
-      VALUES (?, ?, CURRENT_TIMESTAMP, 1, 1)
-      `, [initiatingBusinessId, receivingBusinessId])
+      VALUES (?, ?, CURRENT_TIMESTAMP, 1, ?)
+      `, [initiatingBusinessId, receivingBusinessId, connectionTypeId])
 
     return result.insertId;
   },

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { getCurrentBusinessInfo, removeConnection, getOtherBusinessInfo } from "../../../api/business";
 import { addNotification, getCurrentUserPendingConnections } from "../../../api/notification";
@@ -14,6 +14,7 @@ import CloseIcon from "../../Icons/CloseIcon";
 
 const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
 
+    const { partnerType } = useParams();
     const navigate = useNavigate();
     const [showProfilePopup, setShowProfilePopup] = useState(false);
     const [profileData, setProfileData] = useState(null);
@@ -81,8 +82,20 @@ const ConnectionsGrid = ({ connectionsData, connectionModule }) => {
             // Get the receiving business's user ID (operator)
             const receivingBusinessUserId = selectedBusiness.businessId;
 
+            const getPartnerTypeId = (partnerType) => {
+                const partnerTypeMap = {
+                    'alliance': 1,
+                    'complementary': 2,
+                    'mastermind': 3
+                };
+                
+                return partnerTypeMap[partnerType] || 2; // returns null if partnerType not found
+            };
+
+            const partnerId = getPartnerTypeId(partnerType);
+
             // Send notification instead of directly connecting
-            const message = "connect";
+            const message = `connect-${partnerId}`;
             
             await addNotification(receivingBusinessUserId, message);
             
