@@ -30,7 +30,7 @@ CREATE TABLE `business_categories` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `business_connections` (
   CONSTRAINT `business_connections_initiating_id` FOREIGN KEY (`initiating_business_id`) REFERENCES `businesses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `business_connections_receiving_id` FOREIGN KEY (`receiving_business_id`) REFERENCES `businesses` (`id`),
   CONSTRAINT `business_connections_type` FOREIGN KEY (`connection_type_id`) REFERENCES `connection_types` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,60 +197,21 @@ CREATE TABLE `businesses` (
   `description` text,
   `address` varchar(100) DEFAULT NULL,
   `city` varchar(60) DEFAULT NULL,
+  `value` int unsigned DEFAULT NULL,
   `business_type_id` int unsigned DEFAULT NULL,
   `business_category_id` int unsigned DEFAULT NULL,
-  `business_phase` int unsigned DEFAULT NULL,
+  `business_phase_id` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `businesses_user_id_idx` (`operator_user_id`),
   KEY `businesses_type_id_idx` (`business_type_id`),
   KEY `businesses_category_id_idx` (`business_category_id`),
-  KEY `businesss_phase_id_idx` (`business_phase`),
+  KEY `businesss_phase_id_idx` (`business_phase_id`),
   CONSTRAINT `businesses_category_id` FOREIGN KEY (`business_category_id`) REFERENCES `business_categories` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `businesses_type_id` FOREIGN KEY (`business_type_id`) REFERENCES `connection_types` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `businesses_type_id` FOREIGN KEY (`business_type_id`) REFERENCES `business_types` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `businesses_user_id` FOREIGN KEY (`operator_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `businesss_phase_id` FOREIGN KEY (`business_phase`) REFERENCES `business_phases` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `case_studies`
---
-
-DROP TABLE IF EXISTS `case_studies`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `case_studies` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `owner_user_id` int unsigned NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `date` timestamp NULL DEFAULT NULL,
-  `content` longtext NOT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `video_url` varchar(255) DEFAULT NULL,
-  `published` tinyint NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `case_study_user_id_idx` (`owner_user_id`),
-  CONSTRAINT `case_study_user_id` FOREIGN KEY (`owner_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `connection_mastermind_roles`
---
-
-DROP TABLE IF EXISTS `connection_mastermind_roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `connection_mastermind_roles` (
-  `connection_id` int unsigned NOT NULL,
-  `mastermind_role_id` int unsigned NOT NULL,
-  PRIMARY KEY (`connection_id`,`mastermind_role_id`),
-  KEY `connection_mastermind_roles_role_idx` (`mastermind_role_id`),
-  CONSTRAINT `connection_mastermind_roles_connection_id` FOREIGN KEY (`connection_id`) REFERENCES `business_connections` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `connection_mastermind_roles_role` FOREIGN KEY (`mastermind_role_id`) REFERENCES `mastermind_roles` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `businesss_phase_id` FOREIGN KEY (`business_phase_id`) REFERENCES `business_phases` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -266,7 +227,7 @@ CREATE TABLE `connection_types` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,7 +244,7 @@ CREATE TABLE `daily_activities` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -304,90 +265,39 @@ CREATE TABLE `daily_activity_enrolments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `idea_votes`
+-- Table structure for table `feedback`
 --
 
-DROP TABLE IF EXISTS `idea_votes`;
+DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `idea_votes` (
-  `voter_user_id` int unsigned NOT NULL,
-  `idea_id` int unsigned NOT NULL,
-  `type` tinyint NOT NULL,
-  PRIMARY KEY (`voter_user_id`),
-  KEY `idea_votes_idea_id_idx` (`idea_id`),
-  CONSTRAINT `idea_votes_idea_id` FOREIGN KEY (`idea_id`) REFERENCES `ideas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idea_votes_user_id` FOREIGN KEY (`voter_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ideas`
---
-
-DROP TABLE IF EXISTS `ideas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ideas` (
-  `id` int unsigned NOT NULL,
-  `submitted_by_user_id` int unsigned NOT NULL,
+CREATE TABLE `feedback` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) NOT NULL,
+  `email` varchar(254) NOT NULL,
   `content` text NOT NULL,
+  `date_submitted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `ideas_user_id_idx` (`submitted_by_user_id`),
-  CONSTRAINT `ideas_user_id` FOREIGN KEY (`submitted_by_user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `industries`
+-- Table structure for table `l2e_responses`
 --
 
-DROP TABLE IF EXISTS `industries`;
+DROP TABLE IF EXISTS `l2e_responses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `industries` (
+CREATE TABLE `l2e_responses` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` int unsigned NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `picture` varchar(255) DEFAULT NULL,
+  `user_id` int unsigned NOT NULL,
+  `response` json NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
-  KEY `industries_category_id_idx` (`category_id`),
-  CONSTRAINT `industries_category_id` FOREIGN KEY (`category_id`) REFERENCES `industry_categories` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `industry_categories`
---
-
-DROP TABLE IF EXISTS `industry_categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `industry_categories` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `mastermind_roles`
---
-
-DROP TABLE IF EXISTS `mastermind_roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `mastermind_roles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
+  KEY `l2e_responses_user_id_idx` (`user_id`),
+  CONSTRAINT `l2e_responses_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -403,7 +313,7 @@ CREATE TABLE `migrations` (
   `name` varchar(255) NOT NULL,
   `run_on` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -430,6 +340,23 @@ CREATE TABLE `notifications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `project_applicants`
+--
+
+DROP TABLE IF EXISTS `project_applicants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `project_applicants` (
+  `project_id` int unsigned NOT NULL,
+  `user_id` int unsigned NOT NULL,
+  PRIMARY KEY (`project_id`,`user_id`),
+  KEY `project_applicants_user_id_idx` (`user_id`),
+  CONSTRAINT `project_applicants_project_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `project_applicants_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `project_business_categories`
 --
 
@@ -438,10 +365,10 @@ DROP TABLE IF EXISTS `project_business_categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `project_business_categories` (
   `project_id` int unsigned NOT NULL,
-  `business_category_id int` int unsigned NOT NULL,
-  PRIMARY KEY (`project_id`,`business_category_id int`),
-  KEY `project_business_categories_category_id_idx` (`business_category_id int`),
-  CONSTRAINT `project_business_categories_category_id` FOREIGN KEY (`business_category_id int`) REFERENCES `business_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  `business_category_id` int unsigned NOT NULL,
+  PRIMARY KEY (`project_id`,`business_category_id`),
+  KEY `project_business_categories_category_id_idx` (`business_category_id`),
+  CONSTRAINT `project_business_categories_category_id` FOREIGN KEY (`business_category_id`) REFERENCES `business_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `project_business_categories_project_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -491,10 +418,11 @@ CREATE TABLE `projects` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `managed_by_user_id` int unsigned NOT NULL,
   `name` varchar(100) NOT NULL,
-  `project_status` enum('open','closed','complete') NOT NULL,
-  `projection_open` datetime DEFAULT NULL,
-  `project_closed` datetime DEFAULT NULL,
-  `project_completion` datetime DEFAULT NULL,
+  `description` longtext NOT NULL,
+  `status` enum('open','closed') NOT NULL,
+  `open_date` datetime DEFAULT NULL,
+  `close_date` datetime DEFAULT NULL,
+  `completion_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `projects_managed_by_user_id_idx` (`managed_by_user_id`),
@@ -628,6 +556,29 @@ CREATE TABLE `user_business_strengths` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `user_case_studies`
+--
+
+DROP TABLE IF EXISTS `user_case_studies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_case_studies` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `owner_user_id` int unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
+  `content` longtext NOT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `video_url` varchar(255) DEFAULT NULL,
+  `published` tinyint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `case_study_user_id_idx` (`owner_user_id`),
+  CONSTRAINT `case_study_user_id` FOREIGN KEY (`owner_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user_daily_activity_progress`
 --
 
@@ -644,6 +595,25 @@ CREATE TABLE `user_daily_activity_progress` (
   KEY `udap_activity_id_idx` (`daily_activity_id`),
   CONSTRAINT `udap_activity_id` FOREIGN KEY (`daily_activity_id`) REFERENCES `daily_activities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `udap_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_dashboard_configs`
+--
+
+DROP TABLE IF EXISTS `user_dashboard_configs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_dashboard_configs` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `config` json NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `user_dashboard_configs_user_id_idx` (`user_id`),
+  CONSTRAINT `user_dashboard_configs_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -678,6 +648,7 @@ CREATE TABLE `user_posts` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `poster_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
   `content` longtext NOT NULL,
   `thumbnail` varchar(255) DEFAULT NULL,
   `video_url` varchar(255) DEFAULT NULL,
@@ -784,7 +755,7 @@ DROP TABLE IF EXISTS `user_testimonials`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_testimonials` (
-  `id` int unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `poster_user_id` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `date` timestamp NULL DEFAULT NULL,
@@ -811,10 +782,11 @@ CREATE TABLE `users` (
   `first_name` varchar(60) NOT NULL,
   `last_name` varchar(60) DEFAULT NULL,
   `contact_email` varchar(254) DEFAULT NULL,
-  `contact_phone_no` varchar(10) DEFAULT NULL,
+  `contact_phone_no` varchar(50) DEFAULT NULL,
+  `adk_session_id` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -826,4 +798,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-21 17:04:22
+-- Dump completed on 2025-10-12 16:16:40
