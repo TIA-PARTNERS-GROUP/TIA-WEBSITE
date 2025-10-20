@@ -41,7 +41,6 @@ export default (db) => ({
       return rows;
   },
 
-
   async getServices(id) {
     const [rows] = await db.query(`
         SELECT service_id, description
@@ -52,12 +51,36 @@ export default (db) => ({
     return rows;
   },
 
-    async getClients(id) {
-      const [rows] = await db.query(`
-        SELECT client_id, description
-        FROM business_clients
-        WHERE business_id = ?
-      `, [id])
+  async getClients(id) {
+    const [rows] = await db.query(`
+      SELECT client_id, description
+      FROM business_clients
+      WHERE business_id = ?
+    `, [id])
+
+    return rows;
+  },
+
+  async getSkills(id) {
+    const [rows] = await db.query(`
+      SELECT us.skill_id, s.name, sc.name as category_name
+      FROM user_skills us
+      JOIN skills s ON us.skill_id = s.id
+      JOIN skill_categories sc ON s.category_id = sc.id
+      WHERE us.user_id = ?
+    `, [id])
+
+    return rows;
+  },
+
+  async getStrengths(id) {
+    const [rows] = await db.query(`
+      SELECT us.strength_id, s.name, sc.name as category_name
+      FROM user_strengths us
+      JOIN strengths s ON us.strength_id = s.id
+      JOIN strength_categories sc ON s.category_id = sc.id
+      WHERE us.user_id = ?
+    `, [id])
 
     return rows;
   },
@@ -79,7 +102,6 @@ export default (db) => ({
       businessCategory: null,
       businessPhase: null,
     };
-
 
     for (const key of Object.keys(request)) {
       if (params.hasOwnProperty(key)) {
@@ -121,7 +143,6 @@ export default (db) => ({
       queryParams.push(params.businessValue);
     }
     
-    
     if (setClauses.length === 0) {
       throw new Error("No valid fields to update");
     }
@@ -149,12 +170,31 @@ export default (db) => ({
     return result.insertId;
   },
 
-
   async addService(id, serviceDescription) {
     const [result] = await db.query(`
       INSERT INTO business_services (business_id, description)
       VALUES (?, ?)
       `, [id, serviceDescription])
+
+    return result.insertId;
+  },
+
+  async addSkill(businessId, skillId) {
+    const [result] = await db.query(`
+      INSERT INTO user_skills (user_id, skill_id)
+      VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE skill_id = skill_id
+      `, [businessId, skillId])
+
+    return result.insertId;
+  },
+
+  async addStrength(businessId, strengthId) {
+    const [result] = await db.query(`
+      INSERT INTO user_strengths (user_id, strength_id)
+      VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE strength_id = strength_id
+      `, [businessId, strengthId])
 
     return result.insertId;
   },
@@ -179,6 +219,26 @@ export default (db) => ({
       return result.affectedRows;
   },
 
+  async removeSkill(skillId, businessId) {
+    const [result] = await db.query(`
+      DELETE FROM user_skills
+      WHERE skill_id = ?
+      AND user_id = ?
+      `, [skillId, businessId])
+
+      return result.affectedRows;
+  },
+
+  async removeStrength(strengthId, businessId) {
+    const [result] = await db.query(`
+      DELETE FROM user_strengths
+      WHERE strength_id = ?
+      AND user_id = ?
+      `, [strengthId, businessId])
+
+      return result.affectedRows;
+  },
+
   async addConnection(initiatingBusinessId, receivingBusinessId, connectionTypeId) {
     const [result] = await db.query(`
       INSERT INTO business_connections (initiating_business_id, receiving_business_id, date_initiated, active, connection_type_id)
@@ -187,6 +247,7 @@ export default (db) => ({
 
     return result.insertId;
   },
+
   async removeConnection(id,) {
     const [result] = await db.query(`
       DELETE FROM business_connections
@@ -195,6 +256,7 @@ export default (db) => ({
 
       return result.affectedRows;
   },
+
   async getConnectionInfo(id) {
     const [rows] = await db.query(`
       SELECT id, initiating_business_id, receiving_business_id, date_initiated, active, connection_type_id

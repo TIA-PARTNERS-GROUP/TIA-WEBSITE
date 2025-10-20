@@ -17,7 +17,8 @@ export const getMyProfile = async (req, res) => {
     const connections = await business.getConnections(businessId);
     const services = await business.getServices(businessId);
     const clients = await business.getClients(businessId);
-
+    const skills = await business.getSkills(businessId);
+    const strengths = await business.getStrengths(businessId);
 
     return res.status(200).json(
         {
@@ -33,8 +34,9 @@ export const getMyProfile = async (req, res) => {
             businessValue: bi.value,
             connections : connections,
             services: services,
-            clients: clients
-            
+            clients: clients,
+            skills: skills,
+            strengths: strengths
         }
     );
 }
@@ -54,7 +56,8 @@ export const getUserProfile = async (req, res) => {
     const connections = await business.getConnections(businessId);
     const services = await business.getServices(businessId);
     const clients = await business.getClients(businessId);
-
+    const skills = await business.getSkills(businessId);
+    const strengths = await business.getStrengths(businessId);
 
     return res.status(200).json(
         {
@@ -67,8 +70,9 @@ export const getUserProfile = async (req, res) => {
             businessDescription: bi.description,
             connections : connections,
             services: services,
-            clients: clients
-            
+            clients: clients,
+            skills: skills,
+            strengths: strengths
         }
     );
 }
@@ -116,12 +120,9 @@ export const addServices = async (req, res) => {
             const serviceName = services[index]
             const id = await business.addService(businessId, serviceName);
             newServices[serviceName] = id;
-
         }
 
         return res.status(201).json({message: "Success", newServices: newServices})
-
-
     } catch (error) {
         console.error(error)
         return res.status(500).json({message: "Internal server error"});
@@ -152,14 +153,69 @@ export const addClients = async (req, res) => {
         }
 
         return res.status(201).json({message: "Success", newClients: newClients})
-
-
     } catch (error) {
         console.error(error)
         return res.status(500).json({message: "Internal server error"});
     }
 }
 
+export const addSkills = async (req, res) => {
+    try {
+        const { skills } = req.body;
+        if (!skills || skills.length == 0) {
+            return res.status(400).json({message: "No skills provided"})
+        }
+        const business = businessModel(db);
+        const user = userModel(db);
+        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
+
+        if (businessResult == null) {
+            res.status(404).json({message: "No business exists for user"});
+        }
+        const businessId = businessResult.id;
+
+        let newSkills = {}
+        for (const index in skills) {
+            const skillId = skills[index]
+            const id = await business.addSkill(businessId, skillId);
+            newSkills[skillId] = id;
+        }
+
+        return res.status(201).json({message: "Success", newSkills: newSkills})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
+export const addStrengths = async (req, res) => {
+    try {
+        const { strengths } = req.body;
+        if (!strengths || strengths.length == 0) {
+            return res.status(400).json({message: "No strengths provided"})
+        }
+        const business = businessModel(db);
+        const user = userModel(db);
+        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
+
+        if (businessResult == null) {
+            res.status(404).json({message: "No business exists for user"});
+        }
+        const businessId = businessResult.id;
+
+        let newStrengths = {}
+        for (const index in strengths) {
+            const strengthId = strengths[index]
+            const id = await business.addStrength(businessId, strengthId);
+            newStrengths[strengthId] = id;
+        }
+
+        return res.status(201).json({message: "Success", newStrengths: newStrengths})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
 
 export const removeServices = async (req, res) => {
     try {
@@ -189,8 +245,6 @@ export const removeServices = async (req, res) => {
         }
 
         return res.status(201).json({message: "Success", outcomes: outcomes})
-
-
     } catch (error) {
         console.error(error)
         return res.status(500).json({message: "Internal server error"});
@@ -225,8 +279,72 @@ export const removeClients = async (req, res) => {
         }
 
         return res.status(201).json({message: "Success", outcomes: outcomes})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
 
+export const removeSkills = async (req, res) => {
+    try {
+        const { skills } = req.body;
+        if (!skills || skills.length == 0) {
+            return res.status(400).json({message: "No skills provided"})
+        }
+        const business = businessModel(db);
+        const user = userModel(db);
+        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
 
+        if (businessResult == null) {
+            res.status(404).json({message: "No business exists for user"});
+        }
+        const businessId = businessResult.id;
+
+        let outcomes = {}
+        for (const index in skills) {
+            const skillId = skills[index]
+            const rowsAffected = await business.removeSkill(skillId, businessId);
+            if (rowsAffected) {
+                outcomes[skillId] = "Success";
+            } else {
+                outcomes[skillId] = "No skill with that id for this business";
+            }
+        }
+
+        return res.status(201).json({message: "Success", outcomes: outcomes})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
+export const removeStrengths = async (req, res) => {
+    try {
+        const { strengths } = req.body;
+        if (!strengths || strengths.length == 0) {
+            return res.status(400).json({message: "No strengths provided"})
+        }
+        const business = businessModel(db);
+        const user = userModel(db);
+        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
+
+        if (businessResult == null) {
+            res.status(404).json({message: "No business exists for user"});
+        }
+        const businessId = businessResult.id;
+
+        let outcomes = {}
+        for (const index in strengths) {
+            const strengthId = strengths[index]
+            const rowsAffected = await business.removeStrength(strengthId, businessId);
+            if (rowsAffected) {
+                outcomes[strengthId] = "Success";
+            } else {
+                outcomes[strengthId] = "No strength with that id for this business";
+            }
+        }
+
+        return res.status(201).json({message: "Success", outcomes: outcomes})
     } catch (error) {
         console.error(error)
         return res.status(500).json({message: "Internal server error"});
@@ -266,7 +384,6 @@ export const addConnection = async (req, res) => {
         
         const connectionId = await business.addConnection(initiatingBusinessId, receivingBusinessId, connectionTypeId);
         return res.status(201).json({message: "Connection added", connectionId: connectionId})
-
     } catch (error) {
         console.error(error)
         return res.status(500).json({message: "Internal server error"});
@@ -292,14 +409,8 @@ export const removeConnection = async (req, res) => {
             return res.status(404).json({message: "No connection with that id"});
         }
 
-
         const initiatingBusinessId = connection.initiating_business_id;
         const receivingBusinessId = connection.receiving_business_id;
-        
-
-        console.log(id)
-        console.log(initiatingBusinessId)
-        console.log(receivingBusinessId)
         
         if (userBusiness.id != initiatingBusinessId && userBusiness.id != receivingBusinessId) {
             return res.status(403).json({message: "You can only remove connections for your own business"})

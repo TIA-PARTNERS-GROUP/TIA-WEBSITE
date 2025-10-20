@@ -1,5 +1,5 @@
 import Router from 'express';
-import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses } from '../controllers/businessController.js';
+import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses, addSkills, removeSkills, addStrengths, removeStrengths } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 // Integration of validation middleware with this module's Joi Schema
 import { validator } from '../middleware/validators/joiConfig.js';
@@ -494,6 +494,148 @@ router.post('/addclient', verifyToken, validator(clientsOpSchema), addClients);
 
 /**
  * @swagger
+ * /business/addskill:
+ *   post:
+ *     summary: Add one or more skills to the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Adds one or more skills (by ID) to the business associated with the authenticated user.  
+ *       Returns the IDs of the newly created skill associations.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - skills
+ *             properties:
+ *               skills:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [1, 2, 3]
+ *     responses:
+ *       201:
+ *         description: Skills added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 newSkills:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: integer
+ *       400:
+ *         description: No skills provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No skills provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/addskill', verifyToken, addSkills);
+
+/**
+ * @swagger
+ * /business/addstrength:
+ *   post:
+ *     summary: Add one or more strengths to the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Adds one or more strengths (by ID) to the business associated with the authenticated user.  
+ *       Returns the IDs of the newly created strength associations.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - strengths
+ *             properties:
+ *               strengths:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [1, 2, 3]
+ *     responses:
+ *       201:
+ *         description: Strengths added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 newStrengths:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: integer
+ *       400:
+ *         description: No strengths provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No strengths provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/addstrength', verifyToken, addStrengths);
+
+/**
+ * @swagger
  * /business/removeservice:
  *   delete:
  *     summary: Remove one or more services from the authenticated user's business
@@ -640,6 +782,153 @@ router.delete('/removeservice', verifyToken, validator(serviceOpSchema), removeS
  */
 router.delete('/removeclient', verifyToken, validator(clientsOpSchema), removeClients);
 
+/**
+ * @swagger
+ * /business/removeskill:
+ *   delete:
+ *     summary: Remove one or more skills from the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Removes one or more skills (by ID) from the business associated with the authenticated user.  
+ *       Each provided skill ID will return a success or failure outcome.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - skills
+ *             properties:
+ *               skills:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [1, 2, 3]
+ *     responses:
+ *       201:
+ *         description: Skill removal attempted, results returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 outcomes:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *                   example:
+ *                     "1": "Success"
+ *                     "2": "No skill with that id for this business"
+ *       400:
+ *         description: No skills provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No skills provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/removeskill', verifyToken, removeSkills);
+
+/**
+ * @swagger
+ * /business/removestrength:
+ *   delete:
+ *     summary: Remove one or more strengths from the authenticated user's business
+ *     description: >
+ *       Requires a valid Bearer token.  
+ *       Removes one or more strengths (by ID) from the business associated with the authenticated user.  
+ *       Each provided strength ID will return a success or failure outcome.
+ *     tags:
+ *       - Business
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - strengths
+ *             properties:
+ *               strengths:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [1, 2, 3]
+ *     responses:
+ *       201:
+ *         description: Strength removal attempted, results returned
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Success
+ *                 outcomes:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: string
+ *                   example:
+ *                     "1": "Success"
+ *                     "2": "No strength with that id for this business"
+ *       400:
+ *         description: No strengths provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No strengths provided
+ *       401:
+ *         description: Authorization header missing or invalid format
+ *       403:
+ *         description: Invalid or expired token
+ *       404:
+ *         description: No business exists for user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No business exists for user
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/removestrength', verifyToken, removeStrengths);
 
 /**
  * @swagger
@@ -1028,6 +1317,5 @@ router.get('/l2e', verifyToken, getAllL2EResponses);
  *                   example: Internal server error
  */
 router.get('/:id', verifyToken, validator(byIdParamsSchema, 'params'), getUserProfile);
-
 
 export default router;

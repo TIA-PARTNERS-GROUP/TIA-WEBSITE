@@ -68,3 +68,11 @@ export const l2eBodySchema = Joi.object().unknown(true).min(1);
 export const byIdParamsSchema = Joi.object({
   id: Joi.alternatives().try(intId, Joi.string().min(1)).required()
 });
+
+export const skillsOpSchema = Joi.object({
+  skills: Joi.array().items(Joi.number().integer().positive()).min(1).required()
+});
+
+export const strengthsOpSchema = Joi.object({
+  strengths: Joi.array().items(Joi.number().integer().positive()).min(1).required()
+});
