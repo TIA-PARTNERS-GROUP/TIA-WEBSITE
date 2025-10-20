@@ -88,7 +88,7 @@ VALUES
   (302, (SELECT id FROM users WHERE first_name='James' AND last_name='Kumar'), 'James Kumar Consulting', NULL, 'James Kumar', NULL, NULL, 'Operations expert who streamlines business processes'),
   (303, (SELECT id FROM users WHERE first_name='Maria' AND last_name='Gonzalez'), 'Maria Gonzalez Consulting', NULL, 'Maria Gonzalez', NULL, NULL, 'Sales guru with proven track record in B2B markets');
 
-INSERT IGNORE INTO business_skills (id, name)
+INSERT INTO business_skills (id, name)
 VALUES
   (1, 'App Development'),
   (2, 'Cloud Solutions'),
@@ -105,8 +105,6 @@ VALUES
   (13, 'Web Development'),
   (14, 'Wireless Solutions');
 
-
-
 INSERT INTO regions (id, name)
 VALUES
   ('nsw', 'New South Wales'),
@@ -117,3 +115,30 @@ VALUES
   ('tas', 'Tasmania'),
   ('nt', 'Northern Territory'),
   ('act', 'Australian Capital Territory');
+
+INSERT INTO business_types (id, name)
+VALUES (1, 'Technology');
+
+INSERT INTO skill_categories (id, name, business_type_id)
+VALUES 
+  (1, 'General', 1),
+  (2, 'Software Development', 1),
+  (3, 'Networking', 1),
+  (4, 'Security', 1);
+
+INSERT INTO skills (id, category_id, name, picture)
+VALUES
+  (1, 2, 'App Development', NULL),
+  (2, 2, 'Cloud Solutions', NULL),
+  (3, 4, 'Cyber Security', NULL),
+  (4, 3, 'Data Cabling', NULL),
+  (5, 4, 'Electronic Security Solutions', NULL),
+  (6, 3, 'Internet Communications', NULL),
+  (7, 3, 'IP Phone Solutions (VOIP)', NULL),
+  (8, 1, 'IT Helpdesk', NULL),
+  (9, 1, 'IT Strategy', NULL),
+  (10, 1, 'Managed IT Services', NULL),
+  (11, 1, 'Project Management', NULL),
+  (12, 1, 'Systems Integration', NULL),
+  (13, 2, 'Web Development', NULL),
+  (14, 3, 'Wireless Solutions', NULL);
