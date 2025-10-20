@@ -50,6 +50,8 @@ const ProjectPopup = ({
         nt: "Northern Territory"
     };
 
+    
+
     const getSkillObjectsFromIds = (skillIds, allSkills) => {
         if (!Array.isArray(skillIds)) return [];
         return skillIds
@@ -211,6 +213,7 @@ const ProjectPopup = ({
 
                 onEdit(updatedData);
             }
+            onClose();
         } catch (error) {
             console.error('[DEBUG: SAVE] Error updating project:', error);
         } finally {

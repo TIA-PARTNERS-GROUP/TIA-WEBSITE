@@ -87,8 +87,8 @@ const FindJob = () => {
                         : "N/A",
                     skills: project.skills,
                     skillsDisplay: project.skills && project.skills.length > 0 
-                        ? skillsMap[project.skills[0]] || `Skill ${project.skills[0]}`
-                        : "N/A",
+                        ? project.skills.map(skillId => skillsMap[skillId] || `Skill ${skillId}`)
+                        : ["N/A"],
                     regions: project.regions ? project.regions.map(region => regionMap[region.toLowerCase()] || region) : [],
                     date: project.open_date || project.created_at,
                     content: project.description
