@@ -54,7 +54,7 @@ export default (db) => ({
         JOIN users su ON n.sender_user_id = su.id
         LEFT JOIN businesses rb ON rb.operator_user_id = n.receiver_user_id
         WHERE n.sender_user_id = ?
-          AND LOWER(TRIM(n.message)) = 'connect'
+          AND LOWER(TRIM(n.message)) LIKE 'connect%'
           AND n.opened = 0
         ORDER BY n.time_sent DESC
       `, [senderUserId]);

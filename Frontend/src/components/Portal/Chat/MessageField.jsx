@@ -5,7 +5,9 @@ import { resetChatbot, sendChatbotMessage } from "../../../api/chatbot";
 import ReactMarkdown from "react-markdown";
 import UpArrowIcon from "../../Icons/UpArrowIcon";
 import { addBlog } from "../../../api/blogs";
-import { saveL2EScores } from "../../../api/business";
+import { getCurrentBusinessInfo, saveL2EScores } from "../../../api/business";
+import ConnectionPopup from "../Connect/ConnectionPopup";
+import { addNotification, getCurrentUserNotifications, getCurrentUserPendingConnections } from "../../../api/notification";
 
 const MessageField = ({ messageData, user_id, name, chatType }) => {
 
@@ -18,6 +20,57 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     const messagesContainerRef = useRef(null);
     const textareaRef = useRef(null);
     const [currentBlogData, setCurrentBlogData] = useState(null);
+
+    const [showConnectionPopup, setShowConnectionPopup] = useState(false);
+    const [selectedBusinessForConnection, setSelectedBusinessForConnection] = useState(null);
+    const [emailTemplate, setEmailTemplate] = useState('');
+    const [isSendingConnection, setIsSendingConnection] = useState(false);
+    const [pendingConnectionBusinessIds, setPendingConnectionBusinessIds] = useState([]);
+    const [currentBusiness, setCurrentBusiness] = useState(null);
+
+    const [connectedBusinessIds, setConnectedBusinessIds] = useState([]);
+
+    useEffect(() => {
+        const fetchConnectionData = async () => {
+            try {
+                // Get current user info for existing connections
+                const userRes = await getCurrentBusinessInfo();
+                const userConnections = userRes.data?.connections || {};
+                setConnectedBusinessIds(Object.keys(userConnections));
+
+                // Get pending connection notifications where current user is the SENDER
+                const pendingRes = await getCurrentUserPendingConnections();
+                const pendingData = pendingRes.data.pendingConnections || [];
+                
+                // Extract receiver_business_id from pending connections
+                let pendingBusinessIds = [];
+                if (Array.isArray(pendingData)) {
+                    pendingBusinessIds = pendingData
+                        .map(connection => connection.receiver_business_id)
+                        .filter(id => id) || [];
+                }
+                
+                setPendingConnectionBusinessIds(pendingBusinessIds);
+            } catch (error) {
+                console.error('Failed to fetch connection data:', error);
+            }
+        };
+        
+        fetchConnectionData();
+    }, []);
+
+    useEffect(() => {
+        const fetchCurrentBusiness = async () => {
+            try {
+                const currentBusinessRes = await getCurrentBusinessInfo();
+                setCurrentBusiness(currentBusinessRes.data);
+            } catch (error) {
+                console.error('Failed to fetch current business info:', error);
+            }
+        };
+        
+        fetchCurrentBusiness();
+    }, []);
 
     // Geolocation using react-geolocate, default to QUT if no geolocation
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
@@ -99,12 +152,67 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
     };
 
+    const renderConnectButtons = (state) => {
+        if (!state?.ConnectAgent?.existing_users || !state.ConnectAgent.connection_result) {
+            return null;
+        }
+
+        const existingUsers = state.ConnectAgent.existing_users;
+        const connectionResults = state.ConnectAgent.connection_result;
+
+        return (
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h3 className="text-lg font-semibold text-blue-800 mb-3">Connect with Recommended Businesses</h3>
+                <div className="space-y-3">
+                    {connectionResults.map((result, index) => {
+                        const user = result.recommendation.user;
+                        const businessId = existingUsers[index];
+                        const isConnected = connectedBusinessIds.includes(businessId.toString());
+                        const isPending = pendingConnectionBusinessIds.includes(businessId);
+                        
+                        console.log('Business ID:', businessId, 'Is Pending:', isPending, 'Is Connected:', isConnected);
+                        console.log('Pending IDs:', pendingConnectionBusinessIds);
+                        
+                        return (
+                            <div key={businessId} className="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
+                                <div className="flex-1">
+                                    <h4 className="font-medium text-gray-800">{user.name}</h4>
+                                    <p className="text-sm text-gray-600">{user.business}</p>
+                                    <p className="text-xs text-gray-500 mt-1">{user.description}</p>
+                                </div>
+                                {isConnected ? (
+                                    <button
+                                        onClick={() => handleDisconnect(businessId)}
+                                        className="ml-4 px-4 py-2 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                                    >
+                                        Disconnect
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => !isPending && handleConnectClick(user, businessId)}
+                                        disabled={isPending}
+                                        className={`ml-4 px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                                            isPending 
+                                                ? "bg-gray-400 text-gray-600 cursor-not-allowed" 
+                                                : "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500"
+                                        }`}
+                                    >
+                                        {isPending ? "Pending..." : "Connect"}
+                                    </button>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
+
     useEffect(() => {
         const sendInitialMessage = async () => {
             if (!initialMessageSent && user_id) {
                 setInitialMessageSent(true);
                 setLoading(true);
-
 
                 try {
                     // Send the initial message
@@ -201,11 +309,25 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                 lat: userLat,
                 lng: userLng
             });
-            console.log(message);
+            console.log("Chatbot response:", message);
 
             const response = message.response;
             const state = message.state;
             const botText = getBotResponseText(response);
+
+            if (state?.ConnectAgent?.connection_type === "Existing TIA Users") {
+                console.log("Existing TIA Users detected:", state.ConnectAgent);
+                
+                setLocalMessageData(prev => [
+                    ...prev,
+                    { 
+                        author: "bot", 
+                        text: botText,
+                        state: state
+                    }
+                ]);
+                return;
+            }
 
             if (chatType === "Ladder To Exit" && state?.LadderAgent?.results) {
                 const ladderResults = state.LadderAgent.results;
@@ -318,7 +440,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         };
 
     // Markdown renderer for both user and bot messages
-    const renderMarkdown = (text, isUserMessage = false) => {
+    const renderMarkdown = (text, isUserMessage = false, messageState = null) => {
         if (typeof text !== 'string') return text;
         
         // For blog posts, use the special rendering
@@ -388,48 +510,53 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
 
         // Regular markdown rendering for all other messages
         return (
-            <ReactMarkdown
-                components={{
-                    pre: ({node, ...props}) => (
-                        <pre {...props} className={`whitespace-pre-wrap p-3 rounded w-full my-2 font-mono text-sm ${isUserMessage ? 'bg-blue-500' : 'bg-gray-50'}`} />
-                    ),
-                    code: ({node, ...props}) => (
-                        <code {...props} className={`px-1 rounded text-sm ${isUserMessage ? 'bg-blue-500' : 'bg-gray-100'}`} />
-                    ),
-                    p: ({node, ...props}) => (
-                        <p {...props} className="my-2 leading-6 whitespace-pre-wrap" />
-                    ),
-                    h1: ({node, ...props}) => (
-                        <h1 {...props} className="text-2xl font-bold mt-4 mb-3" />
-                    ),
-                    h2: ({node, ...props}) => (
-                        <h2 {...props} className="text-xl font-bold mt-4 mb-3" />
-                    ),
-                    h3: ({node, ...props}) => (
-                        <h3 {...props} className="text-lg font-bold mt-3 mb-2" />
-                    ),
-                    ul: ({node, ...props}) => (
-                        <ul {...props} className="my-2 pl-6 list-disc" />
-                    ),
-                    ol: ({node, ...props}) => (
-                        <ol {...props} className="my-2 pl-6 list-decimal" />
-                    ),
-                    li: ({node, ...props}) => (
-                        <li {...props} className="mb-1" />
-                    ),
-                    blockquote: ({node, ...props}) => (
-                        <blockquote {...props} className={`border-l-4 pl-4 my-3 ${isUserMessage ? 'border-blue-300' : 'border-gray-300'}`} />
-                    ),
-                    strong: ({node, ...props}) => (
-                        <strong {...props} className="font-bold" />
-                    ),
-                    em: ({node, ...props}) => (
-                        <em {...props} className="italic" />
-                    ),
-                }}
-            >
-                {text}
-            </ReactMarkdown>
+            <div>
+                <ReactMarkdown
+                    components={{
+                        pre: ({node, ...props}) => (
+                            <pre {...props} className={`whitespace-pre-wrap p-3 rounded w-full my-2 font-mono text-sm ${isUserMessage ? 'bg-blue-500' : 'bg-gray-50'}`} />
+                        ),
+                        code: ({node, ...props}) => (
+                            <code {...props} className={`px-1 rounded text-sm ${isUserMessage ? 'bg-blue-500' : 'bg-gray-100'}`} />
+                        ),
+                        p: ({node, ...props}) => (
+                            <p {...props} className="my-2 leading-6 whitespace-pre-wrap" />
+                        ),
+                        h1: ({node, ...props}) => (
+                            <h1 {...props} className="text-2xl font-bold mt-4 mb-3" />
+                        ),
+                        h2: ({node, ...props}) => (
+                            <h2 {...props} className="text-xl font-bold mt-4 mb-3" />
+                        ),
+                        h3: ({node, ...props}) => (
+                            <h3 {...props} className="text-lg font-bold mt-3 mb-2" />
+                        ),
+                        ul: ({node, ...props}) => (
+                            <ul {...props} className="my-2 pl-6 list-disc" />
+                        ),
+                        ol: ({node, ...props}) => (
+                            <ol {...props} className="my-2 pl-6 list-decimal" />
+                        ),
+                        li: ({node, ...props}) => (
+                            <li {...props} className="mb-1" />
+                        ),
+                        blockquote: ({node, ...props}) => (
+                            <blockquote {...props} className={`border-l-4 pl-4 my-3 ${isUserMessage ? 'border-blue-300' : 'border-gray-300'}`} />
+                        ),
+                        strong: ({node, ...props}) => (
+                            <strong {...props} className="font-bold" />
+                        ),
+                        em: ({node, ...props}) => (
+                            <em {...props} className="italic" />
+                        ),
+                    }}
+                >
+                    {text}
+                </ReactMarkdown>
+                
+                {messageState?.ConnectAgent?.connection_type === "Existing TIA Users" && 
+                 renderConnectButtons(messageState)}
+            </div>
         );
     };
 
@@ -440,6 +567,74 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             setCurrentBlogData(blogData);
         }
     }, [localMessageData]);
+
+    const handleConnectClick = (businessData, businessId) => {
+        console.log('Connect clicked for:', businessData, 'Business ID:', businessId);
+        setSelectedBusinessForConnection({
+            ...businessData,
+            businessId: businessId // Use businessId instead of userId
+        });
+        setEmailTemplate(`Hi ${businessData.name || ''},
+
+    My business would like to connect with your business, ${businessData.business}. Looking forward to collaborating!
+
+    Best regards`);
+        setShowConnectionPopup(true);
+    };
+
+    const handleConnectionRequest = async () => {
+        if (!selectedBusinessForConnection) return;
+        
+        setIsSendingConnection(true);
+        try {
+            console.log('Sending connection request to business:', selectedBusinessForConnection.businessId);
+            
+            const currentBusinessRes = await getCurrentBusinessInfo();
+            setCurrentBusiness(currentBusinessRes.data);
+            
+            const getPartnerTypeId = () => {
+                const partnerTypeMap = {
+                    'Alliance Partners': 1,
+                    'Complementary Partners': 2,
+                    'Mastermind Partners': 3
+                };
+                return partnerTypeMap[chatType] || 2;
+            };
+
+            const partnerId = getPartnerTypeId();
+            const message = `connect-${partnerId}`;
+            
+            // You'll need to check if addNotification expects business ID or user ID
+            // If it expects user ID, you'll need to fetch the user ID from the business ID
+            await addNotification(selectedBusinessForConnection.businessId, message);
+            
+            setPendingConnectionBusinessIds(prev => [...prev, selectedBusinessForConnection.businessId]);
+            
+            console.log('Connection request sent successfully');
+            
+            setShowConnectionPopup(false);
+            setSelectedBusinessForConnection(null);
+        } catch (error) {
+            console.error('Failed to send connection request:', error);
+        } finally {
+            setIsSendingConnection(false);
+        }
+    };
+
+    const handleCancelConnection = () => {
+        setShowConnectionPopup(false);
+        setSelectedBusinessForConnection(null);
+    };
+
+    const handleDisconnect = async (businessId) => {
+        try {
+            await removeConnection(businessId);
+            setConnectedBusinessIds(prev => prev.filter(id => id !== businessId));
+            console.log('Disconnected from business:', businessId);
+        } catch (error) {
+            console.error('Failed to disconnect:', error);
+        }
+    };
 
     return (
         <div>
@@ -479,7 +674,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                                 <div className={message.author === "bot" ? "prose prose-sm" : "prose prose-invert prose-sm"}>
                                     {typeof message.text === "object" 
                                         ? JSON.stringify(message.text)
-                                        : renderMarkdown(message.text, message.author === "user")
+                                        : renderMarkdown(message.text, message.author === "user", message.state)
                                     }
                                 </div>
                             )}
@@ -514,6 +709,26 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                         </form>
                         <br></br>
                     </div>
+
+                {showConnectionPopup && selectedBusinessForConnection && (
+                    <ConnectionPopup
+                        currentBusiness={{ 
+                            businessName: currentBusiness.businessName,
+                            contactName: name 
+                        }}
+                        selectedBusiness={{ 
+                            title: selectedBusinessForConnection.business,
+                            contactName: selectedBusinessForConnection.name,
+                            contactEmail: currentBusiness.contactEmail
+                        }}
+                        emailTemplate={emailTemplate}
+                        setEmailTemplate={setEmailTemplate}
+                        isLoading={isSendingConnection}
+                        onCancel={handleCancelConnection}
+                        onRequest={handleConnectionRequest}
+                    />
+                )}
+
                 </div>
     )
 }
