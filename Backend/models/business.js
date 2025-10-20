@@ -61,26 +61,26 @@ export default (db) => ({
     return rows;
   },
 
-  async getSkills(id) {
+  async getSkills(userId) {
     const [rows] = await db.query(`
       SELECT us.skill_id, s.name, sc.name as category_name
       FROM user_skills us
       JOIN skills s ON us.skill_id = s.id
       JOIN skill_categories sc ON s.category_id = sc.id
       WHERE us.user_id = ?
-    `, [id])
+    `, [userId]);
 
     return rows;
   },
 
-  async getStrengths(id) {
+  async getStrengths(userId) {
     const [rows] = await db.query(`
       SELECT us.strength_id, s.name, sc.name as category_name
       FROM user_strengths us
       JOIN strengths s ON us.strength_id = s.id
       JOIN strength_categories sc ON s.category_id = sc.id
       WHERE us.user_id = ?
-    `, [id])
+    `, [userId]);
 
     return rows;
   },
@@ -189,15 +189,28 @@ export default (db) => ({
     return result.insertId;
   },
 
-  async addStrength(businessId, strengthId) {
+  async addStrength(userId, strengthId) {
+  try {
+    console.log('=== addStrength DEBUG ===');
+    console.log('User ID:', userId, 'Strength ID:', strengthId);
+    
     const [result] = await db.query(`
       INSERT INTO user_strengths (user_id, strength_id)
       VALUES (?, ?)
-      ON DUPLICATE KEY UPDATE strength_id = strength_id
-      `, [businessId, strengthId])
+      ON DUPLICATE KEY UPDATE strength_id = VALUES(strength_id)
+    `, [userId, strengthId]);
+
+    console.log('MySQL Result:', result);
+    console.log('Insert ID:', result.insertId);
+    console.log('Affected Rows:', result.affectedRows);
+    console.log('=== END DEBUG ===');
 
     return result.insertId;
-  },
+  } catch (error) {
+    console.error('Error in addStrength:', error);
+    throw error;
+  }
+},
 
   async removeClient(id, businessId) {
     const [result] = await db.query(`

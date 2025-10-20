@@ -16,7 +16,9 @@ const ProfileOutput =({
     contactInfo,
     connectionNum,
     companyCategory,
-    fromNotifications
+    fromNotifications,
+    skills,
+    strengths
   }) => {
   
   const { startLoading, stopLoading } = useLoading();
@@ -26,6 +28,8 @@ const ProfileOutput =({
   const [defaultCompanyName, setDefaultCompanyName] = useState("Loading...");
   const [defaultWhatWeDoData, setDefaultWhatWeDoData] = useState([{description: "Loading..."}]);
   const [defaultClientData, setDefaultClientData] = useState([{description: "Loading..."}]);
+  const [defaultSkills, setDefaultSkills] = useState([]);
+  const [defaultStrengths, setDefaultStrengths] = useState([]);
   const [defaultConnectionNum, setDefaultConnectionNum] = useState(0);
   const [defaultCategory, setDefaultCategory] = useState("");
 
@@ -34,6 +38,8 @@ const ProfileOutput =({
   const displayContactInfo = contactInfo ?? defaultContactInfo;
   const displayWhatWeDoData = whatwedoData ?? defaultWhatWeDoData;
   const displayClientData = clientData ?? defaultClientData;
+  const displaySkills = skills ?? defaultSkills;
+  const displayStrengths = strengths ?? defaultStrengths;
   const displayConnectionNum = connectionNum ?? defaultConnectionNum;
   const displayCategory = companyCategory ?? defaultCategory;
   
@@ -53,7 +59,9 @@ const ProfileOutput =({
           services, 
           clients, 
           connections,
-          businessCategory 
+          businessCategory,
+          skills,
+          strengths
         } = res.data;
         
         setDefaultCompanyDescription(businessDescription);
@@ -61,6 +69,8 @@ const ProfileOutput =({
         setDefaultCompanyName(businessName);
         setDefaultWhatWeDoData(services);
         setDefaultClientData(clients);
+        setDefaultSkills(skills);
+        setDefaultStrengths(strengths);
         setDefaultConnectionNum(connections.length);
         setDefaultCategory(businessCategory);
       } catch (error) {
@@ -73,6 +83,17 @@ const ProfileOutput =({
 
   fetchBusinessInfo();
 }, [personalProfile, companyName, businessId]);
+
+  // Format skills and strengths to match the HexagonList expected format
+  const formattedSkills = displaySkills.map(skill => ({ 
+    description: skill.name,
+    category: skill.category_name 
+  }));
+  
+  const formattedStrengths = displayStrengths.map(strength => ({ 
+    description: strength.name,
+    category: strength.category_name 
+  }));
 
   return (
     <div className="space-y-4">
@@ -96,6 +117,8 @@ const ProfileOutput =({
         <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800">Who We Are</h2>
         <p className="py-8 sm:text-sm 2xl:text-lg">{displayCompanyDescription}</p>
       </div>
+      
+      {/* Services and Clients Row */}
       <div className="grid grid-cols-2 gap-x-4">
         <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
           <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800 pb-8">What We Do</h2>
@@ -104,6 +127,18 @@ const ProfileOutput =({
         <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
           <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800 pb-8">Our Clients</h2>
           <HexagonList listData={displayClientData} />
+        </div>
+      </div>
+
+      {/* Skills and Strengths Row */}
+      <div className="grid grid-cols-2 gap-x-4">
+        <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
+          <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800 pb-8">Our Skills</h2>
+          <HexagonList listData={formattedSkills} />
+        </div>
+        <div className="bg-white rounded-xl sm:px-6 2xl:px-16 py-2">
+          <h2 className="sm:pt-4 2xl:pt-10 sm:text-md 2xl:text-2xl md:text-lg font-semibold text-black-800 pb-8">Our Strengths</h2>
+          <HexagonList listData={formattedStrengths} />
         </div>
       </div>
     </div>

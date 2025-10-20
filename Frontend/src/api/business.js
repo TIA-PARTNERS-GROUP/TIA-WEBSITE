@@ -79,3 +79,19 @@ export function saveL2EScores(scores) {
 export function getLatestL2EScore() {
     return api.get('/business/l2e/latest');
 }
+
+export function addSkills(skills) {
+  return api.post('/business/addskill', { skills });
+};
+
+export function addStrengths(strengths) {
+  return api.post('/business/addstrength', { strengths });
+};
+
+export function removeSkills(skills) {
+  return api.delete('/business/removeskill', { data: { skills } });
+};
+
+export function removeStrengths(strengths) {
+  return api.delete('/business/removestrength', { data: { strengths } });
+};

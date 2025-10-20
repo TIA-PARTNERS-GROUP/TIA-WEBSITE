@@ -31,16 +31,45 @@ export const updateSchema = Joi.object({
   businessPhase: Joi.string().max(100)
 }).min(1);
 
+const serviceObjectSchema = Joi.object({
+  description: Joi.string().min(1).max(2000).required(),
+  service_id: Joi.number().integer().min(1).optional(),
+  input: Joi.boolean().optional()
+});
+
+// Client object schema  
+const clientObjectSchema = Joi.object({
+  description: Joi.string().min(1).max(2000).required(),
+  client_id: Joi.number().integer().min(1).optional(),
+  input: Joi.boolean().optional()
+});
+
 // POST /business/addservice  &  DELETE /business/removeservice  (req.body)
 // ——— 根据你的 Swagger：services 为 string 数组
 export const serviceOpSchema = Joi.object({
-  services: Joi.array().items(Joi.string().min(1).max(2000)).min(1).max(50).required()
+  services: Joi.array().items(
+    Joi.alternatives().try(
+      Joi.string().min(1).max(2000),        // For adding services (descriptions)
+      Joi.number().integer().min(1),        // For removing services (IDs)
+      Joi.object({                          // For object format
+        description: Joi.string().min(1).max(2000).required()
+      })
+    )
+  ).min(1).max(50).required()
 });
 
 // POST /business/addclient  &  DELETE /business/removeclient  (req.body)
 // ——— 根据你的 Swagger：clients 为 integer 数组
 export const clientsOpSchema = Joi.object({
-  clients: Joi.array().items(intId).min(1).max(200).required()
+  clients: Joi.array().items(
+    Joi.alternatives().try(
+      Joi.string().min(1).max(2000),        // For adding clients (descriptions)
+      Joi.number().integer().min(1),        // For removing clients (IDs)
+      Joi.object({                          // For object format
+        description: Joi.string().min(1).max(2000).required()
+      })
+    )
+  ).min(1).max(50).required()
 });
 
 // POST /business/addconnection  (req.body)

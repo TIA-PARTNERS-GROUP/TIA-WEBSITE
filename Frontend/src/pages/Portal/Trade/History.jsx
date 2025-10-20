@@ -5,7 +5,7 @@ import { getMyProjects, getAppliedProjects } from "../../../api/projects";
 import ArticleTable from "../../../components/Portal/Manage/ArticleTable";
 import SearchBar from "../../../components/Portal/Connect/SearchBar";
 import PaginationNav from "../../../components/Portal/Connect/PaginationNav";
-import { getCategoriesList, getSkillsList } from "../../../api/categories";
+import { getCategoriesList, getBusinessSkillsList } from "../../../api/categories";
 
 const History = () => {
     const [searchParams] = useSearchParams();
@@ -81,7 +81,7 @@ const History = () => {
                     return acc;
                 }, {});
 
-                const skillsRes = await getSkillsList();
+                const skillsRes = await getBusinessSkillsList();
                 const skillsMap = skillsRes.data.skills.reduce((acc, skill) => {
                     acc[skill.id] = skill.name;
                     return acc;

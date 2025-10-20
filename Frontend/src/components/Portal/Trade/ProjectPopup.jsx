@@ -6,7 +6,7 @@ import { getCurrentUserInfo } from "../../../api/user";
 import { deleteProject, getAppliedProjects, updateProject } from "../../../api/projects";
 import { addApplicant } from "../../../api/projects";
 import { addNotification } from "../../../api/notification";
-import { getCategoriesList, getSkillsList } from "../../../api/categories";
+import { getCategoriesList, getBusinessSkillsList } from "../../../api/categories";
 import CloseIcon from "../../Icons/CloseIcon";
 import EditIcon from "../../Icons/EditIcon";
 import ChevronDownIcon from "../../Icons/ChevronDownIcon";
@@ -77,7 +77,7 @@ const ProjectPopup = ({
             try {
                 const [categoriesRes, skillsRes] = await Promise.all([
                     getCategoriesList(),
-                    getSkillsList()
+                    getBusinessSkillsList()
                 ]);
 
                 setCategories(categoriesRes.data.categories || []);

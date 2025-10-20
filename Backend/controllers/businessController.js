@@ -13,12 +13,14 @@ export const getMyProfile = async (req, res) => {
     }
 
     const businessId = businessResult.id;
+    const userId = req.user.id;
+    
     const bi = await business.infoFromId(businessId);
     const connections = await business.getConnections(businessId);
     const services = await business.getServices(businessId);
     const clients = await business.getClients(businessId);
-    const skills = await business.getSkills(businessId);
-    const strengths = await business.getStrengths(businessId);
+    const skills = await business.getSkills(userId);
+    const strengths = await business.getStrengths(userId);
 
     return res.status(200).json(
         {
@@ -52,12 +54,15 @@ export const getUserProfile = async (req, res) => {
     }
 
     const businessId = businessResult.id;
+    
+    const userId = businessResult.owner_id;
+    
     const bi = await business.infoFromId(businessId);
     const connections = await business.getConnections(businessId);
     const services = await business.getServices(businessId);
     const clients = await business.getClients(businessId);
-    const skills = await business.getSkills(businessId);
-    const strengths = await business.getStrengths(businessId);
+    const skills = await business.getSkills(userId);
+    const strengths = await business.getStrengths(userId);
 
     return res.status(200).json(
         {
@@ -167,17 +172,13 @@ export const addSkills = async (req, res) => {
         }
         const business = businessModel(db);
         const user = userModel(db);
-        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
-
-        if (businessResult == null) {
-            res.status(404).json({message: "No business exists for user"});
-        }
-        const businessId = businessResult.id;
+        
+        const userId = req.user.id;
 
         let newSkills = {}
         for (const index in skills) {
             const skillId = skills[index]
-            const id = await business.addSkill(businessId, skillId);
+            const id = await business.addSkill(userId, skillId);
             newSkills[skillId] = id;
         }
 
@@ -196,17 +197,13 @@ export const addStrengths = async (req, res) => {
         }
         const business = businessModel(db);
         const user = userModel(db);
-        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
-
-        if (businessResult == null) {
-            res.status(404).json({message: "No business exists for user"});
-        }
-        const businessId = businessResult.id;
+        
+        const userId = req.user.id;
 
         let newStrengths = {}
         for (const index in strengths) {
             const strengthId = strengths[index]
-            const id = await business.addStrength(businessId, strengthId);
+            const id = await business.addStrength(userId, strengthId);
             newStrengths[strengthId] = id;
         }
 
@@ -293,21 +290,17 @@ export const removeSkills = async (req, res) => {
         }
         const business = businessModel(db);
         const user = userModel(db);
-        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
-
-        if (businessResult == null) {
-            res.status(404).json({message: "No business exists for user"});
-        }
-        const businessId = businessResult.id;
+        
+        const userId = req.user.id;
 
         let outcomes = {}
         for (const index in skills) {
             const skillId = skills[index]
-            const rowsAffected = await business.removeSkill(skillId, businessId);
+            const rowsAffected = await business.removeSkill(skillId, userId);
             if (rowsAffected) {
                 outcomes[skillId] = "Success";
             } else {
-                outcomes[skillId] = "No skill with that id for this business";
+                outcomes[skillId] = "No skill with that id for this user";
             }
         }
 
@@ -326,21 +319,17 @@ export const removeStrengths = async (req, res) => {
         }
         const business = businessModel(db);
         const user = userModel(db);
-        const businessResult = await user.fetchBusinessFromOwnerId(req.user.id);
-
-        if (businessResult == null) {
-            res.status(404).json({message: "No business exists for user"});
-        }
-        const businessId = businessResult.id;
+        
+        const userId = req.user.id;
 
         let outcomes = {}
         for (const index in strengths) {
             const strengthId = strengths[index]
-            const rowsAffected = await business.removeStrength(strengthId, businessId);
+            const rowsAffected = await business.removeStrength(strengthId, userId);
             if (rowsAffected) {
                 outcomes[strengthId] = "Success";
             } else {
-                outcomes[strengthId] = "No strength with that id for this business";
+                outcomes[strengthId] = "No strength with that id for this user";
             }
         }
 
