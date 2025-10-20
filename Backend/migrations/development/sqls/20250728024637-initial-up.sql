@@ -215,23 +215,6 @@ CREATE TABLE `businesses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `connection_mastermind_roles`
---
-
-DROP TABLE IF EXISTS `connection_mastermind_roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `connection_mastermind_roles` (
-  `connection_id` int unsigned NOT NULL,
-  `mastermind_role_id` int unsigned NOT NULL,
-  PRIMARY KEY (`connection_id`,`mastermind_role_id`),
-  KEY `connection_mastermind_roles_role_idx` (`mastermind_role_id`),
-  CONSTRAINT `connection_mastermind_roles_connection_id` FOREIGN KEY (`connection_id`) REFERENCES `business_connections` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `connection_mastermind_roles_role` FOREIGN KEY (`mastermind_role_id`) REFERENCES `mastermind_roles` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `connection_types`
 --
 
@@ -300,78 +283,6 @@ CREATE TABLE `feedback` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `idea_votes`
---
-
-DROP TABLE IF EXISTS `idea_votes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `idea_votes` (
-  `voter_user_id` int unsigned NOT NULL,
-  `idea_id` int unsigned NOT NULL,
-  `type` tinyint NOT NULL,
-  PRIMARY KEY (`voter_user_id`),
-  KEY `idea_votes_idea_id_idx` (`idea_id`),
-  CONSTRAINT `idea_votes_idea_id` FOREIGN KEY (`idea_id`) REFERENCES `ideas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idea_votes_user_id` FOREIGN KEY (`voter_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ideas`
---
-
-DROP TABLE IF EXISTS `ideas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ideas` (
-  `id` int unsigned NOT NULL,
-  `submitted_by_user_id` int unsigned NOT NULL,
-  `content` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `ideas_user_id_idx` (`submitted_by_user_id`),
-  CONSTRAINT `ideas_user_id` FOREIGN KEY (`submitted_by_user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `industries`
---
-
-DROP TABLE IF EXISTS `industries`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `industries` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` int unsigned NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `picture` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
-  KEY `industries_category_id_idx` (`category_id`),
-  CONSTRAINT `industries_category_id` FOREIGN KEY (`category_id`) REFERENCES `industry_categories` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `industry_categories`
---
-
-DROP TABLE IF EXISTS `industry_categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `industry_categories` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `l2e_responses`
 --
 
@@ -387,22 +298,6 @@ CREATE TABLE `l2e_responses` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `l2e_responses_user_id_idx` (`user_id`),
   CONSTRAINT `l2e_responses_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `mastermind_roles`
---
-
-DROP TABLE IF EXISTS `mastermind_roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `mastermind_roles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
