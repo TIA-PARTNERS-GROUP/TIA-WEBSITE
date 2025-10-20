@@ -142,3 +142,30 @@ VALUES
   (12, 1, 'Systems Integration', NULL),
   (13, 2, 'Web Development', NULL),
   (14, 3, 'Wireless Solutions', NULL);
+
+  INSERT INTO strength_categories (id, name)
+VALUES 
+  (1, 'Financial'),
+  (2, 'Operational Efficiency'),
+  (3, 'Products & Services'),
+  (4, 'Customers & Market Position');
+
+INSERT INTO strengths (id, category_id, name)
+VALUES 
+  (1, 1, 'High Profit Margins'),
+  (2, 1, 'Strong Cash Flow'),
+  (3, 1, 'Diverse Revenue Streams'),
+  (4, 1, 'Low Debt-to-Equity Ratio'),
+  
+  (5, 2, 'Efficient Supply Chain'),
+  (6, 2, 'Proprietary Technology or Systems'),
+  (7, 2, 'Low Production Costs'),
+  (8, 2, 'Proven Project Management Methodology'),
+  
+  (9, 3, 'Proprietary IP/Patents'),
+  (10, 3, 'Proven Quality & Reliability'),
+  (11, 3, 'Unique Value Proposition (UVP)'),
+  
+  (12, 4, 'Loyal & Diversified Customer Base'),
+  (13, 4, 'Large Market Share'),
+  (14, 4, 'Strong Customer Relationships');
