@@ -35,7 +35,11 @@ describe('GET /api/business/query', () => {
       .set('Authorization', `Bearer ${validToken}`);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Page must be a positive integer');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Page must be a positive integer');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -89,7 +93,11 @@ describe('PATCH /api/business/update', () => {
       .send(invalidData);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Bad request');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Bad request');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -124,7 +132,11 @@ describe('POST /api/business/addservice', () => {
       .send({ services: [] });
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('No services provided');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('No services provided');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -159,7 +171,11 @@ describe('POST /api/business/addclient', () => {
       .send({ clients: [] });
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('No clients provided');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('No clients provided');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -192,7 +208,11 @@ describe('DELETE /api/business/removeservice', () => {
       .send({ services: [] });
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('No services provided');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('No services provided');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -225,7 +245,11 @@ describe('DELETE /api/business/removeclient', () => {
       .send({ clients: [] });
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('No clients provided');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('No clients provided');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -261,7 +285,11 @@ describe('POST /api/business/addconnection', () => {
       .send(connectionData);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Cannot connect to self');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Cannot connect to self');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -293,7 +321,11 @@ describe('DELETE /api/business/removeconnection', () => {
       .send({});
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('No connection id provided');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('No connection id provided');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {

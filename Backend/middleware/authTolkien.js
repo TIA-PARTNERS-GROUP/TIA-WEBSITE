@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import config from '../config/index.js';
+// import config from '../config/index.js';
+import config from '../config/config.js';
 import db from '../config/db.js'
 import userModel from '../models/user.js'
 import crypto from 'crypto';

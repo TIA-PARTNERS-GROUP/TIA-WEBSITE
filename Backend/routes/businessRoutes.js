@@ -1,7 +1,6 @@
 import Router from 'express';
 import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses, addSkills, removeSkills, addStrengths, removeStrengths } from '../controllers/businessController.js';
 import { emptyQuery } from '../middleware/validators/generalValidator.js';
-import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses } from '../controllers/businessController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 // Integration of validation middleware with this module's Joi Schema
 import { validator } from '../middleware/validators/joiConfig.js';

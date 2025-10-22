@@ -9,7 +9,6 @@ import {
 } from '../controllers/categoryController.js';
 import { validator } from '../middleware/validators/joiConfig.js';
 import { emptyQuery } from '../middleware/validators/generalValidator.js';
-import { getBusinessCategories, getBusinessSkills } from '../controllers/categoryController.js';
 
 const router = Router();
 
