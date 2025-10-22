@@ -7,6 +7,9 @@ import {
   getSkillCategories,
   getSkills 
 } from '../controllers/categoryController.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
+import { getBusinessCategories, getBusinessSkills } from '../controllers/categoryController.js';
 
 const router = Router();
 
@@ -54,6 +57,7 @@ const router = Router();
  *                   example: Internal server error
  */
 router.get('/getcategories', getBusinessCategories);
+router.get('/getcategories', validator(emptyQuery,'query'), getBusinessCategories);
 
 /**
  * @swagger
@@ -295,5 +299,6 @@ router.get('/getstrengthcategories', getStrengthCategories);
  *                   example: Internal server error
  */
 router.get('/getstrengths', getStrengths);
+router.get('/getskills', validator(emptyQuery,'query'), getBusinessSkills);
 
 export default router;

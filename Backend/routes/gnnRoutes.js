@@ -5,6 +5,8 @@ import {
   getMastermindPartners
 } from '../controllers/gnnController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { userIdParams, projectIdParams } from '../middleware/validators/gnnValidator.js';
 
 const router = Router();
 
@@ -66,7 +68,7 @@ const router = Router();
  *       500:
  *         description: Internal server error or GNN service unavailable
  */
-router.get('/user/:user_id/complementary-partners', verifyToken, getComplementaryPartners);
+router.get('/user/:user_id/complementary-partners', verifyToken, validator(userIdParams, 'params'), getComplementaryPartners);router.get('/user/:user_id/complementary-partners', verifyToken, validator(userIdParams, 'params'), getComplementaryPartners);
 
 /**
  * @swagger
@@ -126,7 +128,7 @@ router.get('/user/:user_id/complementary-partners', verifyToken, getComplementar
  *       500:
  *         description: Internal server error or GNN service unavailable
  */
-router.get('/project/:project_id/alliance-partners', verifyToken, getAlliancePartners);
+router.get('/project/:project_id/alliance-partners', verifyToken, validator(projectIdParams, 'params'), getAlliancePartners);
 
 /**
  * @swagger
@@ -179,6 +181,7 @@ router.get('/project/:project_id/alliance-partners', verifyToken, getAlliancePar
  *       500:
  *         description: Internal server error or GNN service unavailable
  */
-router.get('/user/:user_id/mastermind-partners', verifyToken, getMastermindPartners);
+router.get('/user/:user_id/mastermind-partners', verifyToken, validator(userIdParams, 'params'), getMastermindPartners);
+
 
 export default router;

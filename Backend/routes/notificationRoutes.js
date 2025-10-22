@@ -7,6 +7,8 @@ import {
   setNotificationOpened
 } from '../controllers/notificationController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { listQuery, addNotificationSchema, removeNotificationSchema, setOpenedSchema } from '../middleware/validators/notificationValidator.js';
 
 const router = Router();
 
@@ -65,7 +67,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.get('/mynotifications', verifyToken, getMyNotifications);
+router.get('/mynotifications', verifyToken, validator(listQuery, 'query'), getMyNotifications);
 
 /**
  * @swagger
@@ -111,7 +113,7 @@ router.get('/mynotifications', verifyToken, getMyNotifications);
  *       500:
  *         description: Internal server error
  */
-router.get('/pendingconnections', verifyToken, getPendingConnections);
+router.get('/pendingconnections', verifyToken, validator(listQuery, 'query'), getPendingConnections);
 
 /**
  * @swagger
@@ -164,7 +166,8 @@ router.get('/pendingconnections', verifyToken, getPendingConnections);
  *       500:
  *         description: Internal server error
  */
-router.post('/addnotification', verifyToken, addNotification);
+router.post('/addnotification', verifyToken, validator(addNotificationSchema), addNotification);
+
 
 /**
  * @swagger
@@ -210,7 +213,8 @@ router.post('/addnotification', verifyToken, addNotification);
  *       500:
  *         description: Internal server error
  */
-router.delete('/removenotification', verifyToken, removeNotification);
+router.delete('/removenotification', verifyToken, validator(removeNotificationSchema), removeNotification);
+
 
 /**
  * @swagger
@@ -256,6 +260,6 @@ router.delete('/removenotification', verifyToken, removeNotification);
  *       500:
  *         description: Internal server error
  */
-router.patch('/setopened', verifyToken, setNotificationOpened);
+router.patch('/setopened', verifyToken, validator(setOpenedSchema), setNotificationOpened);
 
 export default router;

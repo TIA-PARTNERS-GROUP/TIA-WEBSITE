@@ -1,6 +1,16 @@
 import Router from 'express';
+import { emptyBody } from '../middleware/validators/generalValidator.js';
 import { signup, verifyEmail, resendVerification, login, refresh, logout, forgotPassword, resetPassword } from '../controllers/authController.js';   
 import { verifyRefreshToken } from '../middleware/authTolkien.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import {
+  signupSchema,
+  loginSchema,
+  verifyEmailSchema,
+  resendVerificationSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema
+} from '../middleware/validators/authValidator.js';
 
 const router = Router();
 
@@ -80,7 +90,7 @@ const router = Router();
  */
 
 
-router.post('/signup', signup);
+router.post('/signup', validator(signupSchema), signup);
 
 /**
  * @swagger
@@ -132,7 +142,7 @@ router.post('/signup', signup);
  *                   type: string
  *                   example: Invalid email or password
  */
-router.post('/login', login);
+router.post('/login', validator(loginSchema), login);
 
 /**
  * @swagger
@@ -195,7 +205,7 @@ router.post('/login', login);
  *             example:
  *               message: Internal server error
  */
-router.post('/refresh', verifyRefreshToken, refresh)
+router.post('/refresh', validator(emptyBody), verifyRefreshToken, refresh);
 
 
 /**
@@ -252,14 +262,14 @@ router.post('/refresh', verifyRefreshToken, refresh)
  *                   type: string
  *                   example: Internal server error
  */
-router.post('/logout', verifyRefreshToken, logout);
+router.post('/logout', validator(emptyBody), verifyRefreshToken, logout);
 
-router.post('/verifyEmail', verifyEmail);
+router.post('/verifyEmail', validator(verifyEmailSchema), verifyEmail);
 
-router.post('/resendVerification', resendVerification);
+router.post('/resendVerification', validator(resendVerificationSchema), resendVerification);
 
-router.post('/forgotPassword', forgotPassword);
+router.post('/forgotPassword', validator(forgotPasswordSchema), forgotPassword);
 
-router.post('/resetPassword', resetPassword);
+router.post('/resetPassword', validator(resetPasswordSchema), resetPassword);
 
 export default router;

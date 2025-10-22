@@ -1,5 +1,7 @@
 import Router from 'express';
 import { submitFeedback } from '../controllers/feedbackController.js'
+import { validator } from '../middleware/validators/joiConfig.js';
+import { submitFeedbackSchema } from '../middleware/validators/feedbackValidator.js';
 const router = Router();
 
 
@@ -64,6 +66,6 @@ const router = Router();
  *                   example: Internal server error
  */
 
-router.post('/', submitFeedback)
+router.post('/', validator(submitFeedbackSchema), submitFeedback)
 
 export default router;

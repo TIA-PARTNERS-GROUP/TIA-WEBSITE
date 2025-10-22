@@ -4,25 +4,27 @@ export const JoiSchema = Joi;
 
 // Create validators with consistent settings
 export const createValidator = (schema) => {
-    return async (payload) => {
-        try {
-            const value = await schema.validateAsync(payload, {
-                abortEarly: false,  // collect all errors
-                stripUnknown: true, // remove unknown keys
-                convert: true       // allow type conversion
-            });
-            return { value };
-        } catch (error) { return { error }; }
-    };
+  return async (payload) => {
+    try {
+      const value = await schema.validateAsync(payload ?? {}, {
+        abortEarly: false,  // collect all errors
+        stripUnknown: true, // remove unknown keys
+        convert: true       // allow type conversion
+      });
+      return { value };
+    } catch (error) {
+      return { error };
+    }
+  };
 };
 
 // Express middleware wrapper
 export const validator = (schema, where = 'body') => {
     return async (req, res, next) => {
       const target =
-        where === 'query' ? req.query :  //The where parameter determines the validation object.
-        where === 'params' ? req.params :
-        req.body;
+        where === 'query'  ? (req.query  ?? {}) :
+        where === 'params' ? (req.params ?? {}) :
+                             (req.body   ?? {});
   
       try {
         const value = await schema.validateAsync(target, {
@@ -48,3 +50,4 @@ export const validator = (schema, where = 'body') => {
       }
     };
   };
+  
