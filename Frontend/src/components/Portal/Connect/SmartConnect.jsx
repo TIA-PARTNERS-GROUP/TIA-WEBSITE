@@ -6,6 +6,7 @@ import { getMyProjects } from "../../../api/projects";
 import ConnectionsGrid from "../../../components/Portal/Connect/ConnectionsGrid";
 import PaginationNav from "./PaginationNav";
 import PrimaryButton from "../../Button/PrimaryButton";
+import { getCurrentUserInfo } from "../../../api/user";
 
 const SmartConnect = () => {
   const { partnerType } = useParams();
@@ -21,116 +22,104 @@ const SmartConnect = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const fetchConnections = async () => {
-      startLoading();
+  const fetchConnections = async () => {
+    startLoading();
 
-      try {
-        let apiFn;
+    try {
+      // Step 0: get current user ID
+      const userRes = await getCurrentUserInfo();
+      const userId = userRes?.data?.data?.id;
+      if (!userId) {
+        console.error("Could not get current user ID");
+        stopLoading();
+        return;
+      }
 
-        switch (partnerType?.toLowerCase()) {
-          case "complementary":
-            apiFn = getComplementaryPartners;
-            break;
-          case "alliance":
-            apiFn = getAlliancePartners;
-            break;
-          case "mastermind":
-            apiFn = getMastermindPartners;
-            break;
-          default:
-            console.error("Invalid partner type:", partnerType);
-            stopLoading();
-            return;
-        }
+      let combinedData = [];
 
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('Request timeout after 2 seconds')), 2000);
-        });
+      switch (partnerType?.toLowerCase()) {
+        case "complementary":
+          combinedData = (await getComplementaryPartners(userId))?.data?.partners || [];
+          break;
 
-        let combinedData = [];
-
-        if (partnerType?.toLowerCase() === "alliance") {
-          // Step 1: Get user's projects
+        case "alliance":
           const myProjectsRes = await getMyProjects();
           const projects = myProjectsRes?.data?.projects || [];
 
           if (projects.length === 0) {
             console.warn("No projects found for current user.");
           } else {
-            // Step 2: Query partners for each project
-            const partnerPromises = projects.map(p => 
-              Promise.race([
-                getAlliancePartners(p.id),
-                timeoutPromise
-              ]).catch(err => {
+            const partnerPromises = projects.map(p =>
+              getAlliancePartners(p.id).catch(err => {
                 console.error(`Error fetching partners for project ${p.id}:`, err);
-                return { data: [] };
+                return { data: { partners: [] } };
               })
             );
-
             const results = await Promise.all(partnerPromises);
-
-            // Step 3: Combine all responses
-            combinedData = results.flatMap(r => r.data || []);
+            combinedData = results.flatMap(r => r.data?.partners || []);
           }
-        } else {
-          // For non-alliance partner types, just query once
-          const res = await Promise.race([apiFn(currentPage, itemsPerPage), timeoutPromise]);
-          combinedData = res.data || [];
-        }
+          break;
 
-        // Step 4: Remove duplicates (based on recommendation.user.id)
-        const uniqueData = [];
-        const seen = new Set();
+        case "mastermind":
+          combinedData = (await getMastermindPartners(userId))?.data?.partners || [];
+          break;
 
-        for (const item of combinedData) {
-          const userId = item.recommendation?.user?.id;
-          if (userId && !seen.has(userId)) {
-            seen.add(userId);
-            uniqueData.push(item);
-          }
-        }
-
-        // Store the raw recommendations data
-        setRecommendations(uniqueData);
-
-        // Step 5: Format for display
-        const formattedConnections = uniqueData.map(item => {
-          const user = item.recommendation?.user;
-          return {
-            businessId: user?.id,
-            title: user?.business || user?.name,
-            description: user?.description,
-            category: user?.category,
-            contactName: user?.name,
-            contactEmail: null,
-            reason: item.reason
-          };
-        });
-
-        // Apply pagination
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const paginatedConnections = formattedConnections.slice(startIndex, endIndex);
-
-        setConnectionsData(paginatedConnections);
-        setTotalItems(formattedConnections.length);
-        setTotalPages(Math.ceil(formattedConnections.length / itemsPerPage));
-
-      } catch (error) {
-        console.error("Error fetching partner recommendations:", error);
-        setConnectionsData([]);
-        setRecommendations([]);
-        setTotalItems(0);
-        setTotalPages(1);
-        setCurrentPage(1);
-      } finally {
-        stopLoading();
+        default:
+          console.error("Invalid partner type:", partnerType);
+          stopLoading();
+          return;
       }
-    };
 
-    fetchConnections();
-  }, [partnerType, currentPage]);
+      // Deduplicate based on recommendation.user.id
+      const uniqueData = [];
+      const seen = new Set();
+      for (const item of combinedData) {
+        const userId = item.recommendation?.user?.id;
+        if (userId && !seen.has(userId)) {
+          seen.add(userId);
+          uniqueData.push(item);
+        }
+      }
+
+      setRecommendations(uniqueData);
+
+      // Format for display
+      const formattedConnections = uniqueData.map(item => {
+        return {
+          businessId: user.id,
+          title: user.business || user.name,
+          description: user.description || "",
+          category: user.category || "Uncategorized",
+          contactName: user.name,
+          contactEmail: "",
+          reason: item.reason || ""
+        };
+      });
+
+
+      // Apply pagination
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      setConnectionsData(formattedConnections.slice(startIndex, endIndex));
+      setTotalItems(formattedConnections.length);
+      setTotalPages(Math.ceil(formattedConnections.length / itemsPerPage));
+
+    } catch (error) {
+      console.error("Error fetching partner recommendations:", error);
+      setConnectionsData([]);
+      setRecommendations([]);
+      setTotalItems(0);
+      setTotalPages(1);
+      setCurrentPage(1);
+    } finally {
+      stopLoading();
+    }
+  };
+
+  fetchConnections();
+}, [partnerType, currentPage]);
+
+
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
