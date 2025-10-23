@@ -141,14 +141,45 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         console.log('Publishing blog post:', blogData);
         const title = blogData.title;
         const date = new Date().toISOString();
-        const content = blogData.content;
+        const content = `<ReactMarkdown>${blogData.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</ReactMarkdown>`;
         const publishingStatus = 'published';
         
         try {
+            
+            // Add silent "finished" message to chat
+            setLocalMessageData(prev => [...prev, { author: "user", text: "I'm finished now thanks" }]);
+            setLoading(true);
+
+            // Send the silent message to chatbot
+            const message = await sendChatbotMessage({
+                user_id, 
+                name, 
+                message: "I'm finished now thanks", 
+                chat_type: getConnectionType(),
+                region: "au",
+                lat: userLat,
+                lng: userLng
+            });
+
+            const response = message.response;
+            const state = message.state;
+            const botText = getBotResponseText(response);
+
+            setLocalMessageData(prev => [...prev, { author: "bot", text: botText }]);
+            
+            // Only navigate after receiving the bot's response
             await addBlog(title, date, content, publishingStatus);
             navigate("/manage/blogs/table-view");
+            
         } catch (error) {
-            console.error('Error publishing blog:', error);
+            console.error('Error publishing blog or sending final message:', error);
+            setLocalMessageData(prev => [...prev, { 
+                author: "bot", 
+                text: `Sorry, something went wrong. ${error.message}` 
+            }]);
+            
+        } finally {
+            setLoading(false);
         }
     };
 
