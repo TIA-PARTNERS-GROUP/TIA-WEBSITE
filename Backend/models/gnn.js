@@ -97,7 +97,7 @@ export default (db) => ({
   return rows.map(r => ({
     recommendation: {
       user: {
-        id: r.user_id,
+        id: r.business_id,
         name: r.user_name,
         business: r.business_name,
         type: r.business_type,

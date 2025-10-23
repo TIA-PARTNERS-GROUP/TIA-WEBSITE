@@ -77,7 +77,7 @@ const ConnectionsGrid = ({ connectionsData, connectionModule, searchType, recomm
         }
         
         const recommendation = recommendations.find(rec => 
-            rec.recommendation.business.id === businessId
+            rec.recommendation.user.id === businessId
         );
         
         return recommendation ? recommendation.reason : null;

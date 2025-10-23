@@ -81,21 +81,22 @@ const SmartConnect = () => {
         }
       }
 
-      setRecommendations(uniqueData);
+      setRecommendations(combinedData);
 
       // Format for display
       const formattedConnections = uniqueData.map(item => {
+
+        const user = item.recommendation.user; // safe because of deduplication check
         return {
           businessId: user.id,
           title: user.business || user.name,
           description: user.description || "",
-          category: user.category || "Uncategorized",
+          category: user.category || "",
           contactName: user.name,
-          contactEmail: "",
+          contactEmail: null,
           reason: item.reason || ""
         };
       });
-
 
       // Apply pagination
       const startIndex = (currentPage - 1) * itemsPerPage;
