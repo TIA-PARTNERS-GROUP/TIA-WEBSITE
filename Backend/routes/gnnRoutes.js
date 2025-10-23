@@ -68,7 +68,7 @@ const router = Router();
  *       500:
  *         description: Internal server error or GNN service unavailable
  */
-router.get('/user/:user_id/complementary-partners', verifyToken, validator(userIdParams, 'params'), getComplementaryPartners);router.get('/user/:user_id/complementary-partners', verifyToken, validator(userIdParams, 'params'), getComplementaryPartners);
+router.get('/user/:user_id/complementary-partners', validator(userIdParams, 'params'), getComplementaryPartners);router.get('/user/:user_id/complementary-partners', verifyToken, validator(userIdParams, 'params'), getComplementaryPartners);
 
 /**
  * @swagger
@@ -128,7 +128,7 @@ router.get('/user/:user_id/complementary-partners', verifyToken, validator(userI
  *       500:
  *         description: Internal server error or GNN service unavailable
  */
-router.get('/project/:project_id/alliance-partners', verifyToken, validator(projectIdParams, 'params'), getAlliancePartners);
+router.get('/project/:project_id/alliance-partners', validator(projectIdParams, 'params'), getAlliancePartners);
 
 /**
  * @swagger
@@ -181,7 +181,7 @@ router.get('/project/:project_id/alliance-partners', verifyToken, validator(proj
  *       500:
  *         description: Internal server error or GNN service unavailable
  */
-router.get('/user/:user_id/mastermind-partners', verifyToken, validator(userIdParams, 'params'), getMastermindPartners);
+router.get('/user/:user_id/mastermind-partners', validator(userIdParams, 'params'), getMastermindPartners);
 
 
 export default router;
