@@ -465,16 +465,18 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         }
     };
 
-    const parseBlogResponse = (text) => {
+    const parseBlogResponse = (text, state) => {
         if (typeof text !== 'string') return null;
 
         // Detect if this looks like blog content
         text = text.replace(/^#+\s*content(?:\s*batch\s*\d+)?/gim, '').trim();
 
         const isBlogContent =
-            /blog post headline/i.test(text);
+            /Blog Post Headline/i.test(text) && 
+            /Blog Post/i.test(text) &&
+            /Social Media Caption/i.test(text);
 
-        if (!isBlogContent) return null;
+        if (!isBlogContent && !state) return null;
 
         let titleMatch, contentMatch;
 
@@ -486,6 +488,12 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         if (!titleMatch) {
             titleMatch = text.match(/### Blog Post Headline[\s\S]*?\n(.+?)\n/i);
             contentMatch = text.match(/### Blog Post[\s\S]*?(.*?)(?=### Social Media Caption|---|$)/is);
+        }
+
+        // Pattern 3: **Blog Post Headline** (fallback)
+        if (!titleMatch) {
+            titleMatch = text.match(/\*\*Blog Post Headline\*\*[\s\S]*?\n(.+?)\n/i);
+            contentMatch = text.match(/\*\*Blog Post\*\*[\s\S]*?(.*?)(?=\*\*Social Media Caption\*\*|---|$)/is);
         }
 
         if (titleMatch && contentMatch) {
@@ -625,7 +633,8 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     useEffect(() => {
         const lastBotMessage = [...localMessageData].reverse().find(msg => msg.author === "bot");
         if (lastBotMessage) {
-            const blogData = parseBlogResponse(lastBotMessage.text);
+            const shouldShowPublish = lastBotMessage.state?.VisionAgent?.chat_state === "exit";
+            const blogData = parseBlogResponse(lastBotMessage.text, shouldShowPublish);
             setCurrentBlogData(blogData);
         }
     }, [localMessageData]);
