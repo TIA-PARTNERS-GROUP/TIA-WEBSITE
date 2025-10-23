@@ -29,6 +29,7 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
     const [currentBusiness, setCurrentBusiness] = useState(null);
 
     const [connectedBusinessIds, setConnectedBusinessIds] = useState([]);
+    const [publishing, setPublishing] = useState(false);
 
     useEffect(() => {
         const fetchConnectionData = async () => {
@@ -170,6 +171,8 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
         
         try {
             
+            setPublishing(true);
+
             // Add silent "finished" message to chat
             setLocalMessageData(prev => [...prev, { author: "user", text: "I'm finished now thanks" }]);
             setLoading(true);
@@ -554,10 +557,12 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
                         <div className="mt-6 flex justify-center">
                             <button 
                                 onClick={() => currentBlogData && handlePublish(currentBlogData)}
-                                disabled={!currentBlogData}
-                                className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={!currentBlogData || publishing}
+                                className={`bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-lg transition-colors shadow-md ${
+                                    publishing || !currentBlogData ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
                             >
-                                🚀 Publish Blog Post
+                                {publishing ? "⏳ Publishing..." : "🚀 Publish Blog Post"}
                             </button>
                         </div>
                     )}
