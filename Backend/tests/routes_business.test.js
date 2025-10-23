@@ -264,13 +264,14 @@ describe('DELETE /api/business/removeclient', () => {
 // Test 8 - POST /business/addconnection
 describe('POST /api/business/addconnection', () => {
   it('should add connection successfully', async () => {
-    const connectionData = { initiatingBusinessId: businessId, receivingBusinessId: 2 };
+    const connectionData = { initiatingBusinessId: businessId, receivingBusinessId: 1, connectionTypeId: 1 };
     // console.log('Connection Data:', connectionData);
     const res = await getRequest()
       .post('/api/business/addconnection')
       .set('Authorization', `Bearer ${validToken}`)
       .send(connectionData);
 
+    console.log('Add Connection Response Body:', res.body);
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('message', 'Connection added');
     expect(res.body).toHaveProperty('connectionId');
@@ -278,7 +279,7 @@ describe('POST /api/business/addconnection', () => {
   });
 
   it('should return 400 for cannot connect to self', async () => {
-    const connectionData = { initiatingBusinessId: businessId, receivingBusinessId: businessId };
+    const connectionData = { initiatingBusinessId: businessId, receivingBusinessId: businessId, connectionTypeId: 1 };
     const res = await getRequest()
       .post('/api/business/addconnection')
       .set('Authorization', `Bearer ${validToken}`)
