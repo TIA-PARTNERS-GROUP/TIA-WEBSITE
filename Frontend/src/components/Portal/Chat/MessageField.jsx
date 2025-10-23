@@ -139,10 +139,34 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
 
     const handlePublish = async (blogData) => {
         console.log('Publishing blog post:', blogData);
+        console.log()
+        
+        let cleanedContent = blogData.content;
+        // Remove Headline section first
+        cleanedContent = cleanedContent.replace(/^Headline\s*\n\s*"([^"]*)"\s*\n\s*/i, '');
+        
+        // Then remove ### Blog Post section
+        cleanedContent = cleanedContent.replace(/^### Blog Post\s*\n*/i, '');
+        
+        // Also handle cases where Headline might not have quotes
+        cleanedContent = cleanedContent.replace(/^Headline\s*\n\s*([^\n]+)\s*\n\s*/i, '');
+        
+        // Handle any remaining Blog Post variations
+        cleanedContent = cleanedContent.replace(/^#+\s*Blog Post\s*\n*/i, '');
+        
+        // Also remove any trailing "blog ends up like this" text if present
+        cleanedContent = cleanedContent.replace(/\s*blog ends up like this[^\n]*$/i, '');
+        
+        // Trim any extra whitespace
+        cleanedContent = cleanedContent.trim();
+        
         const title = blogData.title;
         const date = new Date().toISOString();
-        const content = `<ReactMarkdown>${blogData.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</ReactMarkdown>`;
+        const content = `<ReactMarkdown>${cleanedContent.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</ReactMarkdown>`;
         const publishingStatus = 'published';
+        
+        console.log('Original content:', blogData.content);
+        console.log('Cleaned blog content:', content);
         
         try {
             
@@ -169,7 +193,9 @@ const MessageField = ({ messageData, user_id, name, chatType }) => {
             
             // Only navigate after receiving the bot's response
             await addBlog(title, date, content, publishingStatus);
-            navigate("/manage/blogs/table-view");
+            setTimeout(() => {
+                navigate("/manage/blogs/table-view");
+            }, 2000);
             
         } catch (error) {
             console.error('Error publishing blog or sending final message:', error);
