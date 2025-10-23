@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/15</span>
+                <span class='fraction'>15/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/15</span>
+                <span class='fraction'>15/18</span>
             </div>
         
             
@@ -106,7 +106,19 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,9 +139,11 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,12 +166,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express';
 import authRoutes from './authRoutes.js';
 import userRoutes from './userRoutes.js';
-import businessRoutes from './businessRoutes.js'
-import chatBotRoutes from './chatBotRoutes.js'
-import taskRoutes from './taskRoutes.js'
-import notificationRoutes from './notificationRoutes.js'
-import categoryRoutes from './categoryRoutes.js'
+import businessRoutes from './businessRoutes.js';
+import chatBotRoutes from './chatBotRoutes.js';
+import taskRoutes from './taskRoutes.js';
+import notificationRoutes from './notificationRoutes.js';
+import categoryRoutes from './categoryRoutes.js';
+import feedbackRoutes from './feedbackRoutes.js';
+import projectRoutes from './projectRoutes.js';
+import gnnRoutes from './gnnRoutes.js';
 import config from '../config/config.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
 &nbsp;
 const router = express.Router();
 &nbsp;
@@ -169,16 +188,18 @@ router.use('/business', businessRoutes);
 router.use('/chatbot', chatBotRoutes);
 router.use('/tasks', taskRoutes);
 router.use('/notifications', notificationRoutes);
-router.use('/category', categoryRoutes)
+router.use('', categoryRoutes);
+router.use('/feedback', feedbackRoutes);
 // router.use('/connect', connectRoutes);
 // router.use('/manage', manageRoutes);
-// router.use('/projects', projectRoutes);
+router.use('/projects', projectRoutes);
+router.use('/gnn', gnnRoutes);
 // router.use('/references', referenceRoutes);
 &nbsp;
 // Redirect to dashboard for users, devs get direct access to api
 <span class="missing-if-branch" title="if path not taken" >I</span>if (config.env === 'production') {
     const redirectUrl = <span class="cstat-no" title="statement not covered" >`${config.FRONTEND_BASE_URL}/dashboard`;</span>
-<span class="cstat-no" title="statement not covered" >    router.get('/', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    router.get('/', validator(emptyQuery, 'query'), <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        res.render('redirect', {</span>
             success: false,
             message: 'Redirecting to dashboard...',
@@ -187,7 +208,7 @@ router.use('/category', categoryRoutes)
         });
     });
 } else <span class="missing-if-branch" title="else path not taken" >E</span>if (config.env === 'development' || config.env === 'test') {
-    router.get('/', (req, res) =&gt; {
+    router.get('/', validator(emptyQuery, 'query'), (req, res) =&gt; {
         res.json({ message: 'API is working' });
     });
 }
@@ -199,7 +220,7 @@ export default router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-01T06:49:09.802Z
+                at 2025-10-22T09:37:42.483Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --coverage",
+    "test-no-validation": "VALIDATION_DISABLED=true npm test",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "migrate": "db-migrate up:development",

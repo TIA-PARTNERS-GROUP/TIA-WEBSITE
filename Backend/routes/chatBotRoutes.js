@@ -1,6 +1,8 @@
 import Router from 'express';
 import { sendMessage, resetSession } from '../controllers/chatBotController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { chatMessageSchema, resetSchema } from '../middleware/validators/chatBotValidator.js';
 
 const router = Router();
 
@@ -155,7 +157,7 @@ const router = Router();
  *       500:
  *         description: Internal server error.
  */
-router.post('/message', verifyToken, sendMessage);
+router.post('/message', verifyToken, validator(chatMessageSchema), sendMessage);
 /**
  * @swagger
  * /chatbot/reset:
@@ -179,6 +181,6 @@ router.post('/message', verifyToken, sendMessage);
  *       500:
  *         description: Internal server error.
  */
-router.post('/reset', verifyToken, resetSession);
+router.post('/reset', verifyToken, validator(resetSchema), resetSession);
 
 export default router;

@@ -1,5 +1,6 @@
 import Router from 'express';
 import { getMyProfile, getUserProfile, updateProfile, addServices, addClients, removeServices, removeClients, addConnection, removeConnection, queryBusinesses, addL2EResponse, getLatestL2EResponse, getAllL2EResponses, addSkills, removeSkills, addStrengths, removeStrengths } from '../controllers/businessController.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
 // Integration of validation middleware with this module's Joi Schema
 import { validator } from '../middleware/validators/joiConfig.js';
@@ -224,7 +225,7 @@ router.get('/query', verifyToken, validator(querySchema, 'query'), queryBusiness
  *                   type: string
  *                   example: Internal server error
  */
-router.get('/myinfo', verifyToken, getMyProfile);
+router.get('/myinfo', verifyToken, validator(emptyQuery,'query'), getMyProfile);
 
 /**
  * @swagger
@@ -1171,7 +1172,7 @@ router.post('/l2e', verifyToken, validator(l2eBodySchema), addL2EResponse);
  *       500:
  *         description: Internal server error
  */
-router.get('/l2e/latest', verifyToken, getLatestL2EResponse);
+router.get('/l2e/latest', verifyToken, validator(emptyQuery,'query'), getLatestL2EResponse);
 
 
 /**
@@ -1211,7 +1212,7 @@ router.get('/l2e/latest', verifyToken, getLatestL2EResponse);
  *       500:
  *         description: Internal server error
  */
-router.get('/l2e', verifyToken, getAllL2EResponses);
+router.get('/l2e', verifyToken, validator(emptyQuery,'query'), getAllL2EResponses);
 
 
 /**

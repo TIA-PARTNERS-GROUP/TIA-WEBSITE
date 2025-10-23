@@ -4,6 +4,17 @@ import { getUserPosts, getMyPosts, addPost, removePost, publishPost } from '../c
 import { getMyTestimonials, addTestimonial, removeTestimonial, publishTestimonial, getUserTestimonials } from '../controllers/testimonialController.js';
 import { getMyCaseStudies, addCaseStudy, removeCaseStudy, publishCaseStudy, getUserCaseStudies } from '../controllers/caseStudyController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
+
+import { validator } from '../middleware/validators/joiConfig.js';
+import {
+  userIdParams, emailParams,
+  dashboardConfigBody,
+  addPostBody, publishPostBody, removePostBody,
+  addTestimonialBody, publishTestimonialBody, removeTestimonialBody,
+  addCaseStudyBody, publishCaseStudyBody, removeCaseStudyBody,
+} from '../middleware/validators/userValidator.js';
+
 
 const router = Router();
 
@@ -61,7 +72,7 @@ const router = Router();
  *                   type: string
  *                   example: Failed to process request
  */
-router.get('/exists/:email', checkUserExists);
+router.get('/exists/:email', validator(emailParams, 'params'), checkUserExists);
 
 /**
  * @swagger
@@ -133,7 +144,7 @@ router.get('/exists/:email', checkUserExists);
  *             example:
  *               message: Server error verifying token
  */
-router.get('/me', verifyToken, getMe);
+router.get('/me', verifyToken, validator(emptyQuery,'query'), getMe);
 
 /**
  * @swagger
@@ -176,7 +187,7 @@ router.get('/me', verifyToken, getMe);
  *       500:
  *         description: Internal server error.
  */
-router.get('/myposts', verifyToken, getMyPosts);
+router.get('/myposts', verifyToken, validator(emptyQuery,'query'), getMyPosts);
 
 // Testimonials routes
 /**
@@ -220,7 +231,7 @@ router.get('/myposts', verifyToken, getMyPosts);
  *       500:
  *         description: Internal server error.
  */
-router.get('/mytestimonials', verifyToken, getMyTestimonials);
+router.get('/mytestimonials', verifyToken, validator(emptyQuery,'query'), getMyTestimonials);
 /**
  * @swagger
  * /users/addtestimonial:
@@ -272,7 +283,7 @@ router.get('/mytestimonials', verifyToken, getMyTestimonials);
  *       500:
  *         description: Internal server error.
  */
-router.post('/addtestimonial', verifyToken, addTestimonial);
+router.post('/addtestimonial', verifyToken, validator(addTestimonialBody), addTestimonial);
 /**
  * @swagger
  * /users/publishtestimonial:
@@ -314,7 +325,7 @@ router.post('/addtestimonial', verifyToken, addTestimonial);
  *       500:
  *         description: Internal server error.
  */
-router.post('/publishtestimonial', verifyToken, publishTestimonial);
+router.post('/publishtestimonial', verifyToken, validator(publishTestimonialBody), publishTestimonial);
 /**
  * @swagger
  * /users/removetestimonial:
@@ -356,7 +367,7 @@ router.post('/publishtestimonial', verifyToken, publishTestimonial);
  *       500:
  *         description: Internal server error.
  */
-router.delete('/removetestimonial', verifyToken, removeTestimonial);
+router.delete('/removetestimonial', verifyToken, validator(removeTestimonialBody), removeTestimonial);
 /**
  * @swagger
  * /users/{id}/testimonials:
@@ -409,7 +420,7 @@ router.delete('/removetestimonial', verifyToken, removeTestimonial);
  *       500:
  *         description: Internal server error.
  */
-router.get('/:id/testimonials', verifyToken, getUserTestimonials);
+router.get('/:id/testimonials', verifyToken, validator(userIdParams, 'params'), getUserTestimonials);
 
 // Case studies routes
 /**
@@ -453,7 +464,7 @@ router.get('/:id/testimonials', verifyToken, getUserTestimonials);
  *       500:
  *         description: Internal server error.
  */
-router.get('/mycasestudies', verifyToken, getMyCaseStudies);
+router.get('/mycasestudies', verifyToken, validator(emptyQuery,'query'), getMyCaseStudies);
 /**
  * @swagger
  * /users/addcasestudy:
@@ -505,7 +516,8 @@ router.get('/mycasestudies', verifyToken, getMyCaseStudies);
  *       500:
  *         description: Internal server error.
  */
-router.post('/addcasestudy', verifyToken, addCaseStudy);
+router.post('/addcasestudy', verifyToken, validator(addCaseStudyBody), addCaseStudy);
+
 /**
  * @swagger
  * /users/publishcasestudy:
@@ -547,7 +559,7 @@ router.post('/addcasestudy', verifyToken, addCaseStudy);
  *       500:
  *         description: Internal server error.
  */
-router.post('/publishcasestudy', verifyToken, publishCaseStudy);
+router.post('/publishcasestudy', verifyToken, validator(publishCaseStudyBody), publishCaseStudy);
 /**
  * @swagger
  * /users/removecasestudy:
@@ -589,7 +601,7 @@ router.post('/publishcasestudy', verifyToken, publishCaseStudy);
  *       500:
  *         description: Internal server error.
  */
-router.delete('/removecasestudy', verifyToken, removeCaseStudy);
+router.delete('/removecasestudy', verifyToken, validator(removeCaseStudyBody), removeCaseStudy);
 /**
  * @swagger
  * /users/{id}/casestudies:
@@ -642,7 +654,7 @@ router.delete('/removecasestudy', verifyToken, removeCaseStudy);
  *       500:
  *         description: Internal server error.
  */
-router.get('/:id/casestudies', verifyToken, getUserCaseStudies);
+router.get('/:id/casestudies', verifyToken, validator(userIdParams, 'params'), getUserCaseStudies);
 
 /**
  * @swagger
@@ -695,7 +707,7 @@ router.get('/:id/casestudies', verifyToken, getUserCaseStudies);
  *       500:
  *         description: Internal server error.
  */
-router.post('/addpost', verifyToken, addPost);
+router.post('/addpost', verifyToken, validator(addPostBody), addPost);
 
 /**
  * @swagger
@@ -738,7 +750,7 @@ router.post('/addpost', verifyToken, addPost);
  *       500:
  *         description: Internal server error.
  */
-router.post('/publishpost', verifyToken, publishPost)
+router.post('/publishpost', verifyToken, validator(publishPostBody), publishPost);
 
 /**
  * @swagger
@@ -781,7 +793,7 @@ router.post('/publishpost', verifyToken, publishPost)
  *       500:
  *         description: Internal server error.
  */
-router.delete('/removepost', verifyToken, removePost);
+router.delete('/removepost', verifyToken, validator(removePostBody), removePost);
 
 /**
  * @swagger
@@ -812,7 +824,7 @@ router.delete('/removepost', verifyToken, removePost);
  *       500:
  *         description: Internal server error.
  */
-router.get('/config', verifyToken, getDashboardConfig);
+router.get('/config', verifyToken, validator(emptyQuery,'query'), getDashboardConfig);
 
 /**
  * @swagger
@@ -856,7 +868,7 @@ router.get('/config', verifyToken, getDashboardConfig);
  *       500:
  *         description: Internal server error.
  */
-router.post('/config', verifyToken, updateDashboardConfig);
+router.post('/config', verifyToken, validator(dashboardConfigBody), updateDashboardConfig);
 
 /**
  * @swagger
@@ -931,7 +943,7 @@ router.post('/config', verifyToken, updateDashboardConfig);
  *                   type: string
  *                   example: Failed to process request
  */
-router.get('/:id', verifyToken, getUserDetails);
+router.get('/:id', verifyToken, validator(userIdParams, 'params'), getUserDetails);
 
 /**
  * @swagger
@@ -985,7 +997,7 @@ router.get('/:id', verifyToken, getUserDetails);
  *       500:
  *         description: Internal server error.
  */
-router.get('/:id/posts', verifyToken, getUserPosts);
+router.get('/:id/posts', verifyToken, validator(userIdParams, 'params'), getUserPosts);
 
 
 

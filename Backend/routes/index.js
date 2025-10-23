@@ -10,6 +10,8 @@ import feedbackRoutes from './feedbackRoutes.js';
 import projectRoutes from './projectRoutes.js';
 import gnnRoutes from './gnnRoutes.js';
 import config from '../config/config.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
 
 const router = express.Router();
 
@@ -32,7 +34,7 @@ router.use('/gnn', gnnRoutes);
 // Redirect to dashboard for users, devs get direct access to api
 if (config.env === 'production') {
     const redirectUrl = `${config.FRONTEND_BASE_URL}/dashboard`;
-    router.get('/', (req, res) => {
+    router.get('/', validator(emptyQuery, 'query'), (req, res) => {
         res.render('redirect', {
             success: false,
             message: 'Redirecting to dashboard...',
@@ -41,7 +43,7 @@ if (config.env === 'production') {
         });
     });
 } else if (config.env === 'development' || config.env === 'test') {
-    router.get('/', (req, res) => {
+    router.get('/', validator(emptyQuery, 'query'), (req, res) => {
         res.json({ message: 'API is working' });
     });
 }

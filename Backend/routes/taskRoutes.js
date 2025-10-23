@@ -1,6 +1,17 @@
 import Router from 'express';
 import { getAllTasks, getTaskById, getUserTasks, enrollUserInTask, unenrollUserFromTask, getTaskProgress, getDailyProgress, updateTaskProgress } from '../controllers/taskController.js';
 import { verifyToken, verifyRefreshToken } from '../middleware/authTolkien.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
+import {
+  taskIdParams,
+  userIdParams,
+  enrollParams,
+  unenrollParams,
+  progressParamsTask,
+  progressParamsDaily,
+  progressBody
+} from '../middleware/validators/taskValidator.js';
 
 const router = Router();
 
@@ -25,7 +36,7 @@ const router = Router();
    *       401:
    *         description: Unauthorized
    */
-  router.get('/', verifyToken, getAllTasks);
+  router.get('/', verifyToken, validator(emptyQuery,'query'), getAllTasks);
 
   /**
    * @swagger
@@ -55,7 +66,7 @@ const router = Router();
    *       401:
    *         description: Unauthorized
    */
-  router.get('/:taskId', verifyToken, getTaskById);
+  router.get('/:taskId', verifyToken, validator(taskIdParams, 'params'), getTaskById);
 
   /**
    * @swagger
@@ -85,7 +96,7 @@ const router = Router();
    *       401:
    *         description: Unauthorized
    */
-  router.get('/user/:userId', verifyToken, getUserTasks);
+  router.get('/user/:userId', verifyToken, validator(userIdParams, 'params'), getUserTasks);
 
   /**
    * @swagger
@@ -119,7 +130,7 @@ const router = Router();
    *       401:
    *         description: Unauthorized
    */
-  router.post('/:taskId/enroll/:userId', verifyToken, enrollUserInTask);
+  router.post('/:taskId/enroll/:userId', verifyToken, validator(enrollParams, 'params'), enrollUserInTask);
 
   /**
    * @swagger
@@ -151,7 +162,7 @@ const router = Router();
    *       401:
    *         description: Unauthorized
    */
-  router.delete('/:taskId/unenroll/:userId', verifyToken, unenrollUserFromTask);
+  router.delete('/:taskId/unenroll/:userId', verifyToken, validator(unenrollParams, 'params'), unenrollUserFromTask);
 
   /**
    * @swagger
@@ -200,7 +211,7 @@ const router = Router();
    *       404:
    *         description: Task not found
    */
-  router.get('/progress/:userId/:taskId/:date', verifyToken, getTaskProgress);
+  router.get('/progress/:userId/:taskId/:date', verifyToken, validator(progressParamsTask, 'params'), getTaskProgress);
 
   /**
    * @swagger
@@ -257,7 +268,7 @@ const router = Router();
    *       400:
    *         description: Invalid date format
    */
-  router.get('/progress/:userId/:date', verifyToken, getDailyProgress);
+  router.get('/progress/:userId/:date', verifyToken, validator(progressParamsDaily, 'params'), getDailyProgress);
 
   /**
    * @swagger
@@ -322,7 +333,13 @@ const router = Router();
    *       404:
    *         description: Task not found
    */
-  router.put('/progress/:userId/:taskId/:date', verifyToken, updateTaskProgress);
+  router.put('/progress/:userId/:taskId/:date',
+    verifyToken,
+    validator(progressParamsTask, 'params'),
+    validator(progressBody),
+    updateTaskProgress
+  );
+  
 
   /**
    * @swagger

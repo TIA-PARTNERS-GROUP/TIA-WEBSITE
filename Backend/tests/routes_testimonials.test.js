@@ -62,7 +62,11 @@ describe('POST /api/users/addtestimonial', () => {
       .send(invalidData);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Missing required fields');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Missing required fields');
+    }
   });
 
   it('should return 400 for invalid status', async () => {
@@ -78,7 +82,11 @@ describe('POST /api/users/addtestimonial', () => {
       .send(invalidData);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Status must be draft or published');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Status must be draft or published');
+    }
   });
 
   it('should return 401 for missing authorization', async () => {
@@ -109,7 +117,11 @@ describe('POST /api/users/publishtestimonial', () => {
       .send({});
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Missing required fields');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Missing required fields');
+    }
   });
 
   it('should return 404 for testimonial not found or not owned by user', async () => {
@@ -150,7 +162,11 @@ describe('DELETE /api/users/removetestimonial', () => {
       .send({});
 
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('Missing required fields');
+    if (res.body.error) {
+      expect(res.body.error).toBe('VALIDATION_FAILED');
+    } else {
+      expect(res.body.message).toBe('Missing required fields');
+    }
   });
 
   it('should return 404 for testimonial not found or not owned by user', async () => {

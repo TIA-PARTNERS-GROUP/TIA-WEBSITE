@@ -14,7 +14,7 @@ const generateUserData = () => {
   if (!userData) {
     userData = {
       email: `test${Date.now()}@example.com`,
-      password: 'password123',
+      password: 'Password123!',
       firstName: 'John',
       lastName: 'Doe'
     };

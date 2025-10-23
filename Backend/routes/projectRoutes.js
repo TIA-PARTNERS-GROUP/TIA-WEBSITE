@@ -1,7 +1,51 @@
 import Router from 'express';
 import { addApplicant, removeApplicant, addProject, getProject, updateProject, deleteProject, getMyProjects, getAppliedProjects, getProjects } from '../controllers/projectController.js';
 import { verifyToken } from '../middleware/authTolkien.js';
+import { validator } from '../middleware/validators/joiConfig.js';
+import { emptyQuery } from '../middleware/validators/generalValidator.js';
+import {
+   projectIdParams, listProjectQuery,
+   createProjectSchema, updateProjectBody,
+   applicantParams, removeApplicantParams
+ } from '../middleware/validators/projectValidator.js';
+
 const router = Router();
+
+const safe = (fn) => (req, res, next) =>
+    Promise.resolve(fn(req, res, next)).catch(err => {
+      console.error('[GET /api/projects] unexpected error:', err); // <-- 会打印堆栈和出错行号
+      return res.status(500).json({ message: 'Internal server error' });
+    });
+  
+const normalizeListQuery = (req, _res, next) => {
+    const src = req.query || {};
+  
+    const toNumArray = (v) => {
+      if (!v) return [];
+      if (Array.isArray(v)) return v.map(x => Number(x)).filter(Number.isFinite);
+      if (typeof v === 'string') return v.split(',').map(s => Number(s.trim())).filter(Number.isFinite);
+      return [];
+    };
+  
+    const toStrArray = (v) => {
+      if (!v) return [];
+      if (Array.isArray(v)) return v.map(x => String(x).trim()).filter(Boolean);
+      if (typeof v === 'string') return v.split(',').map(s => s.trim()).filter(Boolean);
+      return [];
+    };
+ 
+    req.query.categories = toNumArray(src.categories);
+    req.query.skills     = toNumArray(src.skills);
+    req.query.regions    = toStrArray(src.regions);
+    req.query.page       = src.page  ? Number(src.page)  : 1;
+    req.query.limit      = src.limit ? Number(src.limit) : 20;
+  
+    next();
+  };
+  
+  
+
+
 
 /**
  * @swagger
@@ -84,7 +128,8 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/', verifyToken, addProject);
+router.post('/', verifyToken, validator(createProjectSchema), addProject);
+
 
 /**
  * @swagger
@@ -149,7 +194,8 @@ router.post('/', verifyToken, addProject);
  *     500:
  *       description: Internal server error
  */
-router.get('/', getProjects);
+router.get('/', normalizeListQuery, validator(listProjectQuery, 'query'), safe(getProjects));
+
 
 /**
  * @swagger
@@ -179,7 +225,7 @@ router.get('/', getProjects);
  *       500:
  *         description: Internal server error
  */
-router.post('/:id/applicants', verifyToken, addApplicant);
+router.post('/:id/applicants', verifyToken, validator(applicantParams, 'params'), addApplicant);
 
 /**
  * @swagger
@@ -215,7 +261,7 @@ router.post('/:id/applicants', verifyToken, addApplicant);
  *       500:
  *         description: Internal server error
  */
-router.delete('/:id/applicants/:userId', verifyToken, removeApplicant);
+router.delete('/:id/applicants/:userId', verifyToken, validator(removeApplicantParams, 'params'), removeApplicant);
 
 /**
  * @swagger
@@ -254,7 +300,8 @@ router.delete('/:id/applicants/:userId', verifyToken, removeApplicant);
  *       500:
  *         description: Internal server error
  */
-router.patch('/:id', verifyToken, updateProject);
+router.patch('/:id', verifyToken, validator(projectIdParams, 'params'), validator(updateProjectBody), updateProject);
+
 
 /**
  * @swagger
@@ -284,7 +331,7 @@ router.patch('/:id', verifyToken, updateProject);
  *       500:
  *         description: Internal server error
  */
-router.get('/my', verifyToken, getMyProjects);
+router.get('/my', verifyToken, validator(emptyQuery,'query'), getMyProjects);
 
 /**
  * @swagger
@@ -314,7 +361,7 @@ router.get('/my', verifyToken, getMyProjects);
  *       500:
  *         description: Internal server error
  */
-router.get('/applied', verifyToken, getAppliedProjects);
+router.get('/applied', verifyToken, validator(emptyQuery,'query'), getAppliedProjects);
 
 /**
  * @swagger
@@ -345,7 +392,7 @@ router.get('/applied', verifyToken, getAppliedProjects);
  *       500:
  *         description: Internal server error
  */
-router.get('/:id', getProject);
+router.get('/:id', validator(projectIdParams, 'params'), getProject);
 
 /**
  * @swagger
@@ -377,7 +424,7 @@ router.get('/:id', getProject);
  *       500:
  *         description: Internal server error
  */
-router.delete('/:id', verifyToken, deleteProject);
+router.delete('/:id', verifyToken, validator(projectIdParams, 'params'), deleteProject);
 
 
 export default router;
