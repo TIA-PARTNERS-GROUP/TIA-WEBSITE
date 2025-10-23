@@ -33,7 +33,7 @@ export const addProject = async (req, res) => {
 
         // Ensure all the ids provided are valid
         for (const categoryId of categoryIds) {
-            if (!category.getCategoryById(categoryId)) {
+            if (!category.getBusinessCategoryById(categoryId)) {
                 return res.status(404).json({message: `No category with id of ${categoryId}`});
             }
         }

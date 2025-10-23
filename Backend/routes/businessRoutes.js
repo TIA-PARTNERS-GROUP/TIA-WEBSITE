@@ -225,7 +225,7 @@ router.get('/query', verifyToken, validator(querySchema, 'query'), queryBusiness
  *                   type: string
  *                   example: Internal server error
  */
-router.get('/myinfo', verifyToken, validator(emptyQuery,'query'), getMyProfile);
+router.get('/myinfo', verifyToken, getMyProfile);
 
 /**
  * @swagger
@@ -343,7 +343,7 @@ router.get('/myinfo', verifyToken, validator(emptyQuery,'query'), getMyProfile);
  *                   type: string
  *                   example: Internal server error
  */
-router.patch('/update', verifyToken, validator(updateSchema), updateProfile)
+router.patch('/update', verifyToken, updateProfile)
 
 /**
  * @swagger
