@@ -84,7 +84,10 @@ INSERT INTO business_connections (initiating_business_id, receiving_business_id,
 (1, 201, 1, 1, CURRENT_TIME()),
 (2, 301, 2, 1, CURRENT_TIME()),
 (101, 303, 2, 1, CURRENT_TIME()),
-(102, 2, 2, 1, CURRENT_TIME());
+(102, 2, 2, 1, CURRENT_TIME()),
+(4, 103, 1, 1, CURRENT_TIME()),
+(4, 101, 2, 1, CURRENT_TIME()),
+(4, 202, 3, 1, CURRENT_TIME());
 
 INSERT INTO daily_activities (id, name, description) VALUES 
 (1, 'Connection', 'Make a connection with another business');
