@@ -52,7 +52,7 @@ INSERT INTO business_categories (id, name) VALUES
 INSERT INTO businesses (id, operator_user_id, name, tagline, contact_name, contact_phone_no, contact_email, description, business_category_id) VALUES
 (1, 3, 'BS Industries', 'BS is the BeSt', 'Bob Smith', '0123456789', 'bobsmith@email.com', 'We make things!!', 2),
 (2, 4, 'A-Team', 'AT our best', 'Alice Smith', '0123456789', 'alicesmith@email.com', 'We make things!!', 2),
-(3, 5, 'Steve''s Lava Chicken', 'It''s tasty as hell!', 'Steve', '0123456789', 'stevesmith@email.com', 'It''s a lava attack!', 7),
+(3, 5, 'ST Ltd.', 'It''s tasty as hell!', 'Steve', '0123456789', 'stevesmith@email.com', 'ST will do it.', 7),
 (101, 6, 'Digital Marketing Pro', 'Grow Your Business Online', 'Sarah Chen', '0123456789', 'sarahchen@email.com', 'Specializes in social media and online advertising campaigns', 3),
 (102, 7, 'WebFlow Masters', 'Beautiful, Functional Websites', 'Mike Rodriguez', '0123456789', 'mikerodriguez@email.com', 'Creates high-converting landing pages and business websites', 13),
 (103, 8, 'Content Creators Co', 'Engaging Content That Converts', 'Jessica Wong', '0123456789', 'jessicawong@email.com', 'Produces engaging blog content and video marketing materials', 3),
@@ -262,3 +262,51 @@ INSERT INTO business_clients (client_id, business_id, description) VALUES
 (35, 303, 'Software companies'),
 (36, 303, 'Service-based businesses'),
 (37, 303, 'Manufacturing companies');
+
+INSERT INTO projects (id, managed_by_user_id, name, description, status, open_date, close_date, completion_date) VALUES
+(1, 3, 'E-commerce Platform Upgrade', 'Complete rebuild of online shopping platform with modern React frontend and Node.js backend. Includes payment integration and inventory management.', 'open', '2024-01-15 09:00:00', '2024-06-30 17:00:00', NULL),
+(2, 4, 'Mobile Banking App', 'Development of secure mobile banking application for financial institution with biometric authentication and real-time transactions.', 'open', '2024-02-01 10:00:00', '2024-08-15 18:00:00', NULL),
+(3, 5, 'Restaurant POS System', 'Custom point-of-sale system with online ordering integration and kitchen display system for multi-location restaurant chain.', 'closed', '2024-01-10 08:00:00', '2024-03-20 16:00:00', '2024-03-18 14:30:00'),
+(4, 6, 'Digital Marketing Campaign', 'Comprehensive social media and Google Ads campaign for new product launch targeting millennials and Gen Z.', 'open', '2024-03-01 09:00:00', '2024-05-31 17:00:00', NULL),
+(5, 7, 'Corporate Website Redesign', 'Complete website overhaul with responsive design, CMS integration, and SEO optimization for professional services firm.', 'open', '2024-02-15 10:00:00', '2024-04-30 16:00:00', NULL),
+(6, 9, 'Commercial Office Building', 'Construction of 10-story commercial office building with smart building technology and sustainable design features.', 'open', '2024-01-20 08:00:00', '2024-12-15 17:00:00', NULL),
+(7, 10, 'Shopping Center Structural Design', 'Structural engineering design for new regional shopping center including seismic analysis and foundation design.', 'open', '2024-02-10 09:00:00', '2024-07-31 16:00:00', NULL),
+(8, 11, 'Hospital Electrical Upgrade', 'Complete electrical system upgrade for major hospital including backup power systems and smart lighting controls.', 'closed', '2024-01-05 08:00:00', '2024-04-15 17:00:00', '2024-04-10 15:45:00'),
+(9, 12, 'SaaS Company Growth Strategy', 'Strategic consulting for SaaS startup looking to scale from 1M to 10M ARR with market expansion and team structuring.', 'open', '2024-03-10 10:00:00', '2024-06-30 17:00:00', NULL),
+(10, 13, 'Manufacturing Process Optimization', 'Operational efficiency review and process automation implementation for mid-sized manufacturing company.', 'open', '2024-02-20 09:00:00', '2024-05-15 16:00:00', NULL);
+
+INSERT INTO project_business_categories (project_id, business_category_id) VALUES
+(1, 2), (1, 7),
+(2, 2), (2, 13),
+(3, 2), (3, 7),
+(4, 3),
+(5, 13), (5, 3),
+(6, 11),
+(7, 11),
+(8, 11),
+(9, 15),
+(10, 15);
+
+INSERT INTO project_business_skills (project_id, business_skill_id) VALUES
+(1, 13), (1, 2), (1, 11),
+(2, 1), (2, 3), (2, 11),
+(3, 13), (3, 1), (3, 12),
+(4, 13), (4, 11),
+(5, 13), (5, 11),
+(6, 4), (6, 6), (6, 14), (6, 11),
+(7, 4), (7, 12), (7, 11),
+(8, 4), (8, 5), (8, 14), (8, 11),
+(9, 9), (9, 11),
+(10, 9), (10, 11), (10, 12);
+
+INSERT INTO project_regions (project_id, region_id) VALUES
+(1, 'nsw'), (1, 'vic'), (1, 'qld'),
+(2, 'nsw'), (2, 'vic'),
+(3, 'nsw'),
+(4, 'nsw'), (4, 'vic'), (4, 'qld'), (4, 'wa'),
+(5, 'nsw'),
+(6, 'vic'),
+(7, 'qld'),
+(8, 'nsw'),
+(9, 'nsw'), (9, 'vic'),
+(10, 'vic');
