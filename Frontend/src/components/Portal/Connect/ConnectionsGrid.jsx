@@ -11,6 +11,7 @@ import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
 import CloseIcon from "../../Icons/CloseIcon";
+import business from "../../../../../Backend/models/business";
 
 const ConnectionsGrid = ({ connectionsData, connectionModule, searchType, recommendations = [] }) => {
 
@@ -188,7 +189,9 @@ const ConnectionsGrid = ({ connectionsData, connectionModule, searchType, recomm
             whatwedoData: businessRes.data.services || [],
             clientData: businessRes.data.clients || [],
             connectionNum: businessRes.data.connections.length || 0,
-            companyCategory: businessRes.data.businessCategory
+            companyCategory: businessRes.data.businessCategory,
+            skills: businessRes.data.skills || [],
+            strengths: businessRes.data.strengths || []
         });
         setShowProfilePopup(true);
     }
@@ -303,6 +306,8 @@ const ConnectionsGrid = ({ connectionsData, connectionModule, searchType, recomm
                                 contactInfo={profileData.contactInfo} 
                                 connectionNum={profileData.connectionNum}
                                 companyCategory={profileData.companyCategory}
+                                skills={profileData.skills}
+                                strengths={profileData.strengths}
                             />
                         </div>
                     </div>

@@ -6,7 +6,7 @@ export default (db) => ({
 
   async infoFromId(id) {
     const [rows] = await db.query(`
-      SELECT b.id, b.name, b.contact_name, b.contact_phone_no, b.contact_email, b.business_category_id, bc.name as category, b.description, b.value
+      SELECT b.id, b.name, b.contact_name, b.contact_phone_no, b.contact_email, b.business_category_id, bc.name as category, b.description, b.value, b.operator_user_id as owner_id
       FROM businesses b
       LEFT JOIN business_categories bc ON b.business_category_id = bc.id
       WHERE b.id = ?
