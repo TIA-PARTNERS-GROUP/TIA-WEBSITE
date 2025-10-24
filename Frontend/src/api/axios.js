@@ -39,7 +39,6 @@ api.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const { data } = await api.post('/auth/refresh');
-                // Use 'token' or 'accessToken' depending on your backend's response
                 const newToken = data.token || data.accessToken;
                 sessionStorage.setItem('token', newToken);
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
