@@ -19,17 +19,13 @@ const router = express.Router();
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/business', businessRoutes);
-// router.use('/chat', chatRoutes);
 router.use('/chatbot', chatBotRoutes);
 router.use('/tasks', taskRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('', categoryRoutes);
 router.use('/feedback', feedbackRoutes);
-// router.use('/connect', connectRoutes);
-// router.use('/manage', manageRoutes);
 router.use('/projects', projectRoutes);
 router.use('/gnn', gnnRoutes);
-// router.use('/references', referenceRoutes);
 
 // Redirect to dashboard for users, devs get direct access to api
 if (config.env === 'production') {
