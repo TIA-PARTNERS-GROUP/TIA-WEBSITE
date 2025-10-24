@@ -8,3 +8,5 @@ coverage
 .git
 .gitignore
 .storybook
+
+node_modules

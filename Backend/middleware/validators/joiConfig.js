@@ -20,7 +20,6 @@ export const createValidator = (schema) => {
 
 // Express middleware wrapper
 export const validator = (schema, where = 'body') => {
-  return (req, res, next) => next();
   if (process.env.VALIDATION_DISABLED) {
     return (req, res, next) => next();
   }
@@ -42,16 +41,18 @@ export const validator = (schema, where = 'body') => {
       if (where === 'params') req.params = value;
       next(); // Verification passed; proceed with execution.
     } catch (error) {
-      
-      // Verification failed; return a standardised error response
+
+      // Collect validation error details
       const details = Array.isArray(error.details)
         ? error.details.map(detail => ({
             path: detail.path.join('.'),
             message: detail.message
           }))
         : [{ message: error.message }];
-        
-      message = details.map(d => d.message).join('; ');
+
+      const message = details.map(d => d.message).join('; ');
+
+      // Return a 400 Bad Request response for validation errors
       return res.status(400).json({
         error: 'VALIDATION_FAILED',
         message: message,

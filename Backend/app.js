@@ -17,6 +17,7 @@ app.use(express.json());
 const allowedOrigins = [
   process.env.FRONTEND_BASE_URL,
   process.env.FRONTEND_AWS_URL,
+  'http://ec2-13-239-184-226.ap-southeast-2.compute.amazonaws.com:3000',
   'http://localhost:3000'
 ];
 console.log('Allowed Origins:', allowedOrigins);
