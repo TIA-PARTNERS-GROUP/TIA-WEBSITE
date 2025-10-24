@@ -9,9 +9,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   const allowedHosts = process.env.VITE_ALLOWED_HOSTS ? process.env.VITE_ALLOWED_HOSTS.split(',') : [];
-  console.log('VITE_ALLOWED_HOSTS:', process.env.VITE_ALLOWED_HOSTS);
-  console.log('allowedHosts:', allowedHosts);
-  console.log(`Backend URL: ${env.VITE_PROXY_TARGET}`);
+  // console.log('VITE_ALLOWED_HOSTS:', process.env.VITE_ALLOWED_HOSTS);
+  // console.log('allowedHosts:', allowedHosts);
+  // console.log(`Backend URL: ${env.VITE_PROXY_TARGET}`);
 
   return {
     plugins: [
@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: env.VITE_PROXY_TARGET
+          target: env.VITE_PROXY_TARGET,
         },
       },
     },

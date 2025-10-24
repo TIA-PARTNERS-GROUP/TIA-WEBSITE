@@ -11,7 +11,6 @@ import PrimaryButton from "../../Button/PrimaryButton";
 import SecondaryButton from "../../Button/SecondaryButton";
 import ProfileIcon from "../../Icons/ProfileIcon";
 import CloseIcon from "../../Icons/CloseIcon";
-import business from "../../../../../Backend/models/business";
 
 const ConnectionsGrid = ({ connectionsData, connectionModule, searchType, recommendations = [] }) => {
 

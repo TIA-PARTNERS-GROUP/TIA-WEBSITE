@@ -14,16 +14,10 @@ import { generalAPILimiter } from './middleware/rateLimiter.js';
 const app = express();
 app.use(express.json());
 
-const allowedOrigins = [
-  process.env.FRONTEND_BASE_URL,
-  process.env.FRONTEND_AWS_URL,
-  'http://ec2-13-239-184-226.ap-southeast-2.compute.amazonaws.com:3000',
-  'http://localhost:3000'
-];
-console.log('Allowed Origins:', allowedOrigins);
+console.log('Allowed Origins:', process.env.FRONTEND_BASE_URL);
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: process.env.FRONTEND_BASE_URL,
   credentials: true,
 }))
 
