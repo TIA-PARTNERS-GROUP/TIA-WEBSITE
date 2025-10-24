@@ -50,7 +50,7 @@ INSERT INTO business_categories (id, name) VALUES
 (20, 'Game Development');
 
 INSERT INTO businesses (id, operator_user_id, name, tagline, contact_name, contact_phone_no, contact_email, description, business_category_id) VALUES
-(1, 3, 'BS Industries', 'BS is the BeSt', 'Bob Smith', '0123456789', 'bobsmith@email.com', 'We make things!!', 2),
+(1, 3, 'BC Industries', 'BS is the BeSt', 'Bob Smith', '0123456789', 'bobsmith@email.com', 'We make things!!', 2),
 (2, 4, 'A-Team', 'AT our best', 'Alice Smith', '0123456789', 'alicesmith@email.com', 'We make things!!', 2),
 (3, 5, 'ST Ltd.', 'It''s tasty as hell!', 'Steve', '0123456789', 'stevesmith@email.com', 'ST will do it.', 7),
 (101, 6, 'Digital Marketing Pro', 'Grow Your Business Online', 'Sarah Chen', '0123456789', 'sarahchen@email.com', 'Specializes in social media and online advertising campaigns', 3),
