@@ -68,6 +68,8 @@ jobs:
       - name: Setup database
         env:
             DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: app_test
         run: |
           cd ./Backend/ && npm run migrate
       - name: Run backend tests
