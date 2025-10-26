@@ -46,14 +46,9 @@ jobs:
 
       - name: Setup database
         working-directory: Backend
-        env:
-          NODE_ENV: development
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_USER: root
-          DB_PASSWORD: password
-          DB_NAME: app_test
-        run: npm run migrate
+        run: |
+          npx --yes db-migrate up:development \
+            --url "mysql://root:password@127.0.0.1:3306/app_test"
 
       - name: Run backend tests
         working-directory: Backend
