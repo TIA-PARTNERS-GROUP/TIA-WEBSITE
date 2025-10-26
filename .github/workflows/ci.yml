@@ -23,13 +23,13 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd ./tia_partners_frontend/ && npm install
-      - name: Run frontend tests
-        run: |
-          cd ./tia_partners_frontend/ && npm test -- --ci --silent --forceExit --coverage
+          cd ./frontend/ && npm install
       - name: Install backend dependencies
         run: |
-          cd ./tia_partners_backend/ && npm install
+          cd ./backend/ && npm install
+      - name: Setup database
+        run: |
+          cd ./backend/ && npm run db-setup:linux
       - name: Run backend tests
         run: |
-          cd ./tia_partners_backend/ && npm test
+          cd ./backend/ && npm run test
