@@ -29,7 +29,7 @@ jobs:
           cd ./Backend/ && npm install
       - name: Setup database
         run: |
-          cd ./Backend/ && npm run db-setup:linux
+          cd ./Backend/ && npm run setup-db:linux
       - name: Run backend tests
         run: |
           cd ./Backend/ && npm run test
