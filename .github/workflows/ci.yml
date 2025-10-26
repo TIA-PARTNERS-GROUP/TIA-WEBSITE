@@ -24,7 +24,7 @@ jobs:
       - name: Create Backend test env file
         working-directory: Backend
         run: |
-          cat > .env.test <<EOF
+          cat > .env <<EOF
           NODE_ENV=test
           DB_HOST=127.0.0.1
           DB_PORT=3306
@@ -41,14 +41,14 @@ jobs:
       - name: Create Frontend test env file
         working-directory: Frontend
         run: |
-          cat > .env.test <<EOF
+          cat > .env <<EOF
           VITE_FRONTEND_BASE_PORT=3000
           VITE_API_BASE_URL=http://localhost:5000/api
           EOF
 
       - name: Install frontend dependencies
         env:
-            DOTENV_CONFIG_PATH: ${{ github.workspace }}/Frontend/.env.test
+            DOTENV_CONFIG_PATH: ${{ github.workspace }}/Frontend/.env
         run: |
           cd ./Frontend/ && npm install
       - name: Install backend dependencies
@@ -56,11 +56,11 @@ jobs:
           cd ./Backend/ && npm install
       - name: Setup database
         env:
-            DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env.test
+            DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
         run: |
           cd ./Backend/ && npm run setup-db:linux
       - name: Run backend tests
         env:
-              DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env.test
+              DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
         run: |
           cd ./Backend/ && npm run test
