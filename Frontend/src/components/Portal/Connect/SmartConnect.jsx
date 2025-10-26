@@ -19,11 +19,15 @@ const SmartConnect = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  const [hasNoData, setHasNoData] = useState(false);
+  const [noDataMessage, setNoDataMessage] = useState("");
   const itemsPerPage = 10;
 
   useEffect(() => {
   const fetchConnections = async () => {
     startLoading();
+    setHasNoData(false);
+    setNoDataMessage("");
 
     try {
       // Step 0: get current user ID
@@ -36,10 +40,15 @@ const SmartConnect = () => {
       }
 
       let combinedData = [];
+      let isEmpty = false;
 
       switch (partnerType?.toLowerCase()) {
         case "complementary":
           combinedData = (await getComplementaryPartners(userId))?.data?.partners || [];
+            if (combinedData.length === 0) {
+              isEmpty = true;
+              setNoDataMessage("Can't find any complementary partners");
+            }
           break;
 
         case "alliance":
@@ -47,7 +56,9 @@ const SmartConnect = () => {
           const projects = myProjectsRes?.data?.projects || [];
 
           if (projects.length === 0) {
-            console.warn("No projects found for current user.");
+            isEmpty = true;
+            setNoDataMessage("Can't find any alliance partners - try creating a project first.");
+            combinedData = [];
           } else {
             const partnerPromises = projects.map(p =>
               getAlliancePartners(p.id).catch(err => {
@@ -57,17 +68,39 @@ const SmartConnect = () => {
             );
             const results = await Promise.all(partnerPromises);
             combinedData = results.flatMap(r => r.data?.partners || []);
+
+            if (combinedData.length === 0) {
+                isEmpty = true;
+                setNoDataMessage("Can't find any alliance partners");
+            }
           }
           break;
 
         case "mastermind":
           combinedData = (await getMastermindPartners(userId))?.data?.partners || [];
+          if (combinedData.length === 0) {
+            isEmpty = true;
+            setNoDataMessage("Can't find any mastermind partners - try filling out the strengths section on your profile.");
+          }
           break;
 
         default:
           console.error("Invalid partner type:", partnerType);
           stopLoading();
           return;
+      }
+
+      setHasNoData(isEmpty);
+
+      // If no data, skip the rest of processing
+      if (isEmpty) {
+        setConnectionsData([]);
+        setRecommendations([]);
+        setTotalItems(0);
+        setTotalPages(1);
+        setCurrentPage(1);
+        stopLoading();
+        return;
       }
 
       // Deduplicate based on recommendation.user.id
@@ -112,6 +145,7 @@ const SmartConnect = () => {
       setTotalItems(0);
       setTotalPages(1);
       setCurrentPage(1);
+      setNoDataMessage("Error loading partner recommendations");
     } finally {
       stopLoading();
     }
@@ -144,19 +178,27 @@ const SmartConnect = () => {
         Our SmartConnect system has recommended the following {partnerType} partners based on your profile:
       </p>
 
-      <ConnectionsGrid 
-        connectionsData={connectionsData}
-        searchType="smartconnect"
-        recommendations={recommendations}
-      />
+      {hasNoData ? (
+        <div className="lg:pl-4 2xl:pl-10 py-8 sm:text-xs 2xl:text-lg text-gray-600">
+          {noDataMessage}
+        </div>
+      ) : (
+        <>
+          <ConnectionsGrid 
+            connectionsData={connectionsData}
+            searchType="smartconnect"
+            recommendations={recommendations}
+          />
 
-      <PaginationNav
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalItems={totalItems}
-        itemsPerPage={itemsPerPage}
-        onPageChange={handlePageChange}
-      />
+          <PaginationNav
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
     </div>
   );
 };

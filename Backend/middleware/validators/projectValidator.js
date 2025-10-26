@@ -3,13 +3,17 @@ import Joi from 'joi';
 
 const id = Joi.number().integer().min(1);
 
+// Date validation for "YYYY-MM-DD" format
+const dateString = Joi.string()
+  .pattern(/^\d{4}-\d{2}-\d{2}$/)
+  .message('Date must be in format "YYYY-MM-DD" like "2025-10-26"');
+
 // GET /projects Query Parameters (Aligned with Swagger)
 export const listProjectQuery = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(20),
 
   search: Joi.string().trim().allow(''),
-
 
   categories: Joi.alternatives().try(
     Joi.string()
@@ -47,9 +51,9 @@ export const createProjectSchema = Joi.object({
 
   status: Joi.string().valid('open', 'closed').default('open'),
 
-  openDate: Joi.date().iso().optional().allow(null),
-  closeDate: Joi.date().iso().optional().allow(null),
-  completionDate: Joi.date().iso().optional().allow(null),
+  openDate: dateString.optional().allow(null),
+  closeDate: dateString.optional().allow(null),
+  completionDate: dateString.optional().allow(null),
 
   categoryIds: Joi.array().items(id).optional(),
   skillIds: Joi.array().items(id).optional(),
@@ -63,9 +67,9 @@ export const updateProjectBody = Joi.object({
 
   status: Joi.string().valid('open', 'closed'),
 
-  openDate: Joi.date().iso().allow(null),
-  closeDate: Joi.date().iso().allow(null),
-  completionDate: Joi.date().iso().allow(null),
+  openDate: dateString.allow(null),
+  closeDate: dateString.allow(null),
+  completionDate: dateString.allow(null),
 
   categoryIds: Joi.array().items(id),
   skillIds: Joi.array().items(id),

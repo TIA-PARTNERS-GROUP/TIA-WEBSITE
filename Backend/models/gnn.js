@@ -23,37 +23,25 @@ export default (db) => ({
   },
 
   async fetchComplementaryPartners(userId) {
-    const [userSkillRows] = await db.query(`
-      SELECT s.category_id
-      FROM user_skills us
-      JOIN skills s ON s.id = us.skill_id
-      WHERE us.user_id = ?
+    const [userBusinessRows] = await db.query(`
+      SELECT b.business_category_id
+      FROM businesses b
+      WHERE b.operator_user_id = ?
     `, [userId]);
 
-    const categoryIds = userSkillRows.map(r => r.category_id);
-    const placeholders = categoryIds.map(() => '?').join(',');
+    if (!userBusinessRows.length || !userBusinessRows[0].business_category_id) return [];
 
-    let [users] = categoryIds.length > 0
-      ? await db.query(`
-          SELECT DISTINCT b.id AS business_id
-          FROM users u
-          JOIN businesses b ON b.operator_user_id = u.id
-          JOIN user_skills us ON us.user_id = u.id
-          JOIN skills s ON s.id = us.skill_id
-          WHERE s.category_id IN (${placeholders})
-            AND u.id != ?
-        `, [...categoryIds, userId])
-      : [[]];
+    const userBusinessCategoryId = userBusinessRows[0].business_category_id;
 
-    if (!users.length) {
-      // fallback: pick 1-2 random businesses
-      [users] = await db.query(`
-        SELECT b.id AS business_id
-        FROM businesses b
-        ORDER BY RAND()
-        LIMIT 2
-      `);
-    }
+    const [users] = await db.query(`
+      SELECT DISTINCT b.id AS business_id
+      FROM users u
+      JOIN businesses b ON b.operator_user_id = u.id
+      WHERE b.business_category_id != ?
+        AND u.id != ?
+    `, [userBusinessCategoryId, userId]);
+    
+    if (!users.length) return [];
 
     return await this._formatBusinessRecommendations(users.map(u => u.business_id));
   },
@@ -79,15 +67,7 @@ export default (db) => ({
         `, [...strengthIds, userId])
       : [[]];
 
-    if (!users.length) {
-      // fallback: pick 1-2 random businesses
-      [users] = await db.query(`
-        SELECT b.id AS business_id
-        FROM businesses b
-        ORDER BY RAND()
-        LIMIT 2
-      `);
-    }
+    if (!users.length) return [];
 
     return await this._formatBusinessRecommendations(users.map(u => u.business_id));
   },

@@ -26,7 +26,7 @@ export default function L2E({ mock = false }) {
           setScores(res.data.response.scores);
         }
       } catch (err) {
-        console.error("Failed to fetch L2E scores:", err);
+        console.warn("Failed to fetch L2E scores:", err);
       }
     };
     fetchScores();
