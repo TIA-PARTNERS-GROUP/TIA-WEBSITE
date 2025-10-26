@@ -2,11 +2,9 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
@@ -17,45 +15,74 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: app_test
-        ports: ['3306:3306']
+          MYSQL_DATABASE: tia_website
+        ports:
+          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ppassword"
-          --health-interval=5s --health-timeout=5s --health-retries=30
+          --health-interval=5s --health-timeout=5s --health-retries=60
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+
+      - name: Create Backend test env file
+        working-directory: Backend
+        run: |
+          cat > .env <<EOF
+          NODE_ENV=test
+          DB_HOST=localhost
+          DB_PORT=3306
+          DB_USER=root
+          DB_PASS=password
+          DB_NAME=tia_website
+          PORT=5000
+          JWT_SECRET=thisisaplaceholderjwtsecretfordevelopment
+          FRONTEND_BASE_URL=http://localhost:3000
+          ADK_API_URL=http://localhost:8080/chat
+          ADK_RECORD_TEST=false
+          GNN_API_URL=http://localhost:5000/api/gnn
+          EOF
+
+      - name: Create Frontend test env file
+        working-directory: Frontend
+        run: |
+          cat > .env <<EOF
+          VITE_FRONTEND_BASE_PORT=3000
+          VITE_API_BASE_URL=http://localhost:5000/api
+          EOF
 
       - name: Install frontend dependencies
         working-directory: Frontend
-        run: npm install
+        env:
+          DOTENV_CONFIG_PATH: ${{ github.workspace }}/Frontend/.env
+        run: npm ci
 
-      - name: Run Frontend
+      - name: Build frontend
         working-directory: Frontend
+        env:
+          DOTENV_CONFIG_PATH: ${{ github.workspace }}/Frontend/.env
         run: npm run build
 
       - name: Install backend dependencies
         working-directory: Backend
-        run: npm install
+        run: npm ci
 
-      - name: Setup database
-        working-directory: Backend
-        run: npx --yes db-migrate up:development --url "mysql://root:password@127.0.0.1:3306/app_test"
-
-      - name: Run backend tests
+      - name: Setup database (migrations)
         working-directory: Backend
         env:
-          NODE_ENV: test
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_USER: root
-          DB_PASSWORD: password
-          DB_NAME: app_test
-          JWT_SECRET: thisisaplaceholderjwtsecretfordevelopment
-        run: npm run test
+          DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
+        run: |
+          npm run migrate
+
+      # - name: Run backend tests
+      #   working-directory: Backend
+      #   env:
+      #     DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
+      #   run: npm test

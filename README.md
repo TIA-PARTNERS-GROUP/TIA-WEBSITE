@@ -56,7 +56,7 @@ Using the Jest testing framework
 [jest](https://jestjs.io/)
 ### How to run tests
 ```console
-npm test
+npm run test
 ```
 ### How to run tests without middleware validation
 ```console

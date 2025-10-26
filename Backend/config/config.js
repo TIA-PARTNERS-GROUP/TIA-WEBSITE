@@ -8,7 +8,7 @@ const required = (key) => {
 };
 
 const valEnv = {
-  NODE_ENV: required('NODE_ENV') || 'development', // Default to development (for testing purposes)
+  NODE_ENV: required('NODE_ENV') || 'development',
   PORT: parseInt(required('PORT'), 10),
   FRONTEND_BASE_URL: required('FRONTEND_BASE_URL'),
   DB_HOST: required('DB_HOST'),

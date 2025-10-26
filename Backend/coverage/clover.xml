@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761306500977" clover="3.2.0">
-  <project timestamp="1761306500977" name="All files">
-    <metrics statements="2001" coveredstatements="881" conditionals="725" coveredconditionals="240" methods="281" coveredmethods="97" elements="3007" coveredelements="1218" complexity="0" loc="2001" ncloc="2001" packages="9" files="58" classes="58"/>
+<coverage generated="1761472230178" clover="3.2.0">
+  <project timestamp="1761472230178" name="All files">
+    <metrics statements="2000" coveredstatements="880" conditionals="725" coveredconditionals="240" methods="281" coveredmethods="97" elements="3006" coveredelements="1217" complexity="0" loc="2000" ncloc="2000" packages="9" files="58" classes="58"/>
     <package name="Backend">
-      <metrics statements="22" coveredstatements="17" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
+      <metrics statements="21" coveredstatements="16" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
       <file name="app.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/app.js">
-        <metrics statements="22" coveredstatements="17" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
+        <metrics statements="21" coveredstatements="16" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
         <line num="14" count="7" type="stmt"/>
         <line num="15" count="7" type="stmt"/>
         <line num="17" count="7" type="stmt"/>
-        <line num="23" count="7" type="stmt"/>
+        <line num="19" count="7" type="stmt"/>
         <line num="25" count="7" type="stmt"/>
-        <line num="31" count="7" type="stmt"/>
+        <line num="39" count="7" type="stmt"/>
+        <line num="43" count="7" type="cond" truecount="1" falsecount="1"/>
+        <line num="44" count="7" type="stmt"/>
         <line num="45" count="7" type="stmt"/>
-        <line num="49" count="7" type="cond" truecount="1" falsecount="1"/>
-        <line num="50" count="7" type="stmt"/>
-        <line num="51" count="7" type="stmt"/>
-        <line num="52" count="7" type="stmt"/>
+        <line num="46" count="7" type="stmt"/>
+        <line num="47" count="7" type="stmt"/>
+        <line num="48" count="7" type="stmt"/>
         <line num="53" count="7" type="stmt"/>
         <line num="54" count="7" type="stmt"/>
-        <line num="59" count="7" type="stmt"/>
-        <line num="60" count="7" type="stmt"/>
-        <line num="65" count="7" type="cond" truecount="1" falsecount="1"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="75" count="7" type="cond" truecount="1" falsecount="1"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
+        <line num="59" count="7" type="cond" truecount="1" falsecount="1"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="69" count="7" type="cond" truecount="1" falsecount="1"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
       </file>
     </package>
     <package name="Backend.config">
