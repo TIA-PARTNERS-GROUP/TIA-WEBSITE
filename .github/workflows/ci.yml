@@ -23,13 +23,13 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd ./frontend/ && npm install
+          cd ./Frontend/ && npm install
       - name: Install backend dependencies
         run: |
-          cd ./backend/ && npm install
+          cd ./Backend/ && npm install
       - name: Setup database
         run: |
-          cd ./backend/ && npm run db-setup:linux
+          cd ./Backend/ && npm run db-setup:linux
       - name: Run backend tests
         run: |
-          cd ./backend/ && npm run test
+          cd ./Backend/ && npm run test
