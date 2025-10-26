@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.73% </span>
+                <span class="strong">63.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/46</span>
+                <span class='fraction'>29/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.72% </span>
+                <span class="strong">59.09% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/22</span>
+                <span class='fraction'>13/22</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.48% </span>
+                <span class="strong">70.73% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/41</span>
+                <span class='fraction'>29/41</span>
             </div>
         
             
@@ -177,29 +177,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">90x</span>
-<span class="cline-any cline-yes">90x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">90x</span>
-<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">65x</span>
+<span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">63x</span>
-<span class="cline-any cline-yes">63x</span>
+<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">64x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,10 +228,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -329,11 +329,11 @@ export const verifyRefreshToken = async (req, res, next) =&gt; {
         //4. Check that token hasn't been superseded (with a grace period of 30s)
         // Grace period is for race conditions.
         // TODO revoke the full token chain in the event that an obsolete refresh token is provided
-        if (session.rotated_to_id) {
-          const newerSession = await user.fetchSessionFromId(session.rotated_to_id);
-          <span class="missing-if-branch" title="if path not taken" >I</span>if (newerSession == null) <span class="cstat-no" title="statement not covered" >return res.status(500).json({message: "Internal server error"}); </span>// Bad if happens
-          const newTokenCreatedAt = new Date(newerSession.created_at.toString().replace(" ", "T"));
-          <span class="missing-if-branch" title="if path not taken" >I</span>if (new Date(now.getTime() + 30 * 1000) &gt; newTokenCreatedAt) <span class="cstat-no" title="statement not covered" >return res.status(403).json({message: "Obsolete token"})</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (session.rotated_to_id) {
+          const newerSession = <span class="cstat-no" title="statement not covered" >await user.fetchSessionFromId(session.rotated_to_id);</span>
+<span class="cstat-no" title="statement not covered" >          if (newerSession == null) <span class="cstat-no" title="statement not covered" >return res.status(500).json({message: "Internal server error"}); </span></span>// Bad if happens
+          const newTokenCreatedAt = <span class="cstat-no" title="statement not covered" >new Date(newerSession.created_at.toString().replace(" ", "T"));</span>
+<span class="cstat-no" title="statement not covered" >          if (new Date(now.getTime() + 30 * 1000) &gt; newTokenCreatedAt) <span class="cstat-no" title="statement not covered" >return res.status(403).json({message: "Obsolete token"})</span></span>
         }
 &nbsp;
         req.refreshToken = session;
@@ -376,7 +376,7 @@ export const tempFakeAuth = <span class="fstat-no" title="function not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-26T11:31:19.944Z
+                at 2025-10-26T11:54:53.909Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

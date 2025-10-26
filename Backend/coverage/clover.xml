@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761478279989" clover="3.2.0">
-  <project timestamp="1761478279989" name="All files">
-    <metrics statements="2000" coveredstatements="744" conditionals="727" coveredconditionals="200" methods="279" coveredmethods="79" elements="3006" coveredelements="1023" complexity="0" loc="2000" ncloc="2000" packages="9" files="58" classes="58"/>
+<coverage generated="1761479693974" clover="3.2.0">
+  <project timestamp="1761479693974" name="All files">
+    <metrics statements="2000" coveredstatements="874" conditionals="727" coveredconditionals="235" methods="279" coveredmethods="96" elements="3006" coveredelements="1205" complexity="0" loc="2000" ncloc="2000" packages="9" files="58" classes="58"/>
     <package name="Backend">
       <metrics statements="21" coveredstatements="16" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
-      <file name="app.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/app.js">
+      <file name="app.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/app.js">
         <metrics statements="21" coveredstatements="16" conditionals="6" coveredconditionals="3" methods="2" coveredmethods="0"/>
         <line num="14" count="7" type="stmt"/>
         <line num="15" count="7" type="stmt"/>
@@ -31,7 +31,7 @@
     </package>
     <package name="Backend.config">
       <metrics statements="15" coveredstatements="14" conditionals="8" coveredconditionals="4" methods="1" coveredmethods="1"/>
-      <file name="config.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/config/config.js">
+      <file name="config.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/config/config.js">
         <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="4" count="7" type="stmt"/>
         <line num="5" count="63" type="stmt"/>
@@ -40,11 +40,11 @@
         <line num="10" count="7" type="stmt"/>
         <line num="23" count="7" type="stmt"/>
       </file>
-      <file name="db.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/config/db.js">
+      <file name="db.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/config/db.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="7" type="stmt"/>
       </file>
-      <file name="index.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/config/index.js">
+      <file name="index.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/config/index.js">
         <metrics statements="8" coveredstatements="7" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
         <line num="4" count="7" type="cond" truecount="1" falsecount="1"/>
@@ -57,9 +57,9 @@
       </file>
     </package>
     <package name="Backend.controllers">
-      <metrics statements="1072" coveredstatements="357" conditionals="407" coveredconditionals="112" methods="88" coveredmethods="28"/>
-      <file name="authController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/authController.js">
-        <metrics statements="75" coveredstatements="52" conditionals="8" coveredconditionals="5" methods="8" coveredmethods="4"/>
+      <metrics statements="1072" coveredstatements="441" conditionals="407" coveredconditionals="136" methods="88" coveredmethods="32"/>
+      <file name="authController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/authController.js">
+        <metrics statements="75" coveredstatements="51" conditionals="8" coveredconditionals="5" methods="8" coveredmethods="4"/>
         <line num="9" count="7" type="stmt"/>
         <line num="10" count="6" type="stmt"/>
         <line num="11" count="6" type="stmt"/>
@@ -69,9 +69,9 @@
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="6" type="stmt"/>
         <line num="23" count="6" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="36" count="6" type="stmt"/>
-        <line num="37" count="6" type="stmt"/>
+        <line num="25" count="6" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
         <line num="41" count="7" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
@@ -136,52 +136,52 @@
         <line num="169" count="0" type="stmt"/>
         <line num="171" count="0" type="stmt"/>
       </file>
-      <file name="businessController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/businessController.js">
-        <metrics statements="299" coveredstatements="71" conditionals="109" coveredconditionals="19" methods="21" coveredmethods="6"/>
+      <file name="businessController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/businessController.js">
+        <metrics statements="299" coveredstatements="156" conditionals="109" coveredconditionals="43" methods="21" coveredmethods="10"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="11" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
         <line num="46" count="7" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="51" count="1" type="stmt"/>
-        <line num="52" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="53" count="1" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
         <line num="85" count="7" type="stmt"/>
         <line num="86" count="2" type="stmt"/>
         <line num="87" count="2" type="stmt"/>
         <line num="88" count="2" type="stmt"/>
         <line num="89" count="2" type="stmt"/>
         <line num="91" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="92" count="2" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
         <line num="94" count="2" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="104" count="2" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
+        <line num="97" count="2" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
         <line num="108" count="7" type="stmt"/>
         <line num="109" count="1" type="stmt"/>
         <line num="110" count="1" type="stmt"/>
@@ -191,16 +191,16 @@
         <line num="115" count="1" type="stmt"/>
         <line num="116" count="1" type="stmt"/>
         <line num="118" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="119" count="1" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
         <line num="121" count="1" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="125" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
-        <line num="132" count="1" type="stmt"/>
-        <line num="133" count="1" type="stmt"/>
+        <line num="123" count="1" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+        <line num="125" count="2" type="stmt"/>
+        <line num="126" count="2" type="stmt"/>
+        <line num="127" count="2" type="stmt"/>
+        <line num="130" count="1" type="stmt"/>
+        <line num="132" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
         <line num="137" count="7" type="stmt"/>
         <line num="138" count="1" type="stmt"/>
         <line num="139" count="1" type="stmt"/>
@@ -211,16 +211,16 @@
         <line num="145" count="1" type="stmt"/>
         <line num="146" count="1" type="stmt"/>
         <line num="148" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="149" count="1" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
         <line num="151" count="1" type="stmt"/>
-        <line num="153" count="0" type="stmt"/>
-        <line num="154" count="0" type="stmt"/>
-        <line num="155" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="160" count="0" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="163" count="1" type="stmt"/>
+        <line num="153" count="1" type="stmt"/>
+        <line num="154" count="1" type="stmt"/>
+        <line num="155" count="2" type="stmt"/>
+        <line num="156" count="2" type="stmt"/>
+        <line num="157" count="2" type="stmt"/>
+        <line num="160" count="1" type="stmt"/>
+        <line num="162" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
         <line num="167" count="7" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
         <line num="169" count="0" type="stmt"/>
@@ -254,47 +254,47 @@
         <line num="212" count="0" type="stmt"/>
         <line num="213" count="0" type="stmt"/>
         <line num="217" count="7" type="stmt"/>
-        <line num="218" count="0" type="stmt"/>
-        <line num="219" count="0" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
-        <line num="221" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="218" count="1" type="stmt"/>
+        <line num="219" count="1" type="stmt"/>
+        <line num="220" count="1" type="stmt"/>
+        <line num="221" count="1" type="cond" truecount="3" falsecount="1"/>
         <line num="222" count="0" type="stmt"/>
-        <line num="224" count="0" type="stmt"/>
-        <line num="225" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="228" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="224" count="1" type="stmt"/>
+        <line num="225" count="1" type="stmt"/>
+        <line num="226" count="1" type="stmt"/>
+        <line num="228" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="229" count="0" type="stmt"/>
-        <line num="231" count="0" type="stmt"/>
-        <line num="233" count="0" type="stmt"/>
-        <line num="234" count="0" type="stmt"/>
-        <line num="235" count="0" type="stmt"/>
-        <line num="236" count="0" type="stmt"/>
-        <line num="237" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="238" count="0" type="stmt"/>
+        <line num="231" count="1" type="stmt"/>
+        <line num="233" count="1" type="stmt"/>
+        <line num="234" count="1" type="stmt"/>
+        <line num="235" count="1" type="stmt"/>
+        <line num="236" count="1" type="stmt"/>
+        <line num="237" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="238" count="1" type="stmt"/>
         <line num="240" count="0" type="stmt"/>
-        <line num="244" count="0" type="stmt"/>
+        <line num="244" count="1" type="stmt"/>
         <line num="246" count="0" type="stmt"/>
         <line num="247" count="0" type="stmt"/>
         <line num="251" count="7" type="stmt"/>
-        <line num="252" count="0" type="stmt"/>
-        <line num="253" count="0" type="stmt"/>
-        <line num="254" count="0" type="stmt"/>
-        <line num="255" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="252" count="1" type="stmt"/>
+        <line num="253" count="1" type="stmt"/>
+        <line num="254" count="1" type="stmt"/>
+        <line num="255" count="1" type="cond" truecount="3" falsecount="1"/>
         <line num="256" count="0" type="stmt"/>
-        <line num="258" count="0" type="stmt"/>
-        <line num="259" count="0" type="stmt"/>
-        <line num="260" count="0" type="stmt"/>
-        <line num="262" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="258" count="1" type="stmt"/>
+        <line num="259" count="1" type="stmt"/>
+        <line num="260" count="1" type="stmt"/>
+        <line num="262" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="263" count="0" type="stmt"/>
-        <line num="265" count="0" type="stmt"/>
-        <line num="267" count="0" type="stmt"/>
-        <line num="268" count="0" type="stmt"/>
-        <line num="269" count="0" type="stmt"/>
-        <line num="270" count="0" type="stmt"/>
-        <line num="271" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="272" count="0" type="stmt"/>
+        <line num="265" count="1" type="stmt"/>
+        <line num="267" count="1" type="stmt"/>
+        <line num="268" count="1" type="stmt"/>
+        <line num="269" count="1" type="stmt"/>
+        <line num="270" count="1" type="stmt"/>
+        <line num="271" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="272" count="1" type="stmt"/>
         <line num="274" count="0" type="stmt"/>
-        <line num="278" count="0" type="stmt"/>
+        <line num="278" count="1" type="stmt"/>
         <line num="280" count="0" type="stmt"/>
         <line num="281" count="0" type="stmt"/>
         <line num="285" count="7" type="stmt"/>
@@ -334,49 +334,49 @@
         <line num="338" count="0" type="stmt"/>
         <line num="339" count="0" type="stmt"/>
         <line num="343" count="7" type="stmt"/>
-        <line num="344" count="0" type="stmt"/>
-        <line num="345" count="0" type="stmt"/>
-        <line num="346" count="0" type="stmt"/>
-        <line num="347" count="0" type="stmt"/>
-        <line num="348" count="0" type="stmt"/>
-        <line num="350" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="344" count="1" type="stmt"/>
+        <line num="345" count="1" type="stmt"/>
+        <line num="346" count="1" type="stmt"/>
+        <line num="347" count="1" type="stmt"/>
+        <line num="348" count="1" type="stmt"/>
+        <line num="350" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="351" count="0" type="stmt"/>
-        <line num="354" count="0" type="stmt"/>
-        <line num="356" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="354" count="1" type="stmt"/>
+        <line num="356" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="357" count="0" type="stmt"/>
-        <line num="359" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="359" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="360" count="0" type="stmt"/>
-        <line num="362" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="362" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="363" count="0" type="stmt"/>
-        <line num="366" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="366" count="1" type="cond" truecount="2" falsecount="2"/>
         <line num="367" count="0" type="stmt"/>
-        <line num="370" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="370" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="371" count="0" type="stmt"/>
-        <line num="374" count="0" type="stmt"/>
-        <line num="375" count="0" type="stmt"/>
+        <line num="374" count="1" type="stmt"/>
+        <line num="375" count="1" type="stmt"/>
         <line num="377" count="0" type="stmt"/>
         <line num="378" count="0" type="stmt"/>
         <line num="382" count="7" type="stmt"/>
-        <line num="383" count="0" type="stmt"/>
-        <line num="384" count="0" type="stmt"/>
-        <line num="385" count="0" type="stmt"/>
-        <line num="386" count="0" type="stmt"/>
-        <line num="387" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="383" count="1" type="stmt"/>
+        <line num="384" count="1" type="stmt"/>
+        <line num="385" count="1" type="stmt"/>
+        <line num="386" count="1" type="stmt"/>
+        <line num="387" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="388" count="0" type="stmt"/>
-        <line num="390" count="0" type="stmt"/>
-        <line num="391" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="390" count="1" type="stmt"/>
+        <line num="391" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="392" count="0" type="stmt"/>
-        <line num="395" count="0" type="stmt"/>
-        <line num="397" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="395" count="1" type="stmt"/>
+        <line num="397" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="398" count="0" type="stmt"/>
-        <line num="401" count="0" type="stmt"/>
-        <line num="402" count="0" type="stmt"/>
-        <line num="404" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="401" count="1" type="stmt"/>
+        <line num="402" count="1" type="stmt"/>
+        <line num="404" count="1" type="cond" truecount="2" falsecount="2"/>
         <line num="405" count="0" type="stmt"/>
-        <line num="407" count="0" type="stmt"/>
-        <line num="408" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="407" count="1" type="stmt"/>
+        <line num="408" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="409" count="0" type="stmt"/>
-        <line num="412" count="0" type="stmt"/>
+        <line num="412" count="1" type="stmt"/>
         <line num="414" count="0" type="stmt"/>
         <line num="415" count="0" type="stmt"/>
         <line num="419" count="7" type="stmt"/>
@@ -438,7 +438,7 @@
         <line num="520" count="0" type="stmt"/>
         <line num="521" count="0" type="stmt"/>
       </file>
-      <file name="caseStudyController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/caseStudyController.js">
+      <file name="caseStudyController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/caseStudyController.js">
         <metrics statements="76" coveredstatements="58" conditionals="38" coveredconditionals="28" methods="5" coveredmethods="5"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -517,7 +517,7 @@
         <line num="127" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
       </file>
-      <file name="categoryController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/categoryController.js">
+      <file name="categoryController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/categoryController.js">
         <metrics statements="42" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="4" count="7" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
@@ -562,7 +562,7 @@
         <line num="89" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
       </file>
-      <file name="chatBotController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/chatBotController.js">
+      <file name="chatBotController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/chatBotController.js">
         <metrics statements="49" coveredstatements="3" conditionals="26" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="7" count="7" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -614,7 +614,7 @@
         <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
-      <file name="feedbackController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/feedbackController.js">
+      <file name="feedbackController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/feedbackController.js">
         <metrics statements="10" coveredstatements="1" conditionals="5" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -627,7 +627,7 @@
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
       </file>
-      <file name="gnnController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/gnnController.js">
+      <file name="gnnController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/gnnController.js">
         <metrics statements="22" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="58" count="7" type="stmt"/>
         <line num="60" count="7" type="stmt"/>
@@ -652,7 +652,7 @@
         <line num="88" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
       </file>
-      <file name="notificationController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/notificationController.js">
+      <file name="notificationController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/notificationController.js">
         <metrics statements="68" coveredstatements="5" conditionals="24" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -723,7 +723,7 @@
         <line num="135" count="0" type="stmt"/>
         <line num="136" count="0" type="stmt"/>
       </file>
-      <file name="postController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/postController.js">
+      <file name="postController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/postController.js">
         <metrics statements="77" coveredstatements="59" conditionals="38" coveredconditionals="28" methods="5" coveredmethods="5"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -803,7 +803,7 @@
         <line num="152" count="0" type="stmt"/>
         <line num="153" count="0" type="stmt"/>
       </file>
-      <file name="projectController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/projectController.js">
+      <file name="projectController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/projectController.js">
         <metrics statements="147" coveredstatements="9" conditionals="86" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -953,7 +953,7 @@
         <line num="269" count="0" type="stmt"/>
         <line num="270" count="0" type="stmt"/>
       </file>
-      <file name="taskController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/taskController.js">
+      <file name="taskController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/taskController.js">
         <metrics statements="85" coveredstatements="8" conditionals="27" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -1041,7 +1041,7 @@
         <line num="160" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
       </file>
-      <file name="testimonialController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/testimonialController.js">
+      <file name="testimonialController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/testimonialController.js">
         <metrics statements="76" coveredstatements="58" conditionals="38" coveredconditionals="28" methods="5" coveredmethods="5"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -1120,7 +1120,7 @@
         <line num="127" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
       </file>
-      <file name="userController.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/controllers/userController.js">
+      <file name="userController.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/controllers/userController.js">
         <metrics statements="46" coveredstatements="23" conditionals="8" coveredconditionals="4" methods="5" coveredmethods="3"/>
         <line num="4" count="7" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
@@ -1171,23 +1171,23 @@
       </file>
     </package>
     <package name="Backend.middleware">
-      <metrics statements="52" coveredstatements="42" conditionals="26" coveredconditionals="16" methods="7" coveredmethods="4"/>
-      <file name="authTolkien.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/authTolkien.js">
-        <metrics statements="41" coveredstatements="33" conditionals="22" coveredconditionals="16" methods="5" coveredmethods="3"/>
+      <metrics statements="52" coveredstatements="38" conditionals="26" coveredconditionals="13" methods="7" coveredmethods="4"/>
+      <file name="authTolkien.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/authTolkien.js">
+        <metrics statements="41" coveredstatements="29" conditionals="22" coveredconditionals="13" methods="5" coveredmethods="3"/>
         <line num="12" count="7" type="stmt"/>
-        <line num="13" count="90" type="stmt"/>
-        <line num="14" count="90" type="stmt"/>
-        <line num="16" count="90" type="cond" truecount="2" falsecount="0"/>
-        <line num="17" count="26" type="stmt"/>
-        <line num="20" count="64" type="stmt"/>
-        <line num="22" count="64" type="cond" truecount="3" falsecount="1"/>
+        <line num="13" count="92" type="stmt"/>
+        <line num="14" count="92" type="stmt"/>
+        <line num="16" count="92" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="27" type="stmt"/>
+        <line num="20" count="65" type="stmt"/>
+        <line num="22" count="65" type="cond" truecount="3" falsecount="1"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="26" count="64" type="stmt"/>
-        <line num="28" count="64" type="stmt"/>
-        <line num="29" count="64" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="65" type="stmt"/>
+        <line num="28" count="65" type="stmt"/>
+        <line num="29" count="65" type="cond" truecount="2" falsecount="0"/>
         <line num="30" count="1" type="stmt"/>
-        <line num="34" count="63" type="stmt"/>
-        <line num="35" count="63" type="stmt"/>
+        <line num="34" count="64" type="stmt"/>
+        <line num="35" count="64" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="42" count="7" type="stmt"/>
         <line num="43" count="2" type="stmt"/>
@@ -1200,11 +1200,11 @@
         <line num="56" count="2" type="stmt"/>
         <line num="57" count="2" type="stmt"/>
         <line num="58" count="2" type="cond" truecount="3" falsecount="1"/>
-        <line num="63" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="64" count="1" type="stmt"/>
-        <line num="65" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="66" count="1" type="stmt"/>
-        <line num="67" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="63" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="70" count="2" type="stmt"/>
         <line num="71" count="2" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
@@ -1216,19 +1216,19 @@
         <line num="98" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
       </file>
-      <file name="errorHandler.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/errorHandler.js">
+      <file name="errorHandler.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/errorHandler.js">
         <metrics statements="3" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="7" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
         <line num="3" count="0" type="cond" truecount="0" falsecount="4"/>
       </file>
-      <file name="logger.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/logger.js">
+      <file name="logger.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/logger.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="7" type="stmt"/>
         <line num="2" count="111" type="stmt"/>
         <line num="3" count="111" type="stmt"/>
       </file>
-      <file name="rateLimiter.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/rateLimiter.js">
+      <file name="rateLimiter.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/rateLimiter.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
         <line num="4" count="7" type="stmt"/>
@@ -1238,8 +1238,8 @@
       </file>
     </package>
     <package name="Backend.middleware.validators">
-      <metrics statements="88" coveredstatements="79" conditionals="25" coveredconditionals="17" methods="8" coveredmethods="4"/>
-      <file name="authValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/authValidator.js">
+      <metrics statements="88" coveredstatements="82" conditionals="25" coveredconditionals="19" methods="8" coveredmethods="5"/>
+      <file name="authValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/authValidator.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="7" type="stmt"/>
         <line num="14" count="7" type="stmt"/>
@@ -1250,8 +1250,8 @@
         <line num="66" count="7" type="stmt"/>
         <line num="71" count="7" type="stmt"/>
       </file>
-      <file name="businessValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/businessValidator.js">
-        <metrics statements="16" coveredstatements="13" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="businessValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/businessValidator.js">
+        <metrics statements="16" coveredstatements="16" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="3" count="7" type="stmt"/>
         <line num="6" count="7" type="stmt"/>
         <line num="18" count="7" type="stmt"/>
@@ -1260,35 +1260,35 @@
         <line num="47" count="7" type="stmt"/>
         <line num="60" count="7" type="stmt"/>
         <line num="73" count="7" type="stmt"/>
-        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="78" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
         <line num="85" count="7" type="stmt"/>
         <line num="90" count="7" type="stmt"/>
         <line num="93" count="7" type="stmt"/>
         <line num="97" count="7" type="stmt"/>
         <line num="101" count="7" type="stmt"/>
       </file>
-      <file name="chatBotValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/chatBotValidator.js">
+      <file name="chatBotValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/chatBotValidator.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
         <line num="15" count="7" type="stmt"/>
       </file>
-      <file name="feedbackValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/feedbackValidator.js">
+      <file name="feedbackValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/feedbackValidator.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
       </file>
-      <file name="generalValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/generalValidator.js">
+      <file name="generalValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/generalValidator.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="9" count="7" type="stmt"/>
         <line num="10" count="7" type="stmt"/>
       </file>
-      <file name="gnnValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/gnnValidator.js">
+      <file name="gnnValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/gnnValidator.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="7" type="stmt"/>
         <line num="3" count="7" type="stmt"/>
       </file>
-      <file name="joiConfig.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/joiConfig.js">
+      <file name="joiConfig.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/joiConfig.js">
         <metrics statements="22" coveredstatements="16" conditionals="23" coveredconditionals="17" methods="7" coveredmethods="4"/>
         <line num="3" count="7" type="stmt"/>
         <line num="6" count="7" type="stmt"/>
@@ -1301,26 +1301,26 @@
         <line num="23" count="511" type="cond" truecount="1" falsecount="1"/>
         <line num="24" count="0" type="stmt"/>
         <line num="27" count="511" type="stmt"/>
-        <line num="29" count="79" type="cond" truecount="3" falsecount="1"/>
-        <line num="33" count="79" type="stmt"/>
-        <line num="34" count="79" type="stmt"/>
-        <line num="39" count="55" type="cond" truecount="2" falsecount="0"/>
-        <line num="40" count="55" type="cond" truecount="2" falsecount="0"/>
-        <line num="41" count="55" type="cond" truecount="2" falsecount="0"/>
-        <line num="42" count="55" type="stmt"/>
-        <line num="46" count="24" type="cond" truecount="1" falsecount="1"/>
-        <line num="47" count="31" type="stmt"/>
-        <line num="53" count="31" type="stmt"/>
-        <line num="56" count="24" type="stmt"/>
+        <line num="29" count="80" type="cond" truecount="3" falsecount="1"/>
+        <line num="33" count="80" type="stmt"/>
+        <line num="34" count="80" type="stmt"/>
+        <line num="39" count="60" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="60" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="60" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="60" type="stmt"/>
+        <line num="46" count="20" type="cond" truecount="1" falsecount="1"/>
+        <line num="47" count="26" type="stmt"/>
+        <line num="53" count="26" type="stmt"/>
+        <line num="56" count="20" type="stmt"/>
       </file>
-      <file name="notificationValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/notificationValidator.js">
+      <file name="notificationValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/notificationValidator.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
         <line num="8" count="7" type="stmt"/>
         <line num="15" count="7" type="stmt"/>
         <line num="19" count="7" type="stmt"/>
       </file>
-      <file name="projectValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/projectValidator.js">
+      <file name="projectValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/projectValidator.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="7" type="stmt"/>
         <line num="7" count="7" type="stmt"/>
@@ -1331,7 +1331,7 @@
         <line num="80" count="7" type="stmt"/>
         <line num="85" count="7" type="stmt"/>
       </file>
-      <file name="taskValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/taskValidator.js">
+      <file name="taskValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/taskValidator.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="7" type="stmt"/>
         <line num="7" count="7" type="stmt"/>
@@ -1342,7 +1342,7 @@
         <line num="21" count="7" type="stmt"/>
         <line num="27" count="7" type="stmt"/>
       </file>
-      <file name="userValidator.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/middleware/validators/userValidator.js">
+      <file name="userValidator.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/middleware/validators/userValidator.js">
         <metrics statements="15" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="7" type="stmt"/>
         <line num="5" count="7" type="stmt"/>
@@ -1362,66 +1362,66 @@
       </file>
     </package>
     <package name="Backend.models">
-      <metrics statements="544" coveredstatements="77" conditionals="197" coveredconditionals="32" methods="150" coveredmethods="32"/>
-      <file name="business.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/business.js">
-        <metrics statements="110" coveredstatements="15" conditionals="34" coveredconditionals="3" methods="25" coveredmethods="3"/>
-        <line num="1" count="7" type="stmt"/>
+      <metrics statements="544" coveredstatements="124" conditionals="197" coveredconditionals="44" methods="150" coveredmethods="44"/>
+      <file name="business.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/business.js">
+        <metrics statements="110" coveredstatements="64" conditionals="34" coveredconditionals="15" methods="25" coveredmethods="16"/>
+        <line num="1" count="12" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="15" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="15" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="16" count="1" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="106" count="0" type="stmt"/>
-        <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="108" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
-        <line num="121" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="65" count="2" type="stmt"/>
+        <line num="73" count="2" type="stmt"/>
+        <line num="77" count="2" type="stmt"/>
+        <line num="85" count="2" type="stmt"/>
+        <line num="89" count="2" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="106" count="2" type="stmt"/>
+        <line num="107" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="108" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="114" count="1" type="stmt"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="117" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="118" count="1" type="stmt"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="121" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="122" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
-        <line num="125" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="125" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="126" count="0" type="stmt"/>
         <line num="127" count="0" type="stmt"/>
-        <line num="129" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="129" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="130" count="0" type="stmt"/>
         <line num="131" count="0" type="stmt"/>
-        <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="133" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="134" count="0" type="stmt"/>
         <line num="135" count="0" type="stmt"/>
-        <line num="137" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="137" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="138" count="0" type="stmt"/>
         <line num="139" count="0" type="stmt"/>
-        <line num="141" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="141" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="142" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
-        <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="146" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="147" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="158" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="179" count="0" type="stmt"/>
+        <line num="150" count="1" type="stmt"/>
+        <line num="152" count="1" type="stmt"/>
+        <line num="158" count="1" type="stmt"/>
+        <line num="159" count="1" type="stmt"/>
+        <line num="161" count="1" type="stmt"/>
+        <line num="165" count="2" type="stmt"/>
+        <line num="170" count="2" type="stmt"/>
+        <line num="174" count="2" type="stmt"/>
+        <line num="179" count="2" type="stmt"/>
         <line num="183" count="0" type="stmt"/>
         <line num="189" count="0" type="stmt"/>
         <line num="193" count="0" type="stmt"/>
@@ -1435,22 +1435,22 @@
         <line num="208" count="0" type="stmt"/>
         <line num="210" count="0" type="stmt"/>
         <line num="211" count="0" type="stmt"/>
-        <line num="216" count="0" type="stmt"/>
-        <line num="222" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="232" count="0" type="stmt"/>
+        <line num="216" count="1" type="stmt"/>
+        <line num="222" count="1" type="stmt"/>
+        <line num="226" count="1" type="stmt"/>
+        <line num="232" count="1" type="stmt"/>
         <line num="236" count="0" type="stmt"/>
         <line num="242" count="0" type="stmt"/>
         <line num="246" count="0" type="stmt"/>
         <line num="252" count="0" type="stmt"/>
-        <line num="256" count="0" type="stmt"/>
-        <line num="261" count="0" type="stmt"/>
-        <line num="265" count="0" type="stmt"/>
-        <line num="270" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
-        <line num="279" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="256" count="1" type="stmt"/>
+        <line num="261" count="1" type="stmt"/>
+        <line num="265" count="1" type="stmt"/>
+        <line num="270" count="1" type="stmt"/>
+        <line num="274" count="1" type="stmt"/>
+        <line num="279" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="280" count="0" type="stmt"/>
-        <line num="282" count="0" type="stmt"/>
+        <line num="282" count="1" type="stmt"/>
         <line num="287" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="288" count="0" type="stmt"/>
         <line num="293" count="0" type="stmt"/>
@@ -1476,7 +1476,7 @@
         <line num="357" count="1" type="stmt"/>
         <line num="359" count="1" type="stmt"/>
       </file>
-      <file name="caseStudies.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/caseStudies.js">
+      <file name="caseStudies.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/caseStudies.js">
         <metrics statements="13" coveredstatements="12" conditionals="8" coveredconditionals="7" methods="6" coveredmethods="6"/>
         <line num="1" count="9" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -1492,7 +1492,7 @@
         <line num="42" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
       </file>
-      <file name="category.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/category.js">
+      <file name="category.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/category.js">
         <metrics statements="51" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -1546,7 +1546,7 @@
         <line num="146" count="0" type="stmt"/>
         <line num="147" count="0" type="stmt"/>
       </file>
-      <file name="chatBot.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/chatBot.js">
+      <file name="chatBot.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/chatBot.js">
         <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -1561,7 +1561,7 @@
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
       </file>
-      <file name="feedback.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/feedback.js">
+      <file name="feedback.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/feedback.js">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -1569,7 +1569,7 @@
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
       </file>
-      <file name="gnn.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/gnn.js">
+      <file name="gnn.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/gnn.js">
         <metrics statements="23" coveredstatements="1" conditionals="14" coveredconditionals="0" methods="14" coveredmethods="1"/>
         <line num="1" count="7" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -1595,7 +1595,7 @@
         <line num="81" count="0" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
       </file>
-      <file name="notification.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/notification.js">
+      <file name="notification.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/notification.js">
         <metrics statements="21" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -1619,7 +1619,7 @@
         <line num="107" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
       </file>
-      <file name="posts.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/posts.js">
+      <file name="posts.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/posts.js">
         <metrics statements="13" coveredstatements="12" conditionals="8" coveredconditionals="7" methods="6" coveredmethods="6"/>
         <line num="1" count="9" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
@@ -1635,7 +1635,7 @@
         <line num="45" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
       </file>
-      <file name="project.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/project.js">
+      <file name="project.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/project.js">
         <metrics statements="196" coveredstatements="0" conditionals="97" coveredconditionals="0" methods="38" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -1834,7 +1834,7 @@
         <line num="510" count="0" type="stmt"/>
         <line num="511" count="0" type="stmt"/>
       </file>
-      <file name="skill.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/skill.js">
+      <file name="skill.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/skill.js">
         <metrics statements="26" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -1863,7 +1863,7 @@
         <line num="65" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
       </file>
-      <file name="tasks.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/tasks.js">
+      <file name="tasks.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/tasks.js">
         <metrics statements="19" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -1885,7 +1885,7 @@
         <line num="86" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
       </file>
-      <file name="testimonials.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/testimonials.js">
+      <file name="testimonials.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/testimonials.js">
         <metrics statements="13" coveredstatements="12" conditionals="8" coveredconditionals="7" methods="6" coveredmethods="6"/>
         <line num="1" count="9" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -1901,9 +1901,9 @@
         <line num="42" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
       </file>
-      <file name="user.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/models/user.js">
-        <metrics statements="42" coveredstatements="25" conditionals="18" coveredconditionals="8" methods="14" coveredmethods="10"/>
-        <line num="1" count="40" type="stmt"/>
+      <file name="user.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/models/user.js">
+        <metrics statements="42" coveredstatements="23" conditionals="18" coveredconditionals="8" methods="14" coveredmethods="9"/>
+        <line num="1" count="45" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="8" count="16" type="stmt"/>
@@ -1917,25 +1917,25 @@
         <line num="30" count="6" type="stmt"/>
         <line num="35" count="6" type="stmt"/>
         <line num="40" count="6" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="52" count="6" type="stmt"/>
         <line num="56" count="6" type="stmt"/>
         <line num="65" count="1" type="stmt"/>
-        <line num="71" count="1" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
         <line num="80" count="2" type="stmt"/>
         <line num="86" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="87" count="0" type="stmt"/>
         <line num="89" count="2" type="stmt"/>
-        <line num="93" count="1" type="stmt"/>
-        <line num="99" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="99" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="100" count="0" type="stmt"/>
-        <line num="102" count="1" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
         <line num="106" count="1" type="stmt"/>
-        <line num="114" count="5" type="stmt"/>
-        <line num="120" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="121" count="5" type="stmt"/>
-        <line num="124" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="114" count="9" type="stmt"/>
+        <line num="120" count="9" type="cond" truecount="1" falsecount="1"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="124" count="9" type="cond" truecount="1" falsecount="1"/>
         <line num="125" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
+        <line num="128" count="9" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
         <line num="138" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="139" count="0" type="stmt"/>
@@ -1949,7 +1949,7 @@
     </package>
     <package name="Backend.routes">
       <metrics statements="131" coveredstatements="108" conditionals="24" coveredconditionals="4" methods="12" coveredmethods="2"/>
-      <file name="authRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/authRoutes.js">
+      <file name="authRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/authRoutes.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="15" count="7" type="stmt"/>
         <line num="93" count="7" type="stmt"/>
@@ -1961,7 +1961,7 @@
         <line num="271" count="7" type="stmt"/>
         <line num="273" count="7" type="stmt"/>
       </file>
-      <file name="businessRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/businessRoutes.js">
+      <file name="businessRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/businessRoutes.js">
         <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="19" count="7" type="stmt"/>
         <line num="132" count="7" type="stmt"/>
@@ -1982,7 +1982,7 @@
         <line num="1215" count="7" type="stmt"/>
         <line num="1320" count="7" type="stmt"/>
       </file>
-      <file name="categoryRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/categoryRoutes.js">
+      <file name="categoryRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/categoryRoutes.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="13" count="7" type="stmt"/>
         <line num="58" count="7" type="stmt"/>
@@ -1994,25 +1994,25 @@
         <line num="300" count="7" type="stmt"/>
         <line num="301" count="7" type="stmt"/>
       </file>
-      <file name="chatBotRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/chatBotRoutes.js">
+      <file name="chatBotRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/chatBotRoutes.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="7" count="7" type="stmt"/>
         <line num="160" count="7" type="stmt"/>
         <line num="184" count="7" type="stmt"/>
       </file>
-      <file name="feedbackRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/feedbackRoutes.js">
+      <file name="feedbackRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/feedbackRoutes.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="7" type="stmt"/>
         <line num="69" count="7" type="stmt"/>
       </file>
-      <file name="gnnRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/gnnRoutes.js">
+      <file name="gnnRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/gnnRoutes.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="11" count="7" type="stmt"/>
         <line num="71" count="7" type="stmt"/>
         <line num="131" count="7" type="stmt"/>
         <line num="184" count="7" type="stmt"/>
       </file>
-      <file name="index.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/index.js">
+      <file name="index.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/index.js">
         <metrics statements="18" coveredstatements="15" conditionals="6" coveredconditionals="4" methods="2" coveredmethods="1"/>
         <line num="16" count="7" type="stmt"/>
         <line num="19" count="7" type="stmt"/>
@@ -2033,7 +2033,7 @@
         <line num="42" count="7" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
       </file>
-      <file name="notificationRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/notificationRoutes.js">
+      <file name="notificationRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/notificationRoutes.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="13" count="7" type="stmt"/>
         <line num="70" count="7" type="stmt"/>
@@ -2042,7 +2042,7 @@
         <line num="216" count="7" type="stmt"/>
         <line num="263" count="7" type="stmt"/>
       </file>
-      <file name="projectRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/projectRoutes.js">
+      <file name="projectRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/projectRoutes.js">
         <metrics statements="32" coveredstatements="12" conditionals="18" coveredconditionals="0" methods="10" coveredmethods="1"/>
         <line num="12" count="7" type="stmt"/>
         <line num="14" count="7" type="stmt"/>
@@ -2077,7 +2077,7 @@
         <line num="395" count="7" type="stmt"/>
         <line num="427" count="7" type="stmt"/>
       </file>
-      <file name="taskRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/taskRoutes.js">
+      <file name="taskRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/taskRoutes.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="16" count="7" type="stmt"/>
         <line num="39" count="7" type="stmt"/>
@@ -2089,7 +2089,7 @@
         <line num="271" count="7" type="stmt"/>
         <line num="336" count="7" type="stmt"/>
       </file>
-      <file name="userRoutes.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/routes/userRoutes.js">
+      <file name="userRoutes.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/routes/userRoutes.js">
         <metrics statements="21" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="19" count="7" type="stmt"/>
         <line num="75" count="7" type="stmt"/>
@@ -2116,7 +2116,7 @@
     </package>
     <package name="Backend.services">
       <metrics statements="24" coveredstatements="2" conditionals="14" coveredconditionals="1" methods="3" coveredmethods="0"/>
-      <file name="adkServices.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/services/adkServices.js">
+      <file name="adkServices.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/services/adkServices.js">
         <metrics statements="24" coveredstatements="2" conditionals="14" coveredconditionals="1" methods="3" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
         <line num="4" count="7" type="cond" truecount="1" falsecount="1"/>
@@ -2146,17 +2146,17 @@
     </package>
     <package name="Backend.tests">
       <metrics statements="53" coveredstatements="49" conditionals="20" coveredconditionals="11" methods="8" coveredmethods="8"/>
-      <file name="testUtils.js" path="/home/joshua/tia_connect/TIA-WEBSITE/Backend/tests/testUtils.js">
+      <file name="testUtils.js" path="/home/la1134/Documents/TIA/TIA-WEBSITE/Backend/tests/testUtils.js">
         <metrics statements="53" coveredstatements="49" conditionals="20" coveredconditionals="11" methods="8" coveredmethods="8"/>
         <line num="5" count="7" type="stmt"/>
         <line num="6" count="7" type="cond" truecount="1" falsecount="1"/>
         <line num="9" count="7" type="stmt"/>
         <line num="10" count="111" type="cond" truecount="1" falsecount="1"/>
         <line num="13" count="7" type="stmt"/>
-        <line num="14" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="21" type="cond" truecount="2" falsecount="0"/>
         <line num="15" count="6" type="stmt"/>
-        <line num="26" count="20" type="stmt"/>
-        <line num="29" count="20" type="stmt"/>
+        <line num="26" count="21" type="stmt"/>
+        <line num="29" count="21" type="stmt"/>
         <line num="31" count="7" type="stmt"/>
         <line num="32" count="6" type="stmt"/>
         <line num="33" count="6" type="stmt"/>

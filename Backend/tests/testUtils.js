@@ -19,7 +19,7 @@ const generateUserData = () => {
       lastName: 'Doe',
       company: 'Test Company',
       category: 1,
-      phone: '+1234567890',
+      phone: '0123456789',
       description: 'A test business description with at least 10 characters.'
     };
   }
