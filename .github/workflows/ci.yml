@@ -32,48 +32,37 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Create Backend test env file
-        working-directory: Backend
-        run: |
-          cat > .env <<EOF
-          NODE_ENV=test
-          DB_HOST=127.0.0.1
-          DB_PORT=3306
-          DB_USER=root
-          DB_PASSWORD=password
-          DB_NAME=app_test
-          JWT_SECRET=thisisaplaceholderjwtsecretfordevelopment
-          FRONTEND_BASE_URL=http://localhost:3000
-          ADK_API_URL=http://localhost:8080/chat
-          ADK_RECORD_TEST=false
-          GNN_API_URL=http://localhost:5000/api/gnn
-          EOF
-      
-      - name: Create Frontend test env file
-        working-directory: Frontend
-        run: |
-          cat > .env <<EOF
-          VITE_FRONTEND_BASE_PORT=3000
-          VITE_API_BASE_URL=http://localhost:5000/api
-          EOF
-
       - name: Install frontend dependencies
-        env:
-            DOTENV_CONFIG_PATH: ${{ github.workspace }}/Frontend/.env
-        run: |
-          cd ./Frontend/ && npm install
+        working-directory: Frontend
+        run: npm install
+
+      - name: Run Frontend
+        working-directory: Frontend
+        run: npm run dev
+
       - name: Install backend dependencies
-        run: |
-          cd ./Backend/ && npm install
+        working-directory: Backend
+        run: npm install
+
       - name: Setup database
+        working-directory: Backend
         env:
-            DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: app_test
-        run: |
-          cd ./Backend/ && npm run migrate
+          NODE_ENV: development
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: password
+          DB_NAME: app_test
+        run: npm run migrate
+
       - name: Run backend tests
+        working-directory: Backend
         env:
-              DOTENV_CONFIG_PATH: ${{ github.workspace }}/Backend/.env
-        run: |
-          cd ./Backend/ && npm run test
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: password
+          DB_NAME: app_test
+          JWT_SECRET: thisisaplaceholderjwtsecretfordevelopment
+        run: npm run test
