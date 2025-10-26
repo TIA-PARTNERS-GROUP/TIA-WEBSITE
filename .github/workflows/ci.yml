@@ -46,9 +46,7 @@ jobs:
 
       - name: Setup database
         working-directory: Backend
-        run: |
-          npx --yes db-migrate up:development \
-            --url "mysql://root:password@127.0.0.1:3306/app_test"
+        run: npx --yes db-migrate up:development --url "mysql://root:password@127.0.0.1:3306/app_test"
 
       - name: Run backend tests
         working-directory: Backend
