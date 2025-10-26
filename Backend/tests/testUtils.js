@@ -16,7 +16,11 @@ const generateUserData = () => {
       email: `test${Date.now()}@example.com`,
       password: 'Password123!',
       firstName: 'John',
-      lastName: 'Doe'
+      lastName: 'Doe',
+      company: 'Test Company',
+      category: 1,
+      phone: '+1234567890',
+      description: 'A test business description with at least 10 characters.'
     };
   }
   return userData;

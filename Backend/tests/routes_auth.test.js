@@ -21,7 +21,11 @@ describe('POST /api/auth/signup', () => {
       email: getUserData().email,
       password: 'password123',
       firstName: 'Jane',
-      lastName: 'Doe'
+      lastName: 'Doe',
+      company: 'Duplicate Company',
+      category: 1,
+      phone: '+0987654321',
+      description: 'Another test business description with sufficient length.'
     };
 
     const res = await getRequest()
@@ -33,8 +37,7 @@ describe('POST /api/auth/signup', () => {
     // Handle middleware that may return 400 instead of 409
     if (res.statusCode !== 409) {
       expect(res.statusCode).toBe(400);
-    }
-    else {
+    } else {
       expect(res.statusCode).toBe(409);
       expect(res.body.message).toBe('Email already in use');
     }
