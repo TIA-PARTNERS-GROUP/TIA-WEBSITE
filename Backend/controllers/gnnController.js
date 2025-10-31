@@ -1,5 +1,9 @@
 /*import { fetchComplementaryPartners, fetchAlliancePartners, fetchMastermindPartners } from "../services/gnnServices.js";
 
+// IMPORTANT: This controller is currently using a temporary mock setup that emulates the output of the GNN
+// The code commented out below is the actual code for using the GNN's output
+// Please replace temporary setup by uncommenting when GNN output is functioning. Additionally, you may then remove models/gnn.js.
+
 export async function getComplementaryPartners(req, res) {
   try {
     const { user_id } = req.params;
